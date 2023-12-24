@@ -42,7 +42,7 @@ To run the project locally:
 We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
 
 ## License
-This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+This project is licensed under the [AGPL 3.0 License](LICENSE) - see the LICENSE file for details.
 
 ## Acknowledgements
 - [YOLOv8-License-Plate-Insights](https://github.com/yihong1120/YOLOv8-License-Plate-Insights) for license plate recognition.
