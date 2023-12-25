@@ -1,7 +1,7 @@
-# Traffic-Report-Flutter-Web
+# Traffic-Report-Front-Flutter
 
 ## Overview
-'Traffic-Report-Flutter-Web' serves as the frontend counterpart of the 'Traffic-Violation-Report-System', a digital platform dedicated to enhancing transparency in traffic law enforcement across Taiwan. Utilising Flutter, this web application allows users to interact seamlessly with the backend system to report traffic violations and view responses from law enforcement agencies.
+'Traffic-Report-Front-Flutter' serves as the frontend counterpart of the 'Traffic-Violation-Report-System', a digital platform dedicated to enhancing transparency in traffic law enforcement across Taiwan. Utilising Flutter, this web application allows users to interact seamlessly with the backend system to report traffic violations and view responses from law enforcement agencies.
 
 ## Features
 - **User-Friendly Interface:** Developed with Flutter for a responsive and intuitive user experience.
