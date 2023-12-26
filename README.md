@@ -9,6 +9,27 @@
 - **Response Display:** Showcases responses from authorities to reported violations.
 - **Integration with Backend:** Seamlessly connects with the Django-based backend system.
 
+## Directory Structure
+```
+lib/
+  |- components/    # Shared components, such as custom buttons, form inputs, etc.
+  |- models/        # Data models
+  |- screens/       # Different screens/pages
+      |- accounts/  # Screens related to account, like login, registration, user profile
+          |- login.dart
+          |- register.dart
+          |- profile.dart
+      |- reports/   # Screens related to reports, such as creating a report, viewing report list
+          |- report_list.dart
+          |- report_detail.dart
+          |- create_report.dart
+      |- map/       # Map display, such as showing the map on the homepage
+          |- home_map.dart
+  |- services/      # Services, like network requests, local storage
+  |- utils/         # Utility classes, such as utility functions, constant definitions
+  main.dart         # Entry file
+```
+
 ## Development Roadmap
 - [x] Initial project setup and configuration
 - [ ] Implement user authentication and authorisation
