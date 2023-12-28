@@ -5,6 +5,7 @@ void main() {
   group('NewBusinessLogic', () {
     final businessLogic = BusinessLogic();
 
+    /// Tests if `function1` correctly returns the expected value.
     test('function1 returns expected value', () {
       // Arrange
       final expectedValue = 'Expected Value';
@@ -16,6 +17,7 @@ void main() {
       expect(result, expectedValue);
     });
 
+    /// Tests if `function2` correctly returns the expected value when given a specific input.
     test('function2 returns expected value for input', () {
       // Arrange
       final input = 'Test Input';
