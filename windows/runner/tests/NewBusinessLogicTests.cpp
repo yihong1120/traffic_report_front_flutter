@@ -5,7 +5,8 @@ void main() {
   group('NewBusinessLogic', () {
     final businessLogic = BusinessLogic();
 
-    /// Tests if `function1` correctly returns the expected value.
+    /* Tests if `function1` correctly returns the expected value. */
+    /* function1 returns expected value */
     test('function1 returns expected value', () {
       final expectedValue = 'Expected Value';
       final result = businessLogic.function1();
