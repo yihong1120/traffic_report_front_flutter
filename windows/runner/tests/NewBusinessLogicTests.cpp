@@ -13,7 +13,8 @@ void main() {
       expect(result, expectedValue);
     });
 
-    /// Tests if `function2` correctly returns the expected value when given a specific input.
+    /* Tests if `function2` correctly returns the expected value when given a specific input. */
+    /* function2 returns expected value for input */
     test('function2 returns expected value for input', () {
       final input = 'Test Input';
       final expectedValue = 'Expected Value';
