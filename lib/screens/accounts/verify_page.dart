@@ -1,4 +1,3 @@
-// lib/screens/accounts/verify_page.dart
 import 'package:flutter/material.dart';
 import 'package:your_project_name/services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
