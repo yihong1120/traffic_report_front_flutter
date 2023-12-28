@@ -16,14 +16,17 @@ lib/
   |- models/        # Data models
   |- screens/       # Different screens/pages
       |- accounts/  # Screens related to account, like login, registration, user profile
+          |- routes.dart
           |- login.dart
           |- register.dart
           |- profile.dart
       |- reports/   # Screens related to reports, such as creating a report, viewing report list
+          |- routes.dart
           |- report_list.dart
           |- report_detail.dart
           |- create_report.dart
       |- map/       # Map display, such as showing the map on the homepage
+          |- routes.dart
           |- home_map.dart
   |- services/      # Services, like network requests, local storage
   |- utils/         # Utility classes, such as utility functions, constant definitions
