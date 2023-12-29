@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart'; // 导入 intl 包
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 
@@ -15,10 +16,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   final _picker = ImagePicker();
   List<XFile> _mediaFiles = [];
   TrafficViolation _violation = TrafficViolation(
-    date: DateTime.now(), // 初始化日期
-    time: TimeOfDay.now(), // 初始化时间
-    violation: '紅線停車', // 初始化违规类型
-    status: 'Pending', // 初始化状态
+    date: DateTime.now(),
+    time: TimeOfDay.now(),
+    violation: '紅線停車',
+    status: 'Pending',
   );
 
   // 违规类型选项
@@ -37,6 +38,23 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
     '其他',
   ];
 
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _dateController.text = DateFormat('yyyy-MM-dd').format(_violation.date!);
+    _timeController.text = _violation.time!.format(context);
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    _timeController.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,43 +81,41 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 ),
                 // Date Picker
                 TextFormField(
-                    decoration: InputDecoration(labelText: 'Date'),
-                    readOnly: true,
-                    controller: TextEditingController(
-                    text: DateFormat('yyyy-MM-dd').format(_violation.date!),
-                    ),
-                    onTap: () async {
+                  decoration: InputDecoration(labelText: 'Date'),
+                  readOnly: true,
+                  controller: _dateController,
+                  onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: _violation.date!,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
+                      context: context,
+                      initialDate: _violation.date!,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
                     );
                     if (pickedDate != null) {
-                        setState(() {
+                      setState(() {
                         _violation.date = pickedDate;
-                        });
+                        _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                      });
                     }
-                    },
+                  },
                 ),
                 // Time Picker
                 TextFormField(
-                    decoration: InputDecoration(labelText: 'Time'),
-                    readOnly: true,
-                    controller: TextEditingController(
-                    text: _violation.time!.format(context),
-                    ),
-                    onTap: () async {
+                  decoration: InputDecoration(labelText: 'Time'),
+                  readOnly: true,
+                  controller: _timeController,
+                  onTap: () async {
                     TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: _violation.time!,
+                      context: context,
+                      initialTime: _violation.time!,
                     );
                     if (pickedTime != null) {
-                        setState(() {
+                      setState(() {
                         _violation.time = pickedTime;
-                        });
+                        _timeController.text = pickedTime.format(context);
+                      });
                     }
-                    },
+                  },
                 ),
                 // Violation Dropdown
                 DropdownButtonFormField<String>(
@@ -160,8 +176,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                         _formKey.currentState!.save();
                         _submitReport();
                     }
-                    },
-                    child: Text('Submit Report'),
+                  },
+                  child: Text('Submit Report'),
                 ),
               ],
             ),
@@ -206,7 +222,6 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   }
 
   void _submitReport() async {
-    // Call the ReportService to submit the report and media files
     final reportService = Provider.of<ReportService>(context, listen: false);
     bool success = await reportService.createReport(_violation, _mediaFiles);
     if (success) {
