@@ -1,8 +1,7 @@
-// lib/screens/accounts/routes.dart
 import 'package:flutter/material.dart';
-import 'account_page.dart'; // 更新導入路徑
-import 'login.dart'; // 更新導入路徑
-import 'verify_page.dart'; // 更新導入路徑
+import 'account_page.dart';
+import 'login.dart';
+import 'verify_page.dart';
 import 'register.dart';
 import 'account_delete_confirm_page.dart';
 import 'password_change_done_page.dart';
