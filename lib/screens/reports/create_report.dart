@@ -38,19 +38,19 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+Widget build(BuildContext context) {
+  return Scaffold(
       appBar: AppBar(
         title: Text('Create Report'),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
+    body: SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
                 _buildLicensePlateField(),
                   decoration: InputDecoration(labelText: 'License Plate'),
                   onSaved: (value) => _violation.licensePlate = value,
@@ -88,11 +88,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                     return DropdownMenuItem<String>(
                     value: violation,
                     child: Text(violation),
-                    );
-                }).toList(),
-                onChanged: (String? newValue) {
-                    setState(() {
-                    _violation.violation = newValue;
+              _buildViolationDropdown(),
                     });
                 },
                 onSaved: (String? newValue) {
@@ -108,10 +104,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                         value: status,
                         child: Text(status),
                     );
-                    }).toList(),
-                    onChanged: (value) {
-                    setState(() {
-                        _violation.status = value;
+              _buildStatusDropdown(),
                     });
                     },
                 ),
@@ -125,21 +118,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                     decoration: InputDecoration(labelText: 'Officer'),
                     onSaved: (value) => _violation.officer = value,
                 ),
-                // Media Upload
-                _buildAddMediaButton(),
-                    onPressed: () => _pickMedia(),
-                    child: Text('Add Media'),
-                ),
-                SizedBox(height: 10),
-                _buildMediaPreview(),
-                // Submit Button
-                _buildSubmitButton(),
-                    onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        _submitReport();
-                    }
-                    },
+              _buildAddMediaButton(),
+              SizedBox(height: 10),
+              _buildMediaPreview(),
+              _buildSubmitButton(),
                     child: Text('Submit Report'),
                 ),
               ],
