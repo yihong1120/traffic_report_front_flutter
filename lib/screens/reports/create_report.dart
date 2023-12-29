@@ -51,7 +51,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                TextFormField(
+                _buildLicensePlateField(),
                   decoration: InputDecoration(labelText: 'License Plate'),
                   onSaved: (value) => _violation.licensePlate = value,
                   validator: (value) {
@@ -62,17 +62,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                   },
                 ),
                 // Date Picker
-                TextFormField(
-                    decoration: InputDecoration(labelText: 'Date'),
-                    readOnly: true,
-                    controller: TextEditingController(
-                    text: DateFormat('yyyy-MM-dd').format(_violation.date!),
-                    ),
-                    onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: _violation.date!,
-                        firstDate: DateTime(2000),
+                _buildDatePicker(),
                         lastDate: DateTime(2100),
                     );
                     if (pickedDate != null) {
@@ -83,17 +73,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                     },
                 ),
                 // Time Picker
-                TextFormField(
-                    decoration: InputDecoration(labelText: 'Time'),
-                    readOnly: true,
-                    controller: TextEditingController(
-                    text: _violation.time!.format(context),
-                    ),
-                    onTap: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: _violation.time!,
-                    );
+                _buildTimePicker(),
                     if (pickedTime != null) {
                         setState(() {
                         _violation.time = pickedTime;
@@ -102,8 +82,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                     },
                 ),
                 // Violation Dropdown
-                DropdownButtonFormField<String>(
-                value: _violation.violation,
+                _buildViolationDropdown(),
                 decoration: InputDecoration(labelText: 'Violation'),
                 items: _violations.map((String violation) {
                     return DropdownMenuItem<String>(
@@ -140,21 +119,21 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 TextFormField(
                     decoration: InputDecoration(labelText: 'Location'),
                     onSaved: (value) => _violation.location = value,
-                ),
+                _buildStatusDropdown(),
                 // Officer Field
-                TextFormField(
+                _buildOfficerField(),
                     decoration: InputDecoration(labelText: 'Officer'),
                     onSaved: (value) => _violation.officer = value,
                 ),
                 // Media Upload
-                ElevatedButton(
+                _buildAddMediaButton(),
                     onPressed: () => _pickMedia(),
                     child: Text('Add Media'),
                 ),
                 SizedBox(height: 10),
                 _buildMediaPreview(),
                 // Submit Button
-                ElevatedButton(
+                _buildSubmitButton(),
                     onPressed: () {
                     if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
