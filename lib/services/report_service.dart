@@ -5,6 +5,12 @@ import '../models/traffic_violation.dart';
 class ReportService {
   final String apiUrl = 'https://your-api-url.com/reports';
 
+  /// Creates a report with the given [violation] and [mediaFiles].
+  ///
+  /// The [violation] parameter is a TrafficViolation object that represents the details of the violation.
+  /// The [mediaFiles] parameter is a list of XFile objects that represent the media files associated with the report.
+  ///
+  /// Returns true if the report was created successfully, false otherwise.
   Future<bool> createReport(TrafficViolation violation, List<XFile> mediaFiles) async {
     try {
       // Convert the TrafficViolation object to JSON
