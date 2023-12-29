@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/accounts/routes.dart' as account_routes;
 import 'screens/map/routes.dart' as map_routes;
+import 'screens/reports/routes.dart' as reports_routes;
 
 Future main() async {
   await dotenv.load(fileName: ".env"); // 加載.env文件
@@ -23,6 +24,7 @@ class TrafficReportApp extends StatelessWidget {
       routes: {
         ...map_routes.mapRoutes,
         ...account_routes.accountsRoutes,
+        ...reports_routes.reportsRoutes,
       },
     );
   }
