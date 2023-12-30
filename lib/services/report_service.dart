@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import '../models/traffic_violation.dart';
+
+var logger = Logger();
 
 class ReportService {
   final String apiUrl = 'https://your-api-url.com/reports';
@@ -30,11 +33,11 @@ class ReportService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        print('Failed to create report: ${response.statusCode}');
+        logger.d('Failed to create report: ${response.statusCode}');
         return false;
       }
     } catch (e) {
-      print('Caught error: $e');
+      logger.d('Caught error: $e');
       return false;
     }
   }
