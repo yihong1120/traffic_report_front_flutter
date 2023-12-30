@@ -4,6 +4,7 @@ import 'screens/map/routes.dart' as map_routes;
 import 'screens/reports/routes.dart' as reports_routes;
 import 'screens/chat/routes.dart' as chat_routes;
 import 'screens/accounts/routes.dart' as account_routes;
+import 'components/navigation_drawer.dart'
 
 Future main() async {
   await dotenv.load(fileName: ".env"); // 加載.env文件
@@ -28,6 +29,23 @@ class TrafficReportApp extends StatelessWidget {
         ...chat_routes.chatRoutes,
         ...account_routes.accountsRoutes,
       },
+      home: HomeScreen(), // 设置主屏幕
+    );
+  }
+}
+
+// HomeScreen 类
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Traffic Report System'),
+      ),
+      drawer: NavigationDrawer(), // 使用新组件
+      body: Center(
+        child: Text('Welcome to Traffic Report System'),
+      ),
     );
   }
 }
