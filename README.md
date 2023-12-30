@@ -13,6 +13,8 @@
 ```
 lib/
   |- components/    # Shared components, such as custom buttons, form inputs, etc.
+      |- media_preview.dart
+      |- navigation_drawer.dart
   |- models/        # Data models
   |- screens/       # Different screens/pages
       |- accounts/  # Screens related to account, like login, registration, user profile
