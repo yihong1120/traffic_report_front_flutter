@@ -25,7 +25,7 @@ class TrafficReportApp extends StatelessWidget {
       routes: {
         ...map_routes.mapRoutes,
         ...reports_routes.reportsRoutes,
-        ...reports_routes.chatRoutes,
+        ...chat_routes.chatRoutes,
         ...account_routes.accountsRoutes,
       },
     );
