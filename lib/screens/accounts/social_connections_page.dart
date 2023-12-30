@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:your_project_name/models/social_account.dart'; // 假設您有一個 SocialAccount 模型
-import 'package:your_project_name/services/social_service.dart'; // 假設您有一個處理社交帳號的服務
+import 'package:../../models/social_account.dart'; // 假設您有一個 SocialAccount 模型
+import 'package:../../services/social_service.dart'; // 假設您有一個處理社交帳號的服務
 
 class SocialConnectionsPage extends StatefulWidget {
   const SocialConnectionsPage({Key? key}) : super(key: key);

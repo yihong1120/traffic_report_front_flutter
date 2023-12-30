@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:your_project_name/services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import 'package:../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class PasswordChangePage extends StatefulWidget {
   const PasswordChangePage({Key? key}) : super(key: key);
