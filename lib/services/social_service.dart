@@ -51,7 +51,14 @@ class SocialService {
     final String loginUrl = '$baseUrl/social/login/${provider.id}';
 
     // 使用 url_launcher 打开浏览器窗口
-    if (await canLaunchUrl(loginUrl)) {
+    /// Launches the provided URL in the browser.
+  ///
+  /// Throws an exception if the URL cannot be launched.
+  ///
+  /// [url] is the URL to be launched.
+  ///
+  /// Returns a Future that completes when the URL has been launched.
+  if (await canLaunchUrl(loginUrl)) {
       await launchUrl(loginUrl);
     } else {
       throw 'Could not launch $loginUrl';
