@@ -52,7 +52,7 @@ class SocialService {
 
     // 使用 url_launcher 打开浏览器窗口
     if (await canLaunchUrl(loginUrl)) {
-      await launch(loginUrl);
+      await launchUrl(loginUrl);
     } else {
       throw 'Could not launch $loginUrl';
     }
