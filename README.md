@@ -25,10 +25,16 @@ lib/
           |- report_list.dart
           |- report_detail.dart
           |- create_report.dart
+      |- chat/   # Screens related to chatbot, you can chat with gemini
+          |- routes.dart
+          |- chat_page.dart
       |- map/       # Map display, such as showing the map on the homepage
           |- routes.dart
           |- home_map.dart
   |- services/      # Services, like network requests, local storage
+      |- auth_service.dart
+      |- report_service.dart
+      |- social_service.dart
   |- utils/         # Utility classes, such as utility functions, constant definitions
   main.dart         # Entry file
 ```
