@@ -7,8 +7,8 @@ import 'report_paged_list_page.dart';
 
 Map<String, WidgetBuilder> reportsRoutes = {
   '/reports': (context) => const ReportListPage(),
-  '/reports/create': (context) => const CreateReportPage(),
-  '/reports/details': (context) => const ReportDetailsPage(),
-  '/reports/edit': (context) => const ReportEditPage(),
-  '/reports/paged': (context) => const ReportPagedListPage(),
+  '/create': (context) => const CreateReportPage(),
+  '/details': (context) => const ReportDetailsPage(),
+  '/edit': (context) => const ReportEditPage(),
+  '/paged': (context) => const ReportPagedListPage(),
 };
