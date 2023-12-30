@@ -4,7 +4,7 @@ import 'screens/map/routes.dart' as map_routes;
 import 'screens/reports/routes.dart' as reports_routes;
 import 'screens/chat/routes.dart' as chat_routes;
 import 'screens/accounts/routes.dart' as account_routes;
-import 'components/navigation_drawer.dart'
+import 'components/navigation_drawer.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env"); // 加載.env文件
