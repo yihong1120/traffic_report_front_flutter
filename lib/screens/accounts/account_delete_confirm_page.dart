@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:your_project_name/services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class AccountDeleteConfirmPage extends StatelessWidget {
   const AccountDeleteConfirmPage({Key? key}) : super(key: key);
