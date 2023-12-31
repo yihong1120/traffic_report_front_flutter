@@ -23,17 +23,21 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
         _isLoading = true;
       });
 
-      // 假設 AuthService 有一個 changePassword 方法來處理密碼更改邏輯
+      // 在执行异步操作前获取 Navigator 和 ScaffoldMessenger 状态
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      // 执行异步操作
       bool passwordChanged = await AuthService.changePassword(_oldPassword, _newPassword);
+
+      // 根据操作结果使用先前获取的状态
       if (passwordChanged) {
-        // 如果密碼更改成功，顯示成功消息並導航回帳戶頁面
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Password changed successfully')),
         );
-        Navigator.of(context).pop();
+        navigator.pop();
       } else {
-        // 如果密碼更改失敗，顯示錯誤消息
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Failed to change password')),
         );
       }

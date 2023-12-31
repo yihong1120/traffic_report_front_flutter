@@ -18,13 +18,19 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   void _checkLoginStatus() async {
-    // 假設 AuthService 是您用來管理用戶登入狀態的服務
+    // 获取 Navigator 状态
+    final navigator = Navigator.of(context);
+
+    // 假设 AuthService 是您用来管理用户登录状态的服务
     _isLoggedIn = await AuthService.isLoggedIn();
     if (!_isLoggedIn) {
-      // 如果用戶未登入，導航到登入頁面
-      Navigator.of(context).pushReplacementNamed('/login');
+      // 如果用户未登录，使用先前获取的 Navigator 状态导航到登录页面
+      navigator.pushReplacementNamed('/login');
     }
-    setState(() {});
+    // 通知 Flutter 需要重建 Widget
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

@@ -1,22 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import '../../services/auth_service.dart';
 
 class AccountDeleteConfirmPage extends StatelessWidget {
   const AccountDeleteConfirmPage({super.key});
-
-  void _deleteAccount(BuildContext context) async {
-    // 假設 AuthService 有一個 deleteAccount 方法來處理帳戶刪除邏輯
-    bool deleted = await AuthService.deleteAccount();
-    if (deleted) {
-      // 如果刪除成功，導航到登入頁面或其他頁面
-      Navigator.of(context).pushReplacementNamed('/login');
-    } else {
-      // 如果刪除失敗，顯示錯誤消息
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to delete account')),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,5 +63,19 @@ class AccountDeleteConfirmPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _deleteAccount(BuildContext context) async {
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    bool deleted = await AuthService.deleteAccount();
+    if (deleted) {
+      navigator.pushReplacementNamed('/login');
+    } else {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Failed to delete account')),
+      );
+    }
   }
 }

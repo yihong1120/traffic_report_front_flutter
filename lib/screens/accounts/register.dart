@@ -18,20 +18,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _register() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
       setState(() {
         _isLoading = true;
       });
 
-      // 使用 _password 和 _confirmPassword 作为参数
+      // 在执行异步操作前获取 Navigator 和 ScaffoldMessenger 状态
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      // 执行异步操作
       bool registered = await AuthService.register(_username, _email, _password, _confirmPassword);
+
+      // 根据操作结果使用先前获取的状态
       if (registered) {
-        // 如果注册成功，导航到登录页面
-        Navigator.of(context).pushReplacementNamed('/login');
+        navigator.pushReplacementNamed('/login');
       } else {
-        // 如果注册失败，显示错误消息
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Registration failed')),
         );
       }
