@@ -51,9 +51,10 @@ class AccountDeleteConfirmPage extends StatelessWidget {
             ),
             TextButton(
               child: const Text('Confirm Delete'),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
-                _deleteAccount(context);
+                bool result = await _performAccountDeletion(context);
+                _handleDeletionResult(context, result);
               },
             ),
   void _handleDialogResponse(BuildContext context, AlertDialog dialog) {
@@ -79,12 +80,15 @@ class AccountDeleteConfirmPage extends StatelessWidget {
     );
   }
 
-  void _deleteAccount(BuildContext context) async {
+  Future<bool> _performAccountDeletion(BuildContext context) async {
+    return await AuthService.deleteAccount();
+  }
+
+  void _handleDeletionResult(BuildContext context, bool result) {
     final navigator = Navigator.of(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    bool deleted = await AuthService.deleteAccount();
-    if (deleted) {
+    if (result) {
       navigator.pushReplacementNamed('/login');
     } else {
       scaffoldMessenger.showSnackBar(
