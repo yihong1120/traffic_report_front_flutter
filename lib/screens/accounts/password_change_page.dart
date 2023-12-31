@@ -12,7 +12,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
   final _formKey = GlobalKey<FormState>();
   String _oldPassword = '';
   String _newPassword = '';
-  String _confirmNewPassword = '';
+
   bool _isLoading = false;
 
   void _changePassword() async {
@@ -88,19 +88,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
                           return null;
                         },
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Confirm New Password'),
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please confirm your new password';
-                          } else if (value != _newPassword) {
-                            return 'Passwords do not match';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) => _confirmNewPassword = value!,
-                      ),
+
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _changePassword,
