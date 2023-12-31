@@ -53,7 +53,7 @@ class _PasswordChangeDonePageState extends State<PasswordChangeDonePage> {
             const SizedBox(height: 20),
             Text(
               'You will be redirected to your account page in $_countdown seconds.',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
             TextButton(

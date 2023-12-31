@@ -11,7 +11,7 @@ class TrafficViolation {
   String? location;
   String? officer;
 
-  static const List<String> VIOLATIONS = [
+  static const List<String> violations = [
     '紅線停車',
     '黃線臨車',
     '行駛人行道',
@@ -26,7 +26,8 @@ class TrafficViolation {
     '其他',
   ];
 
-  static const List<String> STATUS = [
+  // 將靜態常量列表重命名為 statusOptions
+  static const List<String> statusOptions = [
     'Pending',
     'Approved',
     'Rejected',

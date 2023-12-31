@@ -5,7 +5,7 @@ class MediaPreview extends StatelessWidget {
   final List<XFile> mediaFiles;
   final Function(XFile) onRemove;
 
-  MediaPreview({Key? key, required this.mediaFiles, required this.onRemove}) : super(key: key);
+  const MediaPreview({super.key, required this.mediaFiles, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class MediaPreview extends StatelessWidget {
             // For example:
             // Image.file(File(file.path), width: 100, height: 100),
             IconButton(
-              icon: Icon(Icons.remove_circle),
+              icon: const Icon(Icons.remove_circle),
               onPressed: () => onRemove(file),
             ),
           ],

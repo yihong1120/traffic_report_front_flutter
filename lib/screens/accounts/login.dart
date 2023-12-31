@@ -22,14 +22,18 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = true;
       });
 
-      // 假設 AuthService 有一個 login 方法來處理登入邏輯
+      // 在执行异步操作前获取 Navigator 和 ScaffoldMessenger 状态
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      // 执行异步操作
       bool loggedIn = await AuthService.login(_username, _password);
+
+      // 根据操作结果使用先前获取的状态
       if (loggedIn) {
-        // 如果登入成功，導航到帳戶頁面
-        Navigator.of(context).pushReplacementNamed('/account');
+        navigator.pushReplacementNamed('/account');
       } else {
-        // 如果登入失敗，顯示錯誤消息
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Invalid username or password')),
         );
       }

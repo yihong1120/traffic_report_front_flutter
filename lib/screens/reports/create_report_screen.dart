@@ -16,7 +16,7 @@ class CreateReportPage extends StatefulWidget {
 class _CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
-  List<XFile> _mediaFiles = [];
+  final List<XFile> _mediaFiles = [];
   final TrafficViolation _violation = TrafficViolation(
     date: DateTime.now(),
     time: TimeOfDay.now(),
@@ -142,7 +142,7 @@ class _CreateReportPageState extends State<CreateReportPage> {
                 DropdownButtonFormField<String>(
                     value: _violation.status,
                     decoration: const InputDecoration(labelText: 'Status'),
-                    items: TrafficViolation.STATUS.map((status) {
+                    items: TrafficViolation.statusOptions.map((status) {
                     return DropdownMenuItem(
                         value: status,
                         child: Text(status),
@@ -190,12 +190,10 @@ class _CreateReportPageState extends State<CreateReportPage> {
   }
 
   void _pickMedia() async {
-    final List<XFile>? pickedFiles = await _picker.pickMultiImage();
-    if (pickedFiles != null) {
-      setState(() {
-        _mediaFiles.addAll(pickedFiles);
-      });
-    }
+    final List<XFile> pickedFiles = await _picker.pickMultiImage();
+    setState(() {
+      _mediaFiles.addAll(pickedFiles);
+    });
   }
 
   Widget _buildMediaPreview() {
@@ -224,8 +222,13 @@ class _CreateReportPageState extends State<CreateReportPage> {
   }
 
   void _submitReport() async {
+    // 获取 context 依赖的信息
     final reportService = Provider.of<ReportService>(context, listen: false);
+
     bool success = await reportService.createReport(_violation, _mediaFiles);
+    
+    if (!mounted) return; // 检查组件是否仍然挂载
+
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report submitted successfully')));
       Navigator.pop(context);

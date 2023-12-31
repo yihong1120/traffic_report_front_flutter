@@ -21,14 +21,18 @@ class _VerifyPageState extends State<VerifyPage> {
         _isLoading = true;
       });
 
-      // 假設 AuthService 有一個 verify 方法來處理帳戶驗證邏輯
+      // 在异步操作开始前获取 Navigator 和 ScaffoldMessenger 状态
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      // 执行异步操作
       bool verified = await AuthService.verify(_verificationCode);
+
+      // 使用先前获取的状态
       if (verified) {
-        // 如果驗證成功，導航到首頁
-        Navigator.of(context).pushReplacementNamed('/home');
+        navigator.pushReplacementNamed('/home');
       } else {
-        // 如果驗證失敗，顯示錯誤消息
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Invalid verification code')),
         );
       }
