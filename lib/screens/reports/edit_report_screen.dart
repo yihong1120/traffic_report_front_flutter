@@ -62,11 +62,11 @@ class _EditReportPageState extends State<EditReportPage> {
               MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
               ElevatedButton(
                 onPressed: _pickMedia,
-                child: Text('Add Media'),
+                child: const Text('Add Media'),
               ),
               ElevatedButton(
                 onPressed: _submitReport,
-                child: Text('Save Changes'),
+                child: const Text('Save Changes'),
               ),
             ],
           ),
