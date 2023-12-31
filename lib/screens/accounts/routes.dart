@@ -10,7 +10,7 @@ import 'social_connections_page.dart';
 
 Map<String, WidgetBuilder> accountsRoutes = {
     '/login': (context) => const LoginPage(),
-    '/account': (context) => const AccountPage(),
+    '/accounts': (context) => const AccountPage(),
     '/register': (context) => const RegisterPage(),
     '/verify': (context) => const VerifyPage(),
     '/account-delete-confirm': (context) => const AccountDeleteConfirmPage(),

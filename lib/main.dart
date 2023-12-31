@@ -22,7 +22,7 @@ class TrafficReportApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      
       routes: {
         ...map_routes.mapRoutes,
         ...reports_routes.reportsRoutes,
