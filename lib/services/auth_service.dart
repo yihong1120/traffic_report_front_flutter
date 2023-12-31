@@ -97,4 +97,22 @@ class AuthService {
       return false;
     }
   }
+
+  // 示例：检查用户是否已登录
+  static Future<bool> isLoggedIn() async {
+    // 这里的逻辑取决于您如何处理认证
+    // 例如，检查是否有有效的认证令牌
+
+    final token = await _getToken(); // 获取存储的令牌
+    return token != null && token.isNotEmpty;
+  }
+
+  // 示例：获取存储的令牌
+  static Future<String?> _getToken() async {
+    // 这里应该包含从存储中获取令牌的逻辑
+    // 例如，使用 SharedPreferences
+
+    // 返回 null 表示没有令牌或令牌无效
+    return null;
+  }
 }
