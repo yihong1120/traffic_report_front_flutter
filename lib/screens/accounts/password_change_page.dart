@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class PasswordChangePage extends StatefulWidget {
-  const PasswordChangePage({Key? key}) : super(key: key);
+  const PasswordChangePage({super.key});
 
   @override
   _PasswordChangePageState createState() => _PasswordChangePageState();
@@ -48,11 +48,11 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Change Password'),
+        title: const Text('Change Password'),
       ),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : Form(
                 key: _formKey,
                 child: Padding(
@@ -61,7 +61,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Old Password'),
+                        decoration: const InputDecoration(labelText: 'Old Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -72,7 +72,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
                         onSaved: (value) => _oldPassword = value!,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'New Password'),
+                        decoration: const InputDecoration(labelText: 'New Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -85,7 +85,7 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
                         },
                       ),
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Confirm New Password'),
+                        decoration: const InputDecoration(labelText: 'Confirm New Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -97,10 +97,10 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
                         },
                         onSaved: (value) => _confirmNewPassword = value!,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _changePassword,
-                        child: Text('Change Password'),
+                        child: const Text('Change Password'),
                       ),
                     ],
                   ),

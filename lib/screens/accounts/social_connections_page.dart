@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:../../models/social_account.dart'; // 假設您有一個 SocialAccount 模型
-import 'package:../../services/social_service.dart'; // 假設您有一個處理社交帳號的服務
+// import 'package:../../models/social_account.dart'; // 假設您有一個 SocialAccount 模型
+// import 'package:../../services/social_service.dart';
+
+import '../../models/social_account.dart';
+import '../../services/social_service.dart'; // 假設您有一個處理社交帳號的服務
 
 class SocialConnectionsPage extends StatefulWidget {
-  const SocialConnectionsPage({Key? key}) : super(key: key);
+  const SocialConnectionsPage({super.key});
 
   @override
   _SocialConnectionsPageState createState() => _SocialConnectionsPageState();
@@ -40,7 +43,7 @@ class _SocialConnectionsPageState extends State<SocialConnectionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Social Account Connections'),
+        title: const Text('Social Account Connections'),
       ),
       body: ListView(
         children: [
@@ -49,7 +52,7 @@ class _SocialConnectionsPageState extends State<SocialConnectionsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Social Account Connections',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
@@ -58,15 +61,15 @@ class _SocialConnectionsPageState extends State<SocialConnectionsPage> {
                       subtitle: Text('UID: ${account.uid}'),
                       trailing: TextButton(
                         onPressed: () => _disconnectSocialAccount(account),
-                        child: Text('Disconnect'),
+                        child: const Text('Disconnect'),
                       ),
                     )),
                 if (_connectedAccounts.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text('No social accounts connected.'),
                   ),
-                Text(
+                const Text(
                   'Connect a social account:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),

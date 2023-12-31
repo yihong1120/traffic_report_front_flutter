@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({super.key});
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -24,15 +24,15 @@ class _RegisterPageState extends State<RegisterPage> {
         _isLoading = true;
       });
 
-      // 假設 AuthService 有一個 register 方法來處理註冊邏輯
-      bool registered = await AuthService.register(_username, _email, _password);
+      // 使用 _password 和 _confirmPassword 作为参数
+      bool registered = await AuthService.register(_username, _email, _password, _confirmPassword);
       if (registered) {
-        // 如果註冊成功，導航到登入頁面或其他頁面
+        // 如果注册成功，导航到登录页面
         Navigator.of(context).pushReplacementNamed('/login');
       } else {
-        // 如果註冊失敗，顯示錯誤消息
+        // 如果注册失败，显示错误消息
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed')),
+          const SnackBar(content: Text('Registration failed')),
         );
       }
 
@@ -46,11 +46,11 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : Form(
                 key: _formKey,
                 child: Padding(
@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Username'),
+                        decoration: const InputDecoration(labelText: 'Username'),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter a username';
@@ -69,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         onSaved: (value) => _username = value!,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Email'),
+                        decoration: const InputDecoration(labelText: 'Email'),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -82,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         onSaved: (value) => _email = value!,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Password'),
+                        decoration: const InputDecoration(labelText: 'Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -95,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                       ),
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Confirm Password'),
+                        decoration: const InputDecoration(labelText: 'Confirm Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -107,10 +107,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         onSaved: (value) => _confirmPassword = value!,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _register,
-                        child: Text('Register'),
+                        child: const Text('Register'),
                       ),
                     ],
                   ),

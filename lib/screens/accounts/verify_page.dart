@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class VerifyPage extends StatefulWidget {
-  const VerifyPage({Key? key}) : super(key: key);
+  const VerifyPage({super.key});
 
   @override
   _VerifyPageState createState() => _VerifyPageState();
@@ -29,7 +29,7 @@ class _VerifyPageState extends State<VerifyPage> {
       } else {
         // 如果驗證失敗，顯示錯誤消息
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid verification code')),
+          const SnackBar(content: Text('Invalid verification code')),
         );
       }
 
@@ -43,11 +43,11 @@ class _VerifyPageState extends State<VerifyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Verify Your Account'),
+        title: const Text('Verify Your Account'),
       ),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : Form(
                 key: _formKey,
                 child: Padding(
@@ -56,7 +56,7 @@ class _VerifyPageState extends State<VerifyPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Verification Code',
                           hintText: 'Enter your verification code',
                         ),
@@ -68,10 +68,10 @@ class _VerifyPageState extends State<VerifyPage> {
                         },
                         onSaved: (value) => _verificationCode = value!,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _verify,
-                        child: Text('Verify'),
+                        child: const Text('Verify'),
                       ),
                     ],
                   ),

@@ -6,16 +6,16 @@ import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import '../../components/media_preview.dart';
 
-class EditReportScreen extends StatefulWidget {
+class EditReportPage extends StatefulWidget {
   final int recordId;
 
-  EditReportScreen({Key? key, required this.recordId}) : super(key: key);
+  const EditReportPage({super.key, required this.recordId});
 
   @override
-  _EditReportScreenState createState() => _EditReportScreenState();
+  _EditReportPageState createState() => _EditReportPageState();
 }
 
-class _EditReportScreenState extends State<EditReportScreen> {
+class _EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
   List<XFile> _mediaFiles = [];
@@ -38,16 +38,16 @@ class _EditReportScreenState extends State<EditReportScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Edit Report')),
-        body: Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('Edit Report')),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Report')),
+      appBar: AppBar(title: const Text('Edit Report')),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -62,11 +62,11 @@ class _EditReportScreenState extends State<EditReportScreen> {
               MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
               ElevatedButton(
                 onPressed: _pickMedia,
-                child: Text('Add Media'),
+                child: const Text('Add Media'),
               ),
               ElevatedButton(
                 onPressed: _submitReport,
-                child: Text('Save Changes'),
+                child: const Text('Save Changes'),
               ),
             ],
           ),

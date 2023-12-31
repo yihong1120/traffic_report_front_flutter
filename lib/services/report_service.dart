@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import '../models/traffic_violation.dart';
 
@@ -14,8 +15,12 @@ class ReportService {
       var reportJson = violation.toJson();
 
       // Create a multipart request to upload the report and media files
-      var request = http.MultipartRequest('POST', Uri.parse(apiUrl))
-        ..fields.addAll(reportJson);
+      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+      // Add fields to the request after converting values to String
+      reportJson.forEach((key, value) {
+        request.fields[key] = value.toString(); // 转换为字符串
+      });
 
       // Add media files to the request
       for (var file in mediaFiles) {
@@ -39,6 +44,20 @@ class ReportService {
     } catch (e) {
       logger.d('Caught error: $e');
       return false;
+    }
+  }
+
+
+  // 获取报告列表的方法
+  Future<List<TrafficViolation>> getReports({int page = 1}) async {
+    var response = await http.get(Uri.parse('$apiUrl?page=$page'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => TrafficViolation.fromJson(json)).toList();
+    } else {
+      logger.d('Failed to fetch reports: ${response.statusCode}');
+      return [];
     }
   }
 }

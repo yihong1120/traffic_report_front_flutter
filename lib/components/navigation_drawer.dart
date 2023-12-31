@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-class NavigationDrawer extends StatelessWidget {
+class CustomNavigationDrawer extends StatelessWidget {
+  const CustomNavigationDrawer({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
@@ -20,23 +22,23 @@ class NavigationDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
             onTap: () => _navigateTo(context, '/'), // 导航到主页，根据实际路由调整
           ),
           ListTile(
-            leading: Icon(Icons.bar_chart),
-            title: Text('Reports'),
+            leading: const Icon(Icons.bar_chart),
+            title: const Text('Reports'),
             onTap: () => _navigateTo(context, '/reports'), // 调整为实际报告页面的路由
           ),
           ListTile(
-            leading: Icon(Icons.chat),
-            title: Text('Chatbot'),
+            leading: const Icon(Icons.chat),
+            title: const Text('Chatbot'),
             onTap: () => _navigateTo(context, '/chat'), // 调整为实际聊天页面的路由
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Accounts'),
+            leading: const Icon(Icons.account_circle),
+            title: const Text('Accounts'),
             onTap: () => _navigateTo(context, '/accounts'), // 调整为实际账户页面的路由
           ),
         ],

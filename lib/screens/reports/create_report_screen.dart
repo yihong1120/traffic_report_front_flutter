@@ -6,16 +6,18 @@ import 'package:provider/provider.dart';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 
-class CreateReportScreen extends StatefulWidget {
+class CreateReportPage extends StatefulWidget {
+  const CreateReportPage({super.key});
+
   @override
-  _CreateReportScreenState createState() => _CreateReportScreenState();
+  _CreateReportPageState createState() => _CreateReportPageState();
 }
 
-class _CreateReportScreenState extends State<CreateReportScreen> {
+class _CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
   List<XFile> _mediaFiles = [];
-  TrafficViolation _violation = TrafficViolation(
+  final TrafficViolation _violation = TrafficViolation(
     date: DateTime.now(),
     time: TimeOfDay.now(),
     violation: '紅線停車',
@@ -38,8 +40,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
     '其他',
   ];
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
 
   @override
   void initState() {
@@ -59,18 +61,18 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Report'),
+        title: const Text('Create Report'),
       ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'License Plate'),
+                  decoration: const InputDecoration(labelText: 'License Plate'),
                   onSaved: (value) => _violation.licensePlate = value,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -81,7 +83,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 ),
                 // Date Picker
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Date'),
+                  decoration: const InputDecoration(labelText: 'Date'),
                   readOnly: true,
                   controller: _dateController,
                   onTap: () async {
@@ -101,7 +103,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 ),
                 // Time Picker
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Time'),
+                  decoration: const InputDecoration(labelText: 'Time'),
                   readOnly: true,
                   controller: _timeController,
                   onTap: () async {
@@ -119,27 +121,27 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 ),
                 // Violation Dropdown
                 DropdownButtonFormField<String>(
-                value: _violation.violation,
-                decoration: InputDecoration(labelText: 'Violation'),
-                items: _violations.map((String violation) {
+                  value: _violation.violation,
+                  decoration: const InputDecoration(labelText: 'Violation'),
+                  items: _violations.map((String violation) {
                     return DropdownMenuItem<String>(
-                    value: violation,
-                    child: Text(violation),
+                      value: violation,
+                      child: Text(violation),
                     );
-                }).toList(),
-                onChanged: (String? newValue) {
+                  }).toList(),
+                  onChanged: (String? newValue) {
                     setState(() {
-                    _violation.violation = newValue;
+                      _violation.violation = newValue;
                     });
-                },
-                onSaved: (String? newValue) {
+                  },
+                  onSaved: (String? newValue) {
                     _violation.violation = newValue;
-                },
-                );
+                  },
+                ), // 添加了这个闭合括号来结束 DropdownButtonFormField
                 // Status Dropdown
                 DropdownButtonFormField<String>(
                     value: _violation.status,
-                    decoration: InputDecoration(labelText: 'Status'),
+                    decoration: const InputDecoration(labelText: 'Status'),
                     items: TrafficViolation.STATUS.map((status) {
                     return DropdownMenuItem(
                         value: status,
@@ -154,20 +156,20 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 ),
                 // Location Field
                 TextFormField(
-                    decoration: InputDecoration(labelText: 'Location'),
+                    decoration: const InputDecoration(labelText: 'Location'),
                     onSaved: (value) => _violation.location = value,
                 ),
                 // Officer Field
                 TextFormField(
-                    decoration: InputDecoration(labelText: 'Officer'),
+                    decoration: const InputDecoration(labelText: 'Officer'),
                     onSaved: (value) => _violation.officer = value,
                 ),
                 // Media Upload
                 ElevatedButton(
                     onPressed: () => _pickMedia(),
-                    child: Text('Add Media'),
+                    child: const Text('Add Media'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildMediaPreview(),
                 // Submit Button
                 ElevatedButton(
@@ -177,7 +179,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                         _submitReport();
                     }
                   },
-                  child: Text('Submit Report'),
+                  child: const Text('Submit Report'),
                 ),
               ],
             ),
@@ -206,7 +208,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
           children: <Widget>[
             Image.file(File(file.path), width: 100, height: 100),
             IconButton(
-              icon: Icon(Icons.remove_circle),
+              icon: const Icon(Icons.remove_circle),
               onPressed: () => _removeMedia(file),
             ),
           ],
@@ -225,10 +227,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
     final reportService = Provider.of<ReportService>(context, listen: false);
     bool success = await reportService.createReport(_violation, _mediaFiles);
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Report submitted successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report submitted successfully')));
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to submit report')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to submit report')));
     }
   }
 }

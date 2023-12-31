@@ -58,8 +58,8 @@ class SocialService {
   /// [url] is the URL to be launched.
   ///
   /// Returns a Future that completes when the URL has been launched.
-  if (await canLaunchUrl(loginUrl)) {
-      await launchUrl(loginUrl);
+  if (await canLaunchUrl(loginUrl as Uri)) {
+      await launchUrl(loginUrl as Uri);
     } else {
       throw 'Could not launch $loginUrl';
     }
