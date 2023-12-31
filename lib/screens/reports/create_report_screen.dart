@@ -6,14 +6,14 @@ import 'package:provider/provider.dart';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 
-class CreateReportScreen extends StatefulWidget {
-  const CreateReportScreen({super.key});
+class CreateReportPage extends StatefulWidget {
+  const CreateReportPage({super.key});
 
   @override
-  _CreateReportScreenState createState() => _CreateReportScreenState();
+  _CreateReportPageState createState() => _CreateReportPageState();
 }
 
-class _CreateReportScreenState extends State<CreateReportScreen> {
+class _CreateReportPageState extends State<CreateReportScreen> {
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
   List<XFile> _mediaFiles = [];

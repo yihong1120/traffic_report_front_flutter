@@ -6,16 +6,16 @@ import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import '../../components/media_preview.dart';
 
-class EditReportScreen extends StatefulWidget {
+class EditReportPage extends StatefulWidget {
   final int recordId;
 
-  const EditReportScreen({super.key, required this.recordId});
+  const EditReportPage({super.key, required this.recordId});
 
   @override
-  _EditReportScreenState createState() => _EditReportScreenState();
+  _EditReportPageState createState() => _EditReportPageState();
 }
 
-class _EditReportScreenState extends State<EditReportScreen> {
+class _EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
   List<XFile> _mediaFiles = [];

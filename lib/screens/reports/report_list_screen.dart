@@ -3,14 +3,15 @@ import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import 'edit_report_screen.dart';
 
-class ReportListScreen extends StatefulWidget {
-  const ReportListScreen({super.key});
+class ReportListPage extends StatefulWidget {
+  const ReportListPage({super.key});
+
 
   @override
-  _ReportListScreenState createState() => _ReportListScreenState();
+  _ReportListPageState createState() => _ReportListPageState();
 }
 
-class _ReportListScreenState extends State<ReportListScreen> {
+class _ReportListPageState extends State<ReportListPage> {
   final ReportService _reportService = ReportService();
   List<TrafficViolation> _reports = [];
   int _currentPage = 1;
