@@ -15,8 +15,12 @@ class ReportService {
       var reportJson = violation.toJson();
 
       // Create a multipart request to upload the report and media files
-      var request = http.MultipartRequest('POST', Uri.parse(apiUrl))
-        ..fields.addAll(reportJson);
+      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+      // Add fields to the request after converting values to String
+      reportJson.forEach((key, value) {
+        request.fields[key] = value.toString(); // 转换为字符串
+      });
 
       // Add media files to the request
       for (var file in mediaFiles) {
