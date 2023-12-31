@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});

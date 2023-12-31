@@ -13,7 +13,7 @@ class CreateReportPage extends StatefulWidget {
   _CreateReportPageState createState() => _CreateReportPageState();
 }
 
-class _CreateReportPageState extends State<CreateReportScreen> {
+class _CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
   List<XFile> _mediaFiles = [];

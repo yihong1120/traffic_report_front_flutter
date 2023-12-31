@@ -6,7 +6,6 @@ import 'edit_report_screen.dart';
 class ReportListPage extends StatefulWidget {
   const ReportListPage({super.key});
 
-
   @override
   _ReportListPageState createState() => _ReportListPageState();
 }
@@ -39,7 +38,7 @@ class _ReportListPageState extends State<ReportListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Case List'),
+        title: const Text('Case List'),
       ),
       body: _isFetching
           ? const Center(child: CircularProgressIndicator())
@@ -58,7 +57,7 @@ class _ReportListPageState extends State<ReportListPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditReportScreen(recordId: report.id),
+                        builder: (context) => EditReportPage(recordId: report.id),
                       ),
                     );
                   },

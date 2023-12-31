@@ -8,7 +8,7 @@ class ChatPage extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatPage> {
   final TextEditingController _controller = TextEditingController();
   String _response = '';
 
