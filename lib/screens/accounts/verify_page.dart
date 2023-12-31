@@ -29,7 +29,7 @@ class _VerifyPageState extends State<VerifyPage> {
       } else {
         // 如果驗證失敗，顯示錯誤消息
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid verification code')),
+          const SnackBar(content: Text('Invalid verification code')),
         );
       }
 
