@@ -16,8 +16,7 @@ class EditReportPage extends StatefulWidget {
 }
 
 class _EditReportPageState extends State<EditReportPage> {
-  late TrafficViolation _violation;
-  final ImagePicker _picker = ImagePicker();
+  // Removed unused fields _violation and _picker
   final List<XFile> _mediaFiles = [];
   final bool _isLoading = true;
 
@@ -30,7 +29,7 @@ class _EditReportPageState extends State<EditReportPage> {
   void _loadViolation() async {
     // TODO: Load the violation data from the backend using the recordId
     // For example:
-    // _violation = await Provider.of<ReportService>(context, listen: false).getViolation(widget.recordId);
+    // Code related to _violation removed
     // setState(() => _isLoading = false);
   }
 
@@ -54,9 +53,7 @@ class _EditReportPageState extends State<EditReportPage> {
               // TODO: Add form fields and media upload logic
               // For example:
               // TextFormField(
-              //   initialValue: _violation.licensePlate,
-              //   decoration: InputDecoration(labelText: 'License Plate'),
-              //   onChanged: (value) => _violation.licensePlate = value,
+              // Code related to _violation removed
               // ),
               // ...
               MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
