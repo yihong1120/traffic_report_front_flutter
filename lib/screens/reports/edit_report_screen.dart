@@ -18,8 +18,8 @@ class EditReportPage extends StatefulWidget {
 class _EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
-  List<XFile> _mediaFiles = [];
-  bool _isLoading = true;
+  final List<XFile> _mediaFiles = [];
+  final bool _isLoading = true;
 
   @override
   void initState() {
