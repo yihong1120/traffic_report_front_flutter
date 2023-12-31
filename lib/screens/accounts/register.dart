@@ -24,15 +24,15 @@ class _RegisterPageState extends State<RegisterPage> {
         _isLoading = true;
       });
 
-      // 假設 AuthService 有一個 register 方法來處理註冊邏輯
-      bool registered = await AuthService.register(_username, _email, _password);
+      // 使用 _password 和 _confirmPassword 作为参数
+      bool registered = await AuthService.register(_username, _email, _password, _confirmPassword);
       if (registered) {
-        // 如果註冊成功，導航到登入頁面或其他頁面
+        // 如果注册成功，导航到登录页面
         Navigator.of(context).pushReplacementNamed('/login');
       } else {
-        // 如果註冊失敗，顯示錯誤消息
+        // 如果注册失败，显示错误消息
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed')),
+          const SnackBar(content: Text('Registration failed')),
         );
       }
 
