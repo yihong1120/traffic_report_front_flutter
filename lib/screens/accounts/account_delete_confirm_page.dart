@@ -22,7 +22,7 @@ class AccountDeleteConfirmPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _showDeleteConfirmationDialog(context),
+              onPressed: () => _handleDialogResponse(context, _showDeleteConfirmationDialog(context)),
               child: const Text('Confirm Delete'),
             ),
             TextButton(
@@ -38,12 +38,9 @@ class AccountDeleteConfirmPage extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete Account'),
+  AlertDialog _createDeleteConfirmationDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Delete Account'),
           content: const Text('Are you sure you want to delete your account?'),
           actions: <Widget>[
             TextButton(
@@ -59,6 +56,23 @@ class AccountDeleteConfirmPage extends StatelessWidget {
                 _deleteAccount(context);
               },
             ),
+  void _handleDialogResponse(BuildContext context, AlertDialog dialog) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return dialog;
+      },
+    );
+  }
+
+  bool _showDeleteConfirmationDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return _createDeleteConfirmationDialog(context);
+      },
+    ) ?? false;
+  }
           ],
         );
       },
