@@ -46,4 +46,18 @@ class ReportService {
       return false;
     }
   }
+
+
+  // 获取报告列表的方法
+  Future<List<TrafficViolation>> getReports({int page = 1}) async {
+    var response = await http.get(Uri.parse('$apiUrl?page=$page'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => TrafficViolation.fromJson(json)).toList();
+    } else {
+      logger.d('Failed to fetch reports: ${response.statusCode}');
+      return [];
+    }
+  }
 }

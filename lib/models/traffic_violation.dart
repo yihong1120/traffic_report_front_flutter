@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TrafficViolation {
+  int? id; // 添加 id 属性
+  String? title; // 添加 title 属性
   DateTime? date;
   TimeOfDay? time;
   String? licensePlate;
@@ -31,6 +33,8 @@ class TrafficViolation {
   ];
 
   TrafficViolation({
+    this.id,
+    this.title,
     this.date,
     this.time,
     this.licensePlate,
@@ -43,13 +47,35 @@ class TrafficViolation {
   // Convert a TrafficViolation into a JSON map.
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
+      'title': title,
       'date': date?.toIso8601String(),
-      'time': time != null ? '${time!.hour}:${time!.minute}' : null, // 简单的时间格式化
+      'time': time != null ? '${time!.hour}:${time!.minute}' : null,
       'licensePlate': licensePlate,
       'violation': violation,
       'status': status,
       'location': location,
       'officer': officer,
     };
+  }
+
+  // Create a TrafficViolation from a JSON map.
+  factory TrafficViolation.fromJson(Map<String, dynamic> json) {
+    return TrafficViolation(
+      id: json['id'] as int?,
+      title: json['title'] as String?,
+      date: json['date'] != null ? DateTime.parse(json['date']) : null,
+      time: json['time'] != null ? _parseTime(json['time']) : null,
+      licensePlate: json['licensePlate'] as String?,
+      violation: json['violation'] as String?,
+      status: json['status'] as String?,
+      location: json['location'] as String?,
+      officer: json['officer'] as String?,
+    );
+  }
+
+  static TimeOfDay? _parseTime(String timeStr) {
+    final parts = timeStr.split(':').map(int.parse).toList();
+    return parts.length == 2 ? TimeOfDay(hour: parts[0], minute: parts[1]) : null;
   }
 }

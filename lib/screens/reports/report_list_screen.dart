@@ -52,12 +52,12 @@ class _ReportListPageState extends State<ReportListPage> {
 
                 TrafficViolation report = _reports[index];
                 return ListTile(
-                  title: Text(report.title),
+                  title: Text(report.title ?? 'No Title'),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditReportPage(recordId: report.id),
+                        builder: (context) => EditReportPage(recordId: report.id ?? -1),
                       ),
                     );
                   },
