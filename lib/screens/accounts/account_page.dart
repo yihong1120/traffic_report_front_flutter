@@ -5,10 +5,10 @@ class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
 
   @override
-  _AccountPageState createState() => _AccountPageState();
+  AccountPageState createState() => AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class AccountPageState extends State<AccountPage> {
   bool _isLoggedIn = false; // 這個應該根據實際的登入狀態來設定
 
   @override
