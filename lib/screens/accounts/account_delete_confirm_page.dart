@@ -13,7 +13,7 @@ class AccountDeleteConfirmPage extends StatelessWidget {
     } else {
       // 如果刪除失敗，顯示錯誤消息
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete account')),
+        const SnackBar(content: Text('Failed to delete account')),
       );
     }
   }

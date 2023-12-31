@@ -28,13 +28,13 @@ class _PasswordChangePageState extends State<PasswordChangePage> {
       if (passwordChanged) {
         // 如果密碼更改成功，顯示成功消息並導航回帳戶頁面
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Password changed successfully')),
+          const SnackBar(content: Text('Password changed successfully')),
         );
         Navigator.of(context).pop();
       } else {
         // 如果密碼更改失敗，顯示錯誤消息
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to change password')),
+          const SnackBar(content: Text('Failed to change password')),
         );
       }
 
