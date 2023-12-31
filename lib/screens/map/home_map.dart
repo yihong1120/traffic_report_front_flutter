@@ -63,17 +63,17 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('交通違規報告系統')),
+      appBar: AppBar(title: const Text('交通違規報告系統')),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
               onChanged: (value) => _searchKeyword = value,
               decoration: InputDecoration(
                 labelText: '搜索',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: _searchData,
                 ),
               ),

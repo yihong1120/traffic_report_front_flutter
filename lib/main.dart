@@ -12,7 +12,7 @@ Future main() async {
 }
 
 class TrafficReportApp extends StatelessWidget {
-  const TrafficReportApp({Key? key}) : super(key: key);
+  const TrafficReportApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +29,23 @@ class TrafficReportApp extends StatelessWidget {
         ...chat_routes.chatRoutes,
         ...account_routes.accountsRoutes,
       },
-      home: HomeScreen(), // 设置主屏幕
+      home: const HomeScreen(), // 设置主屏幕
     );
   }
 }
 
 // HomeScreen 类
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Traffic Report System'),
+        title: const Text('Traffic Report System'),
       ),
-      drawer: NavigationDrawer(), // 使用新组件
-      body: Center(
+      drawer: const CustomNavigationDrawer(), // 使用新组件
+      body: const Center(
         child: Text('Welcome to Traffic Report System'),
       ),
     );

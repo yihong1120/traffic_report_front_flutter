@@ -4,6 +4,8 @@ import '../../services/report_service.dart';
 import 'edit_report_screen.dart';
 
 class ReportListScreen extends StatefulWidget {
+  const ReportListScreen({super.key});
+
   @override
   _ReportListScreenState createState() => _ReportListScreenState();
 }
@@ -39,7 +41,7 @@ class _ReportListScreenState extends State<ReportListScreen> {
         title: Text('Case List'),
       ),
       body: _isFetching
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: _reports.length,
               itemBuilder: (context, index) {

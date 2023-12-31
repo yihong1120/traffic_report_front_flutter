@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  const AccountPage({super.key});
 
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -31,7 +31,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     if (!_isLoggedIn) {
       // 如果用戶未登入，顯示加載指示器，直到我們檢查完畢
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -41,9 +41,9 @@ class _AccountPageState extends State<AccountPage> {
     // 如果用戶已登入，顯示帳戶信息
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account'),
+        title: const Text('Account'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Welcome to your account page!'),
       ),
     );

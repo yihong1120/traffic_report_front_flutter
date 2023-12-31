@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PasswordChangeDonePage extends StatefulWidget {
-  const PasswordChangeDonePage({Key? key}) : super(key: key);
+  const PasswordChangeDonePage({super.key});
 
   @override
   _PasswordChangeDonePageState createState() => _PasswordChangeDonePageState();
@@ -17,7 +17,7 @@ class _PasswordChangeDonePageState extends State<PasswordChangeDonePage> {
   }
 
   void _startCountdown() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (_countdown > 0) {
         setState(() {
           _countdown--;
@@ -38,19 +38,19 @@ class _PasswordChangeDonePageState extends State<PasswordChangeDonePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Password Change Successful'),
+        title: const Text('Password Change Successful'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Your password has been changed successfully!',
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'You will be redirected to your account page in $_countdown seconds.',
               style: TextStyle(fontSize: 16),
@@ -58,7 +58,7 @@ class _PasswordChangeDonePageState extends State<PasswordChangeDonePage> {
             ),
             TextButton(
               onPressed: _redirectToAccountPage,
-              child: Text('Click here if you are not redirected'),
+              child: const Text('Click here if you are not redirected'),
             ),
           ],
         ),

@@ -7,6 +7,8 @@ import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 
 class CreateReportScreen extends StatefulWidget {
+  const CreateReportScreen({super.key});
+
   @override
   _CreateReportScreenState createState() => _CreateReportScreenState();
 }
@@ -15,7 +17,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
   List<XFile> _mediaFiles = [];
-  TrafficViolation _violation = TrafficViolation(
+  final TrafficViolation _violation = TrafficViolation(
     date: DateTime.now(),
     time: TimeOfDay.now(),
     violation: '紅線停車',
@@ -38,8 +40,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
     '其他',
   ];
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
 
   @override
   void initState() {
@@ -59,18 +61,18 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Report'),
+        title: const Text('Create Report'),
       ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'License Plate'),
+                  decoration: const InputDecoration(labelText: 'License Plate'),
                   onSaved: (value) => _violation.licensePlate = value,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -81,7 +83,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 ),
                 // Date Picker
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Date'),
+                  decoration: const InputDecoration(labelText: 'Date'),
                   readOnly: true,
                   controller: _dateController,
                   onTap: () async {
@@ -120,7 +122,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                 // Violation Dropdown
                 DropdownButtonFormField<String>(
                 value: _violation.violation,
-                decoration: InputDecoration(labelText: 'Violation'),
+                decoration: const InputDecoration(labelText: 'Violation'),
                 items: _violations.map((String violation) {
                     return DropdownMenuItem<String>(
                     value: violation,

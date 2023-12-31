@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class AccountDeleteConfirmPage extends StatelessWidget {
-  const AccountDeleteConfirmPage({Key? key}) : super(key: key);
+  const AccountDeleteConfirmPage({super.key});
 
   void _deleteAccount(BuildContext context) async {
     // 假設 AuthService 有一個 deleteAccount 方法來處理帳戶刪除邏輯
@@ -22,29 +22,29 @@ class AccountDeleteConfirmPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Confirm Account Deletion'),
+        title: const Text('Confirm Account Deletion'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Are you sure you want to delete your account? This action cannot be undone.',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _showDeleteConfirmationDialog(context),
-              child: Text('Confirm Delete'),
+              child: const Text('Confirm Delete'),
             ),
             TextButton(
               onPressed: () {
                 // Navigate back to the account page
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
           ],
         ),
@@ -57,17 +57,17 @@ class AccountDeleteConfirmPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Account'),
-          content: Text('Are you sure you want to delete your account?'),
+          title: const Text('Delete Account'),
+          content: const Text('Are you sure you want to delete your account?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Confirm Delete'),
+              child: const Text('Confirm Delete'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 _deleteAccount(context);

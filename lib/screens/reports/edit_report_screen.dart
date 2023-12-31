@@ -9,7 +9,7 @@ import '../../components/media_preview.dart';
 class EditReportScreen extends StatefulWidget {
   final int recordId;
 
-  EditReportScreen({Key? key, required this.recordId}) : super(key: key);
+  const EditReportScreen({super.key, required this.recordId});
 
   @override
   _EditReportScreenState createState() => _EditReportScreenState();
@@ -38,16 +38,16 @@ class _EditReportScreenState extends State<EditReportScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(title: Text('Edit Report')),
-        body: Center(child: CircularProgressIndicator()),
+        appBar: AppBar(title: const Text('Edit Report')),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Report')),
+      appBar: AppBar(title: const Text('Edit Report')),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[

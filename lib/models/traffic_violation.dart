@@ -44,7 +44,7 @@ class TrafficViolation {
   Map<String, dynamic> toJson() {
     return {
       'date': date?.toIso8601String(),
-      'time': time?.format(context), // This requires a BuildContext to format the time.
+      'time': time != null ? '${time!.hour}:${time!.minute}' : null, // 简单的时间格式化
       'licensePlate': licensePlate,
       'violation': violation,
       'status': status,

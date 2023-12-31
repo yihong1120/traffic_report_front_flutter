@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         // 如果登入失敗，顯示錯誤消息
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid username or password')),
+          const SnackBar(content: Text('Invalid username or password')),
         );
       }
 
@@ -42,11 +42,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : Form(
                 key: _formKey,
                 child: Padding(
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Username'),
+                        decoration: const InputDecoration(labelText: 'Username'),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your username';
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                         onSaved: (value) => _username = value!,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'Password'),
+                        decoration: const InputDecoration(labelText: 'Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -75,10 +75,10 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         onSaved: (value) => _password = value!,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _login,
-                        child: Text('Login'),
+                        child: const Text('Login'),
                       ),
                     ],
                   ),
