@@ -39,6 +39,15 @@ class AuthService {
     }
   }
 
+  static Future<bool> verify(String code) async {
+    var url = Uri.parse('$_baseUrl/verify/'); // 替换为正确的验证 API 端点
+    var response = await http.post(url, body: {
+      'code': code,
+    });
+
+    return response.statusCode == 200;
+  }
+
   static Future<bool> verifyEmail(String code) async {
     var url = Uri.parse('$_baseUrl/verify-email/');
     var response = await http.post(url, body: {
