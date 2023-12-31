@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -29,7 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat with Gemini'),
+        title: const Text('Chat with Gemini'),
       ),
       body: Column(
         children: <Widget>[
@@ -38,13 +40,13 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           TextField(
             controller: _controller,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Enter your message',
             ),
           ),
           ElevatedButton(
             onPressed: _sendMessage,
-            child: Text('Send'),
+            child: const Text('Send'),
           ),
         ],
       ),
