@@ -12,7 +12,7 @@ class ReportListPage extends StatefulWidget {
 
 class _ReportListPageState extends State<ReportListPage> {
   final ReportService _reportService = ReportService();
-  List<TrafficViolation> _reports = [];
+  final List<TrafficViolation> _reports = [];
   int _currentPage = 1;
   bool _isFetching = false;
 
@@ -22,16 +22,29 @@ class _ReportListPageState extends State<ReportListPage> {
     _fetchReports();
   }
 
+  // 加載報告的函數
   void _fetchReports({int page = 1}) async {
-    setState(() {
-      _isFetching = true;
-    });
-    List<TrafficViolation> reports = await _reportService.getReports(page: page);
-    setState(() {
-      _currentPage = page;
-      _reports = reports;
-      _isFetching = false;
-    });
+    // 獲取 ScaffoldMessenger 的參考
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    setState(() => _isFetching = true);
+
+    try {
+      List<TrafficViolation> reports = await _reportService.getReports(page: page);
+      setState(() {
+        _currentPage = page;
+        _reports.addAll(reports);
+        _isFetching = false;
+      });
+    } catch (e) {
+      // 使用先前獲取的 ScaffoldMessenger 顯示錯誤信息
+      if (mounted) { // 檢查當前 Widget 是否仍然掛載在樹上
+        scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Failed to fetch reports: $e')),
+        );
+      }
+      setState(() => _isFetching = false);
+    }
   }
 
   @override
@@ -40,17 +53,22 @@ class _ReportListPageState extends State<ReportListPage> {
       appBar: AppBar(
         title: const Text('Case List'),
       ),
-      body: _isFetching
+      body: _isFetching && _reports.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: _reports.length,
+              itemCount: _reports.length + (_isFetching ? 1 : 0),
               itemBuilder: (context, index) {
+                if (index >= _reports.length) {
+                  // 在列表底部顯示加載指示器
+                  return const Center(child: CircularProgressIndicator());
+                }
+
                 if (index >= _reports.length - 1 && _reports.length % 25 == 0) {
-                  // If we reached the end of the current page, fetch the next page
+                  // 加載下一頁
                   _fetchReports(page: _currentPage + 1);
                 }
 
-                TrafficViolation report = _reports[index];
+                final report = _reports[index];
                 return ListTile(
                   title: Text(report.title ?? 'No Title'),
                   onTap: () {
