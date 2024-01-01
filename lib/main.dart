@@ -4,6 +4,7 @@ import 'screens/map/routes.dart' as map_routes;
 import 'screens/reports/routes.dart' as reports_routes;
 import 'screens/chat/routes.dart' as chat_routes;
 import 'screens/accounts/routes.dart' as account_routes;
+import 'screens/map/home_map.dart';
 import 'components/navigation_drawer.dart';
 
 Future main() async {
@@ -29,25 +30,8 @@ class TrafficReportApp extends StatelessWidget {
         ...chat_routes.chatRoutes,
         ...account_routes.accountsRoutes,
       },
-      home: const HomeScreen(), // 设置主屏幕
-    );
-  }
-}
-
-// HomeScreen 类
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Traffic Report System'),
-      ),
-      drawer: const CustomNavigationDrawer(), // 使用新组件
-      body: const Center(
-        child: Text('Welcome to Traffic Report System'),
-      ),
+      // 將 HomeMapPage 設為首頁
+      home: const HomeMapPage(), 
     );
   }
 }
