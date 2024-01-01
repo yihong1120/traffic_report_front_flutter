@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class HomeMapScreen extends StatefulWidget {
-  const HomeMapScreen({super.key});
+class HomeMapPage extends StatefulWidget {
+  const HomeMapPage({super.key});
 
   @override
-  State<HomeMapScreen> createState() => _HomeMapScreenState();
+  State<HomeMapPage> createState() => _HomeMapPageState();
 }
 
-class _HomeMapScreenState extends State<HomeMapScreen> {
+class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
   String _searchKeyword = '';
@@ -64,6 +64,54 @@ class _HomeMapScreenState extends State<HomeMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('交通違規報告系統')),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('菜單'),
+            ),
+            ListTile(
+              title: const Text('Home'),
+              onTap: () {
+                // 導航到 Home 頁面
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Create Report'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/create');
+              },
+            ),
+            ListTile(
+              title: const Text('Edit Report'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/reports');
+              },
+            ),
+            ListTile(
+              title: const Text('Chatbot'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/chat');
+              },
+            ),
+            ListTile(
+              title: const Text('Accounts'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/accounts');
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Padding(
