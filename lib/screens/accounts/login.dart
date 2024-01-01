@@ -44,6 +44,11 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void _register() {
+    // 導航到註冊頁面
+    Navigator.pushNamed(context, '/register');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,6 +90,11 @@ class _LoginPageState extends State<LoginPage> {
                       ElevatedButton(
                         onPressed: _login,
                         child: const Text('Login'),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _register,
+                        child: const Text('Register'),
                       ),
                     ],
                   ),
