@@ -19,7 +19,7 @@ class _EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
   final List<XFile> _mediaFiles = [];
-  final bool _isLoading = true;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -28,10 +28,9 @@ class _EditReportPageState extends State<EditReportPage> {
   }
 
   void _loadViolation() async {
-    // TODO: Load the violation data from the backend using the recordId
-    // For example:
-    // _violation = await Provider.of<ReportService>(context, listen: false).getViolation(widget.recordId);
-    // setState(() => _isLoading = false);
+    // 加載違規報告資料
+    _violation = await Provider.of<ReportService>(context, listen: false).getViolation(widget.recordId);
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -51,14 +50,12 @@ class _EditReportPageState extends State<EditReportPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // TODO: Add form fields and media upload logic
-              // For example:
-              // TextFormField(
-              //   initialValue: _violation.licensePlate,
-              //   decoration: InputDecoration(labelText: 'License Plate'),
-              //   onChanged: (value) => _violation.licensePlate = value,
-              // ),
-              // ...
+              TextFormField(
+                initialValue: _violation.licensePlate,
+                decoration: const InputDecoration(labelText: 'License Plate'),
+                onChanged: (value) => _violation.licensePlate = value,
+              ),
+              // 其他表單字段
               MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
               ElevatedButton(
                 onPressed: _pickMedia,
@@ -76,14 +73,43 @@ class _EditReportPageState extends State<EditReportPage> {
   }
 
   void _pickMedia() async {
-    // TODO: Implement media picking logic
+    final List<XFile> pickedFiles = await _picker.pickMultiImage();
+    setState(() {
+      _mediaFiles.addAll(pickedFiles);
+    });
   }
 
   void _removeMedia(XFile file) {
-    // TODO: Implement media removal logic
+    setState(() {
+      _mediaFiles.remove(file);
+    });
   }
 
   void _submitReport() async {
-    // TODO: Implement report submission logic
+    // 在異步操作前獲取 ScaffoldMessenger 和 Navigator 的實例
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final reportService = Provider.of<ReportService>(context, listen: false);
+    bool success = await reportService.updateReport(_violation, _mediaFiles);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (success) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Report updated successfully')),
+      );
+      navigator.pop();
+    } else {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Failed to update report')),
+      );
+    }
   }
 }
