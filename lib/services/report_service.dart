@@ -7,34 +7,26 @@ import '../models/traffic_violation.dart';
 var logger = Logger();
 
 class ReportService {
-  final String apiUrl = 'https://your-api-url.com/reports';
+  final String apiUrl = 'http://127.0.0.1:8000/reports/';
 
   Future<bool> createReport(TrafficViolation violation, List<XFile> mediaFiles) async {
     try {
-      // Convert the TrafficViolation object to JSON
       var reportJson = violation.toJson();
 
-      // Create a multipart request to upload the report and media files
       var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-
-      // Add fields to the request after converting values to String
       reportJson.forEach((key, value) {
-        request.fields[key] = value.toString(); // 转换为字符串
+        if (value != null) {
+          request.fields[key] = value.toString();
+        }
       });
 
-      // Add media files to the request
       for (var file in mediaFiles) {
-        var multipartFile = await http.MultipartFile.fromPath(
-          'media', // The field name for files in your API
-          file.path,
-        );
+        var multipartFile = await http.MultipartFile.fromPath('media', file.path);
         request.files.add(multipartFile);
       }
 
-      // Send the request
       var response = await request.send();
 
-      // Check the response status
       if (response.statusCode == 200) {
         return true;
       } else {
@@ -47,8 +39,6 @@ class ReportService {
     }
   }
 
-
-  // 获取报告列表的方法
   Future<List<TrafficViolation>> getReports({int page = 1}) async {
     var response = await http.get(Uri.parse('$apiUrl?page=$page'));
 
@@ -58,6 +48,51 @@ class ReportService {
     } else {
       logger.d('Failed to fetch reports: ${response.statusCode}');
       return [];
+    }
+  }
+
+  // 獲取特定違規報告的方法
+  Future<TrafficViolation> getViolation(int recordId) async {
+    var response = await http.get(Uri.parse('$apiUrl$recordId/'));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return TrafficViolation.fromJson(data);
+    } else {
+      logger.d('Failed to fetch violation: ${response.statusCode}');
+      throw Exception('Failed to fetch violation');
+    }
+  }
+
+  // 更新報告的方法
+  Future<bool> updateReport(TrafficViolation violation, List<XFile> mediaFiles) async {
+    try {
+      var reportJson = violation.toJson();
+
+      // 假設後端 API 需要 PUT 請求來更新報告
+      var request = http.MultipartRequest('PUT', Uri.parse('$apiUrl${violation.id}/'));
+      reportJson.forEach((key, value) {
+        if (value != null) {
+          request.fields[key] = value.toString();
+        }
+      });
+
+      for (var file in mediaFiles) {
+        var multipartFile = await http.MultipartFile.fromPath('media', file.path);
+        request.files.add(multipartFile);
+      }
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        logger.d('Failed to update report: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      logger.d('Caught error: $e');
+      return false;
     }
   }
 }
