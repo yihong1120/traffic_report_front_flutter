@@ -5,10 +5,10 @@ class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  ChatScreenState createState() => ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatPage> {
+class ChatScreenState extends State<ChatPage> {
   final TextEditingController _controller = TextEditingController();
   String _response = '';
 

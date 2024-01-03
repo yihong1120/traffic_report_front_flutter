@@ -7,10 +7,10 @@ class ReportListPage extends StatefulWidget {
   const ReportListPage({super.key});
 
   @override
-  _ReportListPageState createState() => _ReportListPageState();
+  ReportListPageState createState() => ReportListPageState();
 }
 
-class _ReportListPageState extends State<ReportListPage> {
+class ReportListPageState extends State<ReportListPage> {
   final ReportService _reportService = ReportService();
   final List<TrafficViolation> _reports = [];
   int _currentPage = 1;

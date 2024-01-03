@@ -9,10 +9,10 @@ class SocialConnectionsPage extends StatefulWidget {
   const SocialConnectionsPage({super.key});
 
   @override
-  _SocialConnectionsPageState createState() => _SocialConnectionsPageState();
+  SocialConnectionsPageState createState() => SocialConnectionsPageState();
 }
 
-class _SocialConnectionsPageState extends State<SocialConnectionsPage> {
+class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   List<SocialAccount> _connectedAccounts = [];
   List<SocialProvider> _availableProviders = []; // 假設 SocialProvider 是一個包含提供者信息的模型
 
