@@ -12,13 +12,13 @@ class HomeMapPage extends StatefulWidget {
 class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
-  String _searchKeyword = '';
+
   final Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
-    String GOOGLE_MAPS_API_KEY = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? ''; // 獲取 API 密鑰
+    String googleMapsApiKey = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? ''; // 獲取 API 密鑰
     // 使用 apiKey 進行相關操作
     // 初始加載標記
     _loadMarkers();
@@ -117,7 +117,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              onChanged: (value) => _searchKeyword = value,
+              // Note: Search feature is currently not implemented
               decoration: InputDecoration(
                 labelText: '搜索',
                 suffixIcon: IconButton(
