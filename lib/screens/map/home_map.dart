@@ -18,7 +18,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
   @override
   void initState() {
     super.initState();
-    // The variable 'GOOGLE_MAPS_API_KEY' was here and is now removed as it is unused.獲取 API 密鑰
+    // The variable 'googleMapsApiKey' was here and is now removed as it is unused.獲取 API 密鑰
     // 使用 apiKey 進行相關操作
     // 初始加載標記
     _loadMarkers();
