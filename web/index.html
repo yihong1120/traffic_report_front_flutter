@@ -38,6 +38,7 @@
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+  <script src="config.js"></script>
 </head>
 <body>
   <script>
@@ -53,6 +54,13 @@
           });
         }
       });
+    });
+  </script>
+  <script>
+    window.addEventListener('load', function() {
+      var script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}`;
+      document.head.appendChild(script);
     });
   </script>
 </body>
