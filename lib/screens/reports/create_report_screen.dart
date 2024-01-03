@@ -10,10 +10,10 @@ class CreateReportPage extends StatefulWidget {
   const CreateReportPage({super.key});
 
   @override
-  _CreateReportPageState createState() => _CreateReportPageState();
+  CreateReportPageState createState() => CreateReportPageState();
 }
 
-class _CreateReportPageState extends State<CreateReportPage> {
+class CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
   final List<XFile> _mediaFiles = [];
