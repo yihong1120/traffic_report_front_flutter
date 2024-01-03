@@ -5,10 +5,10 @@ class VerifyPage extends StatefulWidget {
   const VerifyPage({super.key});
 
   @override
-  _VerifyPageState createState() => _VerifyPageState();
+  VerifyPageState createState() => VerifyPageState();
 }
 
-class _VerifyPageState extends State<VerifyPage> {
+class VerifyPageState extends State<VerifyPage> {
   final _formKey = GlobalKey<FormState>();
   String _verificationCode = '';
   bool _isLoading = false;

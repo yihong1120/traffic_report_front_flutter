@@ -4,10 +4,10 @@ class PasswordChangeDonePage extends StatefulWidget {
   const PasswordChangeDonePage({super.key});
 
   @override
-  _PasswordChangeDonePageState createState() => _PasswordChangeDonePageState();
+  PasswordChangeDonePageState createState() => PasswordChangeDonePageState();
 }
 
-class _PasswordChangeDonePageState extends State<PasswordChangeDonePage> {
+class PasswordChangeDonePageState extends State<PasswordChangeDonePage> {
   int _countdown = 10;
 
   @override

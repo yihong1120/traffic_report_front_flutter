@@ -12,10 +12,10 @@ class EditReportPage extends StatefulWidget {
   const EditReportPage({super.key, required this.recordId});
 
   @override
-  _EditReportPageState createState() => _EditReportPageState();
+  EditReportPageState createState() => EditReportPageState();
 }
 
-class _EditReportPageState extends State<EditReportPage> {
+class EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
   final List<XFile> _mediaFiles = [];
