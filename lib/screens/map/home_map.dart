@@ -12,7 +12,7 @@ class HomeMapPage extends StatefulWidget {
 class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
-  String _searchKeyword = '';
+
   final Set<Marker> _markers = {};
 
   @override
@@ -55,9 +55,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
   }
 
   void _searchData() async {
-    // 根據 _searchKeyword 進行搜索
-    // 搜索後的處理可能會涉及與後端的交互
-    // 更新 _markers 集合以反映搜索結果
+    // This method was previously used to search data based on the _searchKeyword
+    // This functionality is currently not implemented
   }
 
   @override
@@ -117,7 +116,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              onChanged: (value) => _searchKeyword = value,
+              // Removed _searchKeyword related code,
               decoration: InputDecoration(
                 labelText: '搜索',
                 suffixIcon: IconButton(
