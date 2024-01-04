@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
+import 'package:logger/logger.dart';
+import 'dart:typed_data';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
+
+ final Logger logger = Logger();
 
 class CreateReportPage extends StatefulWidget {
   const CreateReportPage({super.key});
@@ -42,16 +47,17 @@ class CreateReportPageState extends State<CreateReportPage> {
 
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+  final Map<String, VideoPlayerController> _videoControllers = {};
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
       if (_dateController.text.isEmpty) {
-    _dateController.text = DateFormat('yyyy-MM-dd').format(_violation.date!);
+        _dateController.text = DateFormat('yyyy-MM-dd').format(_violation.date!);
       }
 
       if (_timeController.text.isEmpty) {
-    _timeController.text = _violation.time!.format(context);
+        _timeController.text = _violation.time!.format(context);
       }
   }
 
@@ -59,9 +65,14 @@ class CreateReportPageState extends State<CreateReportPage> {
   void dispose() {
     _dateController.dispose();
     _timeController.dispose();
+
+    _videoControllers.forEach((_, controller) => controller.dispose());
+    _videoControllers.clear();
+    _dateController.dispose();
+    _timeController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -196,9 +207,62 @@ class CreateReportPageState extends State<CreateReportPage> {
 
   void _pickMedia() async {
     final List<XFile> pickedFiles = await _picker.pickMultiImage();
-    setState(() {
-      _mediaFiles.addAll(pickedFiles);
-    });
+
+    // 检查是否有文件被选中
+    if (pickedFiles.isEmpty) return;
+
+    // 检查选择的媒体数量
+    if (pickedFiles.length > 5) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You can only select up to 5 media files.')),
+        );
+      }
+      return;
+    }
+
+    List<XFile> validFiles = [];
+    
+    // 检查每个媒体文件的大小
+    for (var file in pickedFiles) {
+      final fileLength = await File(file.path).length();
+      if (fileLength > 100 * 1024 * 1024) { // 100MB
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Each file must be less than 100MB')),
+          );
+        }
+      } else {
+        validFiles.add(file);
+      }
+    }
+
+    // 更新状态
+    if (mounted) {
+      setState(() {
+        _mediaFiles.addAll(validFiles);
+        for (var file in validFiles) {
+          if (_isVideoFile(file.path)) {
+            _initVideoController(file);
+          }
+        }
+      });
+    }
+  }
+
+  void _initVideoController(XFile file) {
+    VideoPlayerController controller = VideoPlayerController.file(File(file.path))
+      ..initialize().then((_) {
+        logger.i('Video initialized successfully.');
+        setState(() {});
+      }).catchError((error) {
+        logger.e('Video initialization error: $error');
+      });
+    _videoControllers[file.path] = controller;
+  }
+
+  bool _isVideoFile(String path) {
+    return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
   }
 
   Widget _buildMediaPreview() {
@@ -206,17 +270,58 @@ class CreateReportPageState extends State<CreateReportPage> {
       spacing: 8.0,
       runSpacing: 8.0,
       children: _mediaFiles.map((file) {
-        return Stack(
-          alignment: Alignment.topRight,
-          children: <Widget>[
-            Image.file(File(file.path), width: 100, height: 100),
-            IconButton(
-              icon: const Icon(Icons.remove_circle),
-              onPressed: () => _removeMedia(file),
-            ),
-          ],
-        );
+        if (_isVideoFile(file.path)) {
+          // 处理视频文件
+          return _buildVideoPreview(file);
+        } else {
+          // 处理图像文件
+          return _buildImagePreview(file);
+        }
       }).toList(),
+    );
+  }
+
+  Widget _buildVideoPreview(XFile file) {
+    var controller = _videoControllers[file.path];
+    if (controller == null || !controller.value.isInitialized) {
+      return const CircularProgressIndicator();  // 或者其他占位符
+    }
+    return Stack(
+      alignment: Alignment.topRight,
+      children: <Widget>[
+        VideoPlayer(controller),
+        IconButton(
+          icon: const Icon(Icons.remove_circle),
+          onPressed: () {
+            _removeMedia(file);
+            controller.dispose();
+            _videoControllers.remove(file.path);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImagePreview(XFile file) {
+    return FutureBuilder<Uint8List>(
+      future: file.readAsBytes(),
+      builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
+          Uint8List fileData = snapshot.data!;
+          return Stack(
+            alignment: Alignment.topRight,
+            children: <Widget>[
+              Image.memory(fileData, width: 100, height: 100),
+              IconButton(
+                icon: const Icon(Icons.remove_circle, color: Colors.red),
+                onPressed: () => _removeMedia(file),
+              ),
+            ],
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 
@@ -227,6 +332,15 @@ class CreateReportPageState extends State<CreateReportPage> {
   }
 
   void _submitReport() async {
+    // 确保至少有一个视频文件
+    bool hasVideo = _mediaFiles.any((file) => _isVideoFile(file.path));
+    if (!hasVideo) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please include at least one video file.')),
+      );
+      return;
+    }
+
     // 获取 context 依赖的信息
     final reportService = Provider.of<ReportService>(context, listen: false);
 
