@@ -8,6 +8,7 @@ import 'package:logger/logger.dart';
 import 'dart:typed_data';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
+import '../../components/media_picker.dart';
 
  final Logger logger = Logger();
 
@@ -206,10 +207,10 @@ class CreateReportPageState extends State<CreateReportPage> {
   }
 
   void _pickMedia() async {
-    final List<XFile> pickedFiles = await _picker.pickMultiImage();
+    final List<XFile>? pickedFiles = await MediaPicker.pickMedia(context, enableCamera: true);
 
     // 检查是否有文件被选中
-    if (pickedFiles.isEmpty) return;
+    if (pickedFiles == null || pickedFiles.isEmpty) return;
 
     // 检查选择的媒体数量
     if (pickedFiles.length > 5) {
