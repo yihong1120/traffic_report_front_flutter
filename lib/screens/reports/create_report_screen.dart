@@ -109,6 +109,56 @@ class CreateReportPageState extends State<CreateReportPage> {
                       initialDate: _violation.date!,
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
+  bool _checkSelectedMediaFiles(List<XFile>? pickedFiles) {
+    if (pickedFiles == null || pickedFiles.isEmpty) return false;
+    if (pickedFiles.length > 5) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You can only select up to 5 media files.')),
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+
+  bool _checkMediaFileSize(XFile file) async {
+    final fileLength = await File(file.path).length();
+    if (fileLength > 100 * 1024 * 1024) { // 100MB
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Each file must be less than 100MB')),
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+  bool _checkSelectedMediaFiles(List<XFile>? pickedFiles) {
+    if (pickedFiles == null || pickedFiles.isEmpty) return false;
+    if (pickedFiles.length > 5) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You can only select up to 5 media files.')),
+        );
+      }
+      return false;
+    }
+    return true;
+  }
+
+  bool _checkMediaFileSize(XFile file) async {
+    final fileLength = await File(file.path).length();
+    if (fileLength > 100 * 1024 * 1024) { // 100MB
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Each file must be less than 100MB')),
+        );
+      }
+      return false;
+    }
+    return true;
+  }
                     );
                     if (pickedDate != null) {
                       setState(() {
@@ -208,34 +258,34 @@ class CreateReportPageState extends State<CreateReportPage> {
 
   void _pickMedia() async {
     final List<XFile>? pickedFiles = await MediaPicker.pickMedia(context, enableCamera: true);
-
-    // 检查是否有文件被选中
-    if (pickedFiles == null || pickedFiles.isEmpty) return;
-
-    // 检查选择的媒体数量
+    if (!_checkSelectedMediaFiles(pickedFiles)) return;
+    List<XFile> validFiles = pickedFiles.where((file) => _checkMediaFileSize(file)).toList();
+  bool _checkSelectedMediaFiles(List<XFile>? pickedFiles) {
+    if (pickedFiles == null || pickedFiles.isEmpty) return false;
     if (pickedFiles.length > 5) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('You can only select up to 5 media files.')),
         );
       }
-      return;
+      return false;
     }
+    return true;
+  }
+    if (!_checkSelectedMediaFiles(pickedFiles)) return;
 
-    List<XFile> validFiles = [];
+    List<XFile> validFiles = pickedFiles.where((file) => _checkMediaFileSize(file)).toList();
     
-    // 检查每个媒体文件的大小
-    for (var file in pickedFiles) {
-      final fileLength = await File(file.path).length();
-      if (fileLength > 100 * 1024 * 1024) { // 100MB
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Each file must be less than 100MB')),
-          );
+    // 更新状态
+    if (mounted) {
+      setState(() {
+        _mediaFiles.addAll(validFiles);
+        for (var file in validFiles) {
+          if (_isVideoFile(file.path)) {
+            _initVideoController(file);
+          }
         }
-      } else {
-        validFiles.add(file);
-      }
+      });
     }
 
     // 更新状态
@@ -259,6 +309,18 @@ class CreateReportPageState extends State<CreateReportPage> {
       }).catchError((error) {
         logger.e('Video initialization error: $error');
       });
+  bool _checkMediaFileSize(XFile file) async {
+    final fileLength = await File(file.path).length();
+    if (fileLength > 100 * 1024 * 1024) { // 100MB
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Each file must be less than 100MB')),
+        );
+      }
+      return false;
+    }
+    return true;
+  }
     _videoControllers[file.path] = controller;
   }
 
