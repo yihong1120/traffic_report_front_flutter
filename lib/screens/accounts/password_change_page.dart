@@ -12,8 +12,8 @@ class PasswordChangePageState extends State<PasswordChangePage> {
   final _formKey = GlobalKey<FormState>();
   String _oldPassword = '';
   String _newPassword = '';
-  String _confirmNewPassword = '';
-  bool _isLoading = false;
+  ;
+  
 
   void _changePassword() async {
     if (_formKey.currentState!.validate()) {
