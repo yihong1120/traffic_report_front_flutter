@@ -12,7 +12,7 @@ class PasswordChangePageState extends State<PasswordChangePage> {
   final _formKey = GlobalKey<FormState>();
   String _oldPassword = '';
   String _newPassword = '';
-  String _confirmNewPassword;;
+  String _oldPassword = '';\n  String _newPassword = '';;
   bool _isLoading = false;
 
   void _changePassword() async {
