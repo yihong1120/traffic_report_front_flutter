@@ -5,7 +5,7 @@ import 'package:camera/camera.dart';
 
 class MediaPicker {
   static Future<List<XFile>?> pickMedia(BuildContext context, {bool enableCamera = false}) async {
-    final ImagePicker picker = ImagePicker();
+    static final ImagePicker _picker = ImagePicker();
 
     if (enableCamera) {
       // 检查摄像头是否可用
@@ -29,7 +29,7 @@ class _MediaPickerMenu extends StatelessWidget {
   const _MediaPickerMenu({Key? key, required this.picker}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _context) {
     return Wrap(
       children: <Widget>[
         ListTile(
@@ -57,7 +57,7 @@ class _MediaPickerMenu extends StatelessWidget {
           leading: const Icon(Icons.videocam),
           title: const Text('Record a Video'),
           onTap: () async {
-            Navigator.pop(context, [await picker.pickVideo(source: ImageSource.camera)]);
+            Navigator.pop(context, [await _picker.pickVideo(source: ImageSource.camera)]);
           },
         ),
       ],
