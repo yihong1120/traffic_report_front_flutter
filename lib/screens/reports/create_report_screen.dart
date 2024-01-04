@@ -21,7 +21,7 @@ class CreateReportPage extends StatefulWidget {
 
 class CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
-  final _picker = ImagePicker();
+  
   final List<XFile> _mediaFiles = [];
   final TrafficViolation _violation = TrafficViolation(
     date: DateTime.now(),
