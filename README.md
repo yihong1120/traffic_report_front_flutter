@@ -43,8 +43,8 @@ lib/
 
 ## Development Roadmap
 - [x] Initial project setup and configuration
-- [ ] Implement user authentication and authorisation
-- [ ] Develop the report submission form
+- [x] Implement user authentication and authorisation
+- [x] Develop the report submission form
 - [ ] Create a dashboard for displaying violation reports
 - [ ] Integrate with the backend API for data retrieval and submission
 - [ ] Implement responsive design for mobile and tablet views
