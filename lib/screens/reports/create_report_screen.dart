@@ -44,10 +44,15 @@ class CreateReportPageState extends State<CreateReportPage> {
   final TextEditingController _timeController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+      if (_dateController.text.isEmpty) {
     _dateController.text = DateFormat('yyyy-MM-dd').format(_violation.date!);
+      }
+
+      if (_timeController.text.isEmpty) {
     _timeController.text = _violation.time!.format(context);
+      }
   }
 
   @override
