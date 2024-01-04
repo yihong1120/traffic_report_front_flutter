@@ -5,7 +5,7 @@ import 'package:camera/camera.dart';
 
 class MediaPicker {
   static Future<List<XFile>?> pickMedia(BuildContext context, {bool enableCamera = false}) async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
 
     if (enableCamera) {
       // 检查摄像头是否可用
@@ -14,7 +14,7 @@ class MediaPicker {
         // 显示选择媒体或使用摄像头的菜单
         return showModalBottomSheet<List<XFile>>(
           context: context,
-          builder: (context) => _MediaPickerMenu(picker: _picker),
+          builder: (context) => _MediaPickerMenu(picker: picker),
         );
       }
     }
