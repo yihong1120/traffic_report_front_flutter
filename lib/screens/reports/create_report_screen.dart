@@ -122,7 +122,7 @@ class CreateReportPageState extends State<CreateReportPage> {
     return true;
   }
 
-  bool _checkMediaFileSize(XFile file) async {
+  Future<bool> _checkMediaFileSize(XFile file) async {}
     final fileLength = await File(file.path).length();
     if (fileLength > 100 * 1024 * 1024) { // 100MB
       if (mounted) {
