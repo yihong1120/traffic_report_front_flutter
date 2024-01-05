@@ -24,6 +24,19 @@ class MediaPreview extends StatefulWidget {
 class _MediaPreviewState extends State<MediaPreview> {
   final Map<String, VideoPlayerController> _videoControllers = {};
 
+  VideoPlayerController? _getVideoController(XFile file) {
+    return _videoControllers[file.path];
+  }
+
+  Widget _createVideoPlayer(VideoPlayerController controller) {
+    return VideoPlayer(controller);
+  }
+
+  void _removeVideoFile(XFile file) {
+    var controller = _videoControllers.remove(file.path);
+    controller?.dispose();
+  }
+
   @override
   void dispose() {
     _videoControllers.forEach((_, controller) => controller.dispose());
@@ -52,7 +65,7 @@ class _MediaPreviewState extends State<MediaPreview> {
     return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
   }
 
-  Widget _initializeVideoController(XFile file) {
+  Widget _buildVideoPreview(XFile file) {
     var _videoController = _getVideoController(file);
     if (_videoController == null || !_videoController.value.isInitialized) {
       controller = VideoPlayerController.file(File(file.path))
@@ -81,7 +94,7 @@ class _MediaPreviewState extends State<MediaPreview> {
     );
   }
 
-Widget _readImageFile(XFile file) {
+Widget _buildImagePreview(XFile file) {
     return FutureBuilder<Uint8List>(
       future: file.readAsBytes(),
       builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
