@@ -53,6 +53,9 @@ class CreateReportPageState extends State<CreateReportPage> {
   final Map<String, VideoPlayerController> _videoControllers = {};
 
   @override
+  Widget   ///
+  /// This function builds and returns the report form widget. It sets up the form fields and their respective save handlers.
+  ///
   Widget _buildReportForm() {
     return ReportForm(
       formKey: _formKey,
