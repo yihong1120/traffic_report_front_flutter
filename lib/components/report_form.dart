@@ -64,7 +64,7 @@ class ReportForm extends StatelessWidget {
               onTap: () => _selectTime(context),
             ),
             // Violation Dropdown
-            _buildViolationDropdown((
+            DropdownButtonFormField<String>(
               value: violation.violation,
               decoration: const InputDecoration(labelText: 'Violation'),
               items: violations.map((String violation) {

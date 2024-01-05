@@ -87,7 +87,7 @@ class EditReportPageState extends State<EditReportPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            Widget _buildMainContent() {\n    return Scaffold(
+            children: <Widget>[
               ReportForm(
                 formKey: _formKey,
                 violation: _violation,
