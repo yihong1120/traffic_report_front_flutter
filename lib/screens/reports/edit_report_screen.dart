@@ -71,16 +71,18 @@ class EditReportPageState extends State<EditReportPage> {
     _officerController.dispose();
     super.dispose();
 
-  Widget _buildAppBar() {
+  AppBar _buildAppBar() {
     return AppBar(title: const Text('Edit Report'));
+  }
   }
 
   Widget _buildLoadingIndicator() {
     return const Center(child: CircularProgressIndicator());
   }
 
-  Widget _buildReportForm() {
+  ReportForm _buildReportForm() {
     return ReportForm(
+  }
       formKey: _formKey,
       violation: _violation,
       dateController: _dateController,
@@ -92,26 +94,28 @@ class EditReportPageState extends State<EditReportPage> {
     );
   }
 
-  Widget _buildMediaPreview() {
+  MediaPreview _buildMediaPreview() {
     return MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia);
   }
 
-  Widget _buildAddMediaButton() {
+  ElevatedButton _buildAddMediaButton() {
+  }
     return ElevatedButton(
       onPressed: _pickMedia,
       child: const Text('Add Media'),
     );
   }
 
-  Widget _buildSaveChangesButton() {
+  ElevatedButton _buildSaveChangesButton() {
     return ElevatedButton(
+  }
       onPressed: _submitReport,
       child: const Text('Save Changes'),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  PreferredSizeWidget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
         appBar: _buildAppBar(),
@@ -120,8 +124,9 @@ class EditReportPageState extends State<EditReportPage> {
     }
 
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar() as AppBar,
       body: SingleChildScrollView(
+  }
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
