@@ -124,7 +124,7 @@ class EditReportPageState extends State<EditReportPage> {
     }
 
     return Scaffold(
-      appBar: _buildAppBar() as AppBar,
+      appBar: _buildAppBar(),
       body: SingleChildScrollView(
   }
         child: Padding(
