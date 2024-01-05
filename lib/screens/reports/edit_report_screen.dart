@@ -5,6 +5,13 @@ import 'package:provider/provider.dart';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import '../../components/media_preview.dart';
+import '../../components/report_form.dart';
+
+// 创建一个自定义的类来表示远程媒体文件
+class RemoteMediaFile {
+  final String url;
+  RemoteMediaFile(this.url);
+}
 
 class EditReportPage extends StatefulWidget {
   final int recordId;
@@ -18,8 +25,16 @@ class EditReportPage extends StatefulWidget {
 class EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
-  final List<XFile> _mediaFiles = [];
+  final List<RemoteMediaFile> _remoteMediaFiles = []; // 用于存储远程媒体文件
   bool _isLoading = true;
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _licensePlateController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _officerController = TextEditingController();
+  String _selectedStatus = '';
 
   @override
   void initState() {
@@ -28,10 +43,33 @@ class EditReportPageState extends State<EditReportPage> {
   }
 
   void _loadViolation() async {
-    // 加載違規報告資料
-    _violation = await Provider.of<ReportService>(context, listen: false).getViolation(widget.recordId);
-    setState(() => _isLoading = false);
+    try {
+      _violation = await Provider.of<ReportService>(context, listen: false).getViolation(widget.recordId);
+      _dateController.text = DateFormat('yyyy-MM-dd').format(_violation.date!);
+      _timeController.text = _violation.time!.format(context);
+      _licensePlateController.text = _violation.licensePlate ?? '';
+      _locationController.text = _violation.location ?? '';
+      _officerController.text = _violation.officer ?? '';
+      _selectedStatus = _violation.status ?? '';
+      // 加载远程媒体文件
+      _remoteMediaFiles.addAll(_violation.mediaUrls.map((url) => RemoteMediaFile(url)).toList());
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load report: $e')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    _timeController.dispose();
+    _licensePlateController.dispose();
+    _locationController.dispose();
+    _officerController.dispose();
+    super.dispose();
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +88,16 @@ class EditReportPageState extends State<EditReportPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              TextFormField(
-                initialValue: _violation.licensePlate,
-                decoration: const InputDecoration(labelText: 'License Plate'),
-                onChanged: (value) => _violation.licensePlate = value,
+              ReportForm(
+                formKey: _formKey,
+                violation: _violation,
+                dateController: _dateController,
+                timeController: _timeController,
+                licensePlateController: _licensePlateController,
+                locationController: _locationController,
+                officerController: _officerController,
+                selectedStatus: _selectedStatus,
               ),
-              // 其他表單字段
               MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
               ElevatedButton(
                 onPressed: _pickMedia,
@@ -73,10 +115,12 @@ class EditReportPageState extends State<EditReportPage> {
   }
 
   void _pickMedia() async {
-    final List<XFile> pickedFiles = await _picker.pickMultiImage();
-    setState(() {
-      _mediaFiles.addAll(pickedFiles);
-    });
+    final List<XFile>? pickedFiles = await _picker.pickMultiImage();
+    if (pickedFiles != null) {
+      setState(() {
+        _mediaFiles.addAll(pickedFiles);
+      });
+    }
   }
 
   void _removeMedia(XFile file) {
@@ -86,30 +130,46 @@ class EditReportPageState extends State<EditReportPage> {
   }
 
   void _submitReport() async {
-    // 在異步操作前獲取 ScaffoldMessenger 和 Navigator 的實例
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
+    if (_formKey.currentState!.validate()) {
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
 
-    setState(() {
-      _isLoading = true;
-    });
+      _violation.licensePlate = _licensePlateController.text;
+      _violation.location = _locationController.text;
+      _violation.officer = _officerController.text;
+      _violation.status = _selectedStatus;
 
-    final reportService = Provider.of<ReportService>(context, listen: false);
-    bool success = await reportService.updateReport(_violation, _mediaFiles);
+      setState(() {
+        _isLoading = true;
+      });
 
-    setState(() {
-      _isLoading = false;
-    });
+      try {
+        final reportService = Provider.of<ReportService>(context, listen: false);
+        // 注意：这里需要传递本地媒体文件列表，如果有的话
+        // 如果您还需要处理远程媒体文件，请确保 ReportService 的 updateReport 方法支持它
+        bool success = await reportService.updateReport(_violation, /* 本地媒体文件列表 */);
 
-    if (success) {
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(content: Text('Report updated successfully')),
-      );
-      navigator.pop();
-    } else {
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(content: Text('Failed to update report')),
-      );
+        if (success) {
+          scaffoldMessenger.showSnackBar(
+            const SnackBar(content: Text('Report updated successfully')),
+          );
+          navigator.pop();
+        } else {
+          scaffoldMessenger.showSnackBar(
+            const SnackBar(content: Text('Failed to update report')),
+          );
+        }
+      } catch (e) {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('An error occurred: $e')),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
     }
   }
 }

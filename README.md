@@ -13,9 +13,13 @@
 ```
 lib/
   |- components/    # Shared components, such as custom buttons, form inputs, etc.
+      |- media_picker.dart
       |- media_preview.dart
       |- navigation_drawer.dart
+      |- report_form.dart
   |- models/        # Data models
+      |- social_account.dart
+      |- traffic_violation.dart
   |- screens/       # Different screens/pages
       |- accounts/  # Screens related to account, like login, registration, user profile
           |- routes.dart
@@ -45,7 +49,7 @@ lib/
 - [x] Initial project setup and configuration
 - [x] Implement user authentication and authorisation
 - [x] Develop the report submission form
-- [ ] Create a dashboard for displaying violation reports
+- [x] Create a dashboard for displaying violation reports
 - [ ] Integrate with the backend API for data retrieval and submission
 - [ ] Implement responsive design for mobile and tablet views
 - [ ] Test functionalities across different browsers and devices

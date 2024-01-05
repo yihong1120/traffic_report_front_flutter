@@ -9,8 +9,10 @@ import 'dart:typed_data';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import '../../components/media_picker.dart';
+import '../../components/media_preview.dart';
+import '../../components/report_form.dart';
 
- final Logger logger = Logger();
+final Logger logger = Logger();
 
 class CreateReportPage extends StatefulWidget {
   const CreateReportPage({super.key});
@@ -81,126 +83,60 @@ class CreateReportPageState extends State<CreateReportPage> {
         title: const Text('Create Report'),
       ),
       body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'License Plate'),
-                  onSaved: (value) => _violation.licensePlate = value,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a license plate';
-                    }
-                    return null;
-                  },
-                ),
-                // Date Picker
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Date'),
-                  readOnly: true,
-                  controller: _dateController,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: _violation.date!,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-                    if (pickedDate != null) {
-                      setState(() {
-                        _violation.date = pickedDate;
-                        _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-                      });
-                    }
-                  },
-                ),
-                // Time Picker
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Time'),
-                  readOnly: true,
-                  controller: _timeController,
-                  onTap: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: _violation.time!,
-                    );
-                    if (pickedTime != null) {
-                      setState(() {
-                        _violation.time = pickedTime;
-                        _timeController.text = pickedTime.format(context);
-                      });
-                    }
-                  },
-                ),
-                // Violation Dropdown
-                DropdownButtonFormField<String>(
-                  value: _violation.violation,
-                  decoration: const InputDecoration(labelText: 'Violation'),
-                  items: _violations.map((String violation) {
-                    return DropdownMenuItem<String>(
-                      value: violation,
-                      child: Text(violation),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _violation.violation = newValue;
-                    });
-                  },
-                  onSaved: (String? newValue) {
-                    _violation.violation = newValue;
-                  },
-                ), // 添加了这个闭合括号来结束 DropdownButtonFormField
-                // Status Dropdown
-                DropdownButtonFormField<String>(
-                    value: _violation.status,
-                    decoration: const InputDecoration(labelText: 'Status'),
-                    items: TrafficViolation.statusOptions.map((status) {
-                    return DropdownMenuItem(
-                        value: status,
-                        child: Text(status),
-                    );
-                    }).toList(),
-                    onChanged: (value) {
-                    setState(() {
-                        _violation.status = value;
-                    });
-                    },
-                ),
-                // Location Field
-                TextFormField(
-                    decoration: const InputDecoration(labelText: 'Location'),
-                    onSaved: (value) => _violation.location = value,
-                ),
-                // Officer Field
-                TextFormField(
-                    decoration: const InputDecoration(labelText: 'Officer'),
-                    onSaved: (value) => _violation.officer = value,
-                ),
-                // Media Upload
-                ElevatedButton(
-                    onPressed: () => _pickMedia(),
-                    child: const Text('Add Media'),
-                ),
-                const SizedBox(height: 10),
-                _buildMediaPreview(),
-                // Submit Button
-                ElevatedButton(
-                    onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        _submitReport();
-                    }
-                  },
-                  child: const Text('Submit Report'),
-                ),
-              ],
+        child: Column(
+          children: [
+            ReportForm(
+              formKey: _formKey,
+              violation: _violation,
+              dateController: _dateController,
+              timeController: _timeController,
+              violations: _violations,
+              onDateSaved: (pickedDate) {
+                if (pickedDate != null) {
+                  setState(() {
+                    _violation.date = pickedDate;
+                    _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                  });
+                }
+              },
+              onTimeSaved: (pickedTime) {
+                if (pickedTime != null) {
+                  setState(() {
+                    _violation.time = pickedTime;
+                    _timeController.text = pickedTime.format(context);
+                  });
+                }
+              },
+              onLicensePlateSaved: (value) => _violation.licensePlate = value,
+              onLocationSaved: (value) => _violation.location = value,
+              onOfficerSaved: (value) => _violation.officer = value,
+              onStatusChanged: (value) {
+                setState(() {
+                  _violation.status = value;
+                });
+              },
             ),
-          ),
+            // Media Upload
+            ElevatedButton(
+              onPressed: () => _pickMedia(),
+              child: const Text('Add Media'),
+            ),
+            const SizedBox(height: 10),
+            MediaPreview(
+              mediaFiles: _mediaFiles,
+              onRemove: _removeMedia,
+            ),
+            // Submit Button
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  _submitReport();
+                }
+              },
+              child: const Text('Submit Report'),
+            ),
+          ],
         ),
       ),
     );
@@ -262,73 +198,11 @@ class CreateReportPageState extends State<CreateReportPage> {
     _videoControllers[file.path] = controller;
   }
 
-  bool _isVideoFile(String path) {
-    return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
-  }
-
-  Widget _buildMediaPreview() {
-    return Wrap(
-      spacing: 8.0,
-      runSpacing: 8.0,
-      children: _mediaFiles.map((file) {
-        if (_isVideoFile(file.path)) {
-          // 处理视频文件
-          return _buildVideoPreview(file);
-        } else {
-          // 处理图像文件
-          return _buildImagePreview(file);
-        }
-      }).toList(),
-    );
-  }
-
-  Widget _buildVideoPreview(XFile file) {
-    var controller = _videoControllers[file.path];
-    if (controller == null || !controller.value.isInitialized) {
-      return const CircularProgressIndicator();  // 或者其他占位符
-    }
-    return Stack(
-      alignment: Alignment.topRight,
-      children: <Widget>[
-        VideoPlayer(controller),
-        IconButton(
-          icon: const Icon(Icons.remove_circle),
-          onPressed: () {
-            _removeMedia(file);
-            controller.dispose();
-            _videoControllers.remove(file.path);
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildImagePreview(XFile file) {
-    return FutureBuilder<Uint8List>(
-      future: file.readAsBytes(),
-      builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
-          Uint8List fileData = snapshot.data!;
-          return Stack(
-            alignment: Alignment.topRight,
-            children: <Widget>[
-              Image.memory(fileData, width: 100, height: 100),
-              IconButton(
-                icon: const Icon(Icons.remove_circle, color: Colors.red),
-                onPressed: () => _removeMedia(file),
-              ),
-            ],
-          );
-        } else {
-          return const CircularProgressIndicator();
-        }
-      },
-    );
-  }
-
   void _removeMedia(XFile file) {
     setState(() {
       _mediaFiles.remove(file);
+      _videoControllers[file.path]?.dispose();
+      _videoControllers.remove(file.path);
     });
   }
 
