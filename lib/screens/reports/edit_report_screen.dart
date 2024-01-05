@@ -22,6 +22,9 @@ class EditReportPage extends StatefulWidget {
   EditReportPageState createState() => EditReportPageState();
 }
 
+'''
+  A class to manage the state of the EditReportPage.
+'''
 class EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
@@ -72,7 +75,13 @@ class EditReportPageState extends State<EditReportPage> {
     super.dispose();
 
   @override
-  Widget build(BuildContext context) {
+  '''
+  Build the report form.
+
+  Returns:
+    The report form widget.
+'''
+Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(title: const Text('Edit Report')),
