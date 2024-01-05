@@ -1,3 +1,5 @@
+/// This file contains the CreateReportPage class, which is responsible for rendering the page for creating a new traffic violation report.
+/// It includes the form for entering the report details, the functionality for uploading media files, and the logic for submitting the report.
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,18 +15,24 @@ import '../../components/media_preview.dart';
 import '../../components/report_form.dart';
 
 final Logger logger = Logger();
-
+/// The CreateReportPage class is a StatefulWidget that renders the page for creating a new traffic violation report.
 class CreateReportPage extends StatefulWidget {
   const CreateReportPage({super.key});
 
+  /// Creates the mutable state for this widget at a given location in the tree.
   @override
   CreateReportPageState createState() => CreateReportPageState();
 }
 
+/// The CreateReportPageState class is the logic and internal state for the CreateReportPage widget.
 class CreateReportPageState extends State<CreateReportPage> {
+  /// The key to the form widget.
   final _formKey = GlobalKey<FormState>();
+  /// The image picker for picking media files.
   final _picker = ImagePicker();
+  /// The list of media files to be uploaded.
   final List<XFile> _mediaFiles = [];
+  /// The traffic violation to be reported.
   final TrafficViolation _violation = TrafficViolation(
     date: DateTime.now(),
     time: TimeOfDay.now(),
@@ -32,7 +40,7 @@ class CreateReportPageState extends State<CreateReportPage> {
     status: 'Pending',
   );
 
-  // 违规类型选项
+  /// The list of violation types.
   final List<String> _violations = [
     '紅線停車',
     '黃線臨車',
@@ -48,6 +56,7 @@ class CreateReportPageState extends State<CreateReportPage> {
     '其他',
   ];
 
+  /// The controller for the date text field.
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final Map<String, VideoPlayerController> _videoControllers = {};
