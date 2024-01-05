@@ -87,7 +87,11 @@ class EditReportPageState extends State<EditReportPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            Widget _buildMainContent() {\n    return Scaffold(
+            /**
+             * This function builds and returns the main content of the edit report screen.
+             * It includes the report form, media preview, and buttons for adding media and submitting the report.
+             */
+            Widget _buildMainContent() {
               ReportForm(
                 formKey: _formKey,
                 violation: _violation,
