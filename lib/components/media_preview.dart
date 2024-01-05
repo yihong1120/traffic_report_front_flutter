@@ -33,8 +33,7 @@ class _MediaPreviewState extends State<MediaPreview> {
   }
 
   void _removeVideoFile(XFile file) {
-    var controller = _videoControllers.remove(file.path);
-    controller?.dispose();
+    _videoControllers.remove(file.path);
   }
 
   @override
@@ -68,14 +67,14 @@ class _MediaPreviewState extends State<MediaPreview> {
   Widget _buildVideoPreview(XFile file) {
     var _videoController = _getVideoController(file);
     if (_videoController == null || !_videoController.value.isInitialized) {
-      controller = VideoPlayerController.file(File(file.path))
+      _videoController = VideoPlayerController.file(File(file.path))
         ..initialize().then((_) {
           logger.i('Video initialized successfully.');
           if (mounted) setState(() {});
         }).catchError((error) {
           logger.e('Video initialization error: $error');
         });
-      _videoControllers[file.path] = _videoController;
+      _videoControllers[file.path] = controller;
     }
     return Stack(
       alignment: Alignment.topRight,
