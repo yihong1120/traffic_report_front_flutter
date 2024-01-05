@@ -52,6 +52,11 @@ class _MediaPreviewState extends State<MediaPreview> {
     return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
   }
 
+    /// Build a stack widget for video preview.
+  ///
+  /// [file] the video file
+  ///
+  /// Returns the stack widget.
   Widget _buildVideoPreview(XFile file) {
     var controller = _videoControllers[file.path];
     if (controller == null || !controller.value.isInitialized) {
