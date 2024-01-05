@@ -116,12 +116,19 @@ class CreateReportPageState extends State<CreateReportPage> {
   MediaPreview _buildMediaPreview() {
     return MediaPreview(
       mediaFiles: _mediaFiles,
-      onRemove: _removeMedia,
+      onRemove: (XFile file) {
+        setState(() {
+          _mediaFiles.remove(file);
+          _videoControllers[file.path]?.dispose();
+          _videoControllers.remove(file.path);
+        });
+      },
     );
   }
 
-  void _submitReport() async {
-    // Ensure at least one video file is included
+  void _submitReport() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
     bool hasVideo = _mediaFiles.any((file) => _isVideoFile(file.path));
     if (!hasVideo) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -130,7 +137,6 @@ class CreateReportPageState extends State<CreateReportPage> {
       return;
     }
 
-    // Retrieve dependent information from context
     final reportService = Provider.of<ReportService>(context, listen: false);
 
     bool success = await reportService.createReport(_violation, _mediaFiles);
@@ -147,12 +153,15 @@ class CreateReportPageState extends State<CreateReportPage> {
 
 Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _buildAppBar(),
         title: const Text('Create Report'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+            }
             _buildReportForm(),
               onDateSaved: (pickedDate) {
                 if (pickedDate != null) {
@@ -186,12 +195,6 @@ Widget build(BuildContext context) {
             ),
             const SizedBox(height: 10),
             _buildMediaPreview(),
-            // Submit Button
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  _submitReport();
                 }
               },
               child: const Text('Submit Report'),
