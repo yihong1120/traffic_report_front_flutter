@@ -21,6 +21,9 @@ class CreateReportPage extends StatefulWidget {
   CreateReportPageState createState() => CreateReportPageState();
 }
 
+'''
+  A class to manage the state of the CreateReportPage.
+'''
 class CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
@@ -77,7 +80,13 @@ class CreateReportPageState extends State<CreateReportPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  '''
+  Build the report form.
+
+  Returns:
+    The report form widget.
+'''
+Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Report'),
