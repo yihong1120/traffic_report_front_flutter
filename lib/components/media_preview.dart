@@ -52,6 +52,10 @@ class _MediaPreviewState extends State<MediaPreview> {
     return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
   }
 
+  /**
+   * This function takes a file as input and returns the corresponding video controller.
+   * If the controller does not exist or is not initialized, it creates a new one and initializes it.
+   */
   Widget _buildVideoPreview(XFile file) {
     var controller = _getVideoController(file);
     return _buildVideoStack(controller, file);
