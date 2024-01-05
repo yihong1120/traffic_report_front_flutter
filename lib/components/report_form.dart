@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/traffic_violation.dart';
 
+'''
+  A class for building a form for reporting traffic violations.
+
+  Properties:
+    - formKey: GlobalKey\<FormState>, the key for the form
+    - violation: TrafficViolation, the traffic violation
+    - dateController: TextEditingController, the text editing controller for the date
+    - timeController: TextEditingController, the text editing controller for the time
+    - violations: List\<String>, the list of violations
+    - onDateSaved: Function(DateTime?), function for saving the date
+    - onTimeSaved: Function(TimeOfDay?), function for saving the time
+    - onLicensePlateSaved: Function(String?), function for saving the license plate
+    - onLocationSaved: Function(String?), function for saving the location
+    - onOfficerSaved: Function(String?), function for saving the officer
+    - onStatusChanged: Function(String?), function for changing the status
+'''
 class ReportForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TrafficViolation violation;
