@@ -71,44 +71,67 @@ class EditReportPageState extends State<EditReportPage> {
     _officerController.dispose();
     super.dispose();
 
+  Widget _buildAppBar() {
+    return AppBar(title: const Text('Edit Report'));
+  }
+
+  Widget _buildLoadingIndicator() {
+    return const Center(child: CircularProgressIndicator());
+  }
+
+  Widget _buildReportForm() {
+    return ReportForm(
+      formKey: _formKey,
+      violation: _violation,
+      dateController: _dateController,
+      timeController: _timeController,
+      licensePlateController: _licensePlateController,
+      locationController: _locationController,
+      officerController: _officerController,
+      selectedStatus: _selectedStatus,
+    );
+  }
+
+  Widget _buildMediaPreview() {
+    return MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia);
+  }
+
+  Widget _buildAddMediaButton() {
+    return ElevatedButton(
+      onPressed: _pickMedia,
+      child: const Text('Add Media'),
+    );
+  }
+
+  Widget _buildSaveChangesButton() {
+    return ElevatedButton(
+      onPressed: _submitReport,
+      child: const Text('Save Changes'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Edit Report')),
-        body: const Center(child: CircularProgressIndicator()),
+        appBar: _buildAppBar(),
+        body: _buildLoadingIndicator(),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Report')),
+      appBar: _buildAppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              ReportForm(
-                formKey: _formKey,
-                violation: _violation,
-                dateController: _dateController,
-                timeController: _timeController,
-                licensePlateController: _licensePlateController,
-                locationController: _locationController,
-                officerController: _officerController,
-                selectedStatus: _selectedStatus,
-              ),
-              MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
-              ElevatedButton(
-                onPressed: _pickMedia,
-                child: const Text('Add Media'),
-              ),
-              ElevatedButton(
-                onPressed: _submitReport,
-                child: const Text('Save Changes'),
-              ),
+              _buildReportForm(),
+              _buildMediaPreview(),
+              _buildAddMediaButton(),
+              _buildSaveChangesButton(),
             ],
-          ),
         ),
       ),
     );
