@@ -74,7 +74,10 @@ class _MediaPreviewState extends State<MediaPreview> {
     return controller;
   }
 
-  Widget _buildVideoStack(VideoPlayerController controller, XFile file) {
+  /*
+   * This function takes a video controller and a file as input and returns a Stack widget that contains the video player and a remove button.
+   */
+   Widget _buildVideoStack(VideoPlayerController controller, XFile file) {
     return Stack(
       alignment: Alignment.topRight,
       children: <Widget>[
