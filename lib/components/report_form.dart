@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/traffic_violation.dart';
 
+/// This file contains the ReportForm class, which is responsible for rendering a form for reporting traffic violations.
+///
+
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../models/traffic_violation.dart';
+
+/// Widget for rendering a form to report traffic violations.
 class ReportForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TrafficViolation violation;
@@ -13,7 +21,9 @@ class ReportForm extends StatelessWidget {
   final Function(String?) onLicensePlateSaved;
   final Function(String?) onLocationSaved;
   final Function(String?) onOfficerSaved;
-  final Function(String?) onStatusChanged;
+  /// Event handler for when the status dropdown value changes.
+  ///
+  /// The [onStatusChanged] parameter is the function to call when the value changes.
 
   const ReportForm({
     Key? key,
@@ -30,6 +40,10 @@ class ReportForm extends StatelessWidget {
     required this.onStatusChanged,
   }) : super(key: key);
 
+  @override
+    /// Builds the report form widget.
+  ///
+  /// Returns a form widget for reporting traffic violations.
   @override
   Widget build(BuildContext context) {
     return Form(
