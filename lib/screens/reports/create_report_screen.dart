@@ -52,14 +52,18 @@ class CreateReportPageState extends State<CreateReportPage> {
   final TextEditingController _timeController = TextEditingController();
   final Map<String, VideoPlayerController> _videoControllers = {};
 
-  @override
   Widget _buildReportForm() {
     return ReportForm(
       formKey: _formKey,
       violation: _violation,
       dateController: _dateController,
       timeController: _timeController,
-      violations: _violations,
+  Widget _buildSubmitButton() {
+    return ElevatedButton(
+      onPressed: _submitReport,
+      child: const Text('Submit Report'),
+    );
+  }
       onDateSaved: (pickedDate) {
         if (pickedDate != null) {
           setState(() {
@@ -74,6 +78,12 @@ class CreateReportPageState extends State<CreateReportPage> {
             _violation.time = pickedTime;
             _timeController.text = pickedTime.format(context);
           });
+        }
+      },
+      onLicensePlateSaved: (value) => _violation.licensePlate = value,
+      onLocationSaved: (value) => _violation.location = value,
+      );
+      }
         }
       },
       onLicensePlateSaved: (value) => _violation.licensePlate = value,
