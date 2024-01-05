@@ -1,3 +1,5 @@
+// The EditReportScreen class is responsible for handling the editing of a traffic violation report.
+// It includes functions for loading the report, picking and removing media, and submitting the report.
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -37,7 +39,7 @@ class EditReportPageState extends State<EditReportPage> {
   String _selectedStatus = '';
 
   @override
-  void initState() {
+  /// Initializes the state and loads the violation details for editing.
     super.initState();
     _loadViolation();
   }
@@ -63,7 +65,7 @@ class EditReportPageState extends State<EditReportPage> {
   }
 
   @override
-  void dispose() {
+  /// Cleans up resources when the EditReportPage is removed from the widget tree.
     _dateController.dispose();
     _timeController.dispose();
     _licensePlateController.dispose();
@@ -123,13 +125,15 @@ class EditReportPageState extends State<EditReportPage> {
     }
   }
 
-  void _removeMedia(XFile file) {
+  /// Removes the specified media file from the media files list.
+void _removeMedia(XFile file) {
     setState(() {
       _mediaFiles.remove(file);
     });
   }
 
-  void _submitReport() async {
+  /// Submits the report to update the traffic violation record on the server.
+void _submitReport() async {
     if (_formKey.currentState!.validate()) {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       final navigator = Navigator.of(context);
