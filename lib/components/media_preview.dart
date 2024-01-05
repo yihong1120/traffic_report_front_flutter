@@ -53,12 +53,43 @@ class _MediaPreviewState extends State<MediaPreview> {
   }
 
   Widget _buildVideoPreview(XFile file) {
+    var controller = _getVideoController(file);
+    return _buildVideoStack(controller, file);
+  VideoPlayerController _getVideoController(XFile file) {
     var controller = _videoControllers[file.path];
     if (controller == null || !controller.value.isInitialized) {
       controller = VideoPlayerController.file(File(file.path))
         ..initialize().then((_) {
           logger.i('Video initialized successfully.');
           if (mounted) setState(() {});
+        }).catchError((error) {
+          logger.e('Video initialization error: $error');
+        });
+      _videoControllers[file.path] = controller;
+    }
+    return controller;
+  }
+
+  Widget _buildVideoStack(VideoPlayerController controller, XFile file) {
+    return Stack(
+      alignment: Alignment.topRight,
+      children: <Widget>[
+        VideoPlayer(controller),
+        _buildRemoveButton(controller, file),
+      ],
+    );
+  }
+
+  Widget _buildRemoveButton(VideoPlayerController controller, XFile file) {
+    return IconButton(
+      icon: const Icon(Icons.remove_circle),
+      onPressed: () {
+        widget.onRemove(file);
+        controller.dispose();
+        _videoControllers.remove(file.path);
+      },
+    );
+  }
         }).catchError((error) {
           logger.e('Video initialization error: $error');
         });
@@ -86,9 +117,23 @@ class _MediaPreviewState extends State<MediaPreview> {
       builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
           Uint8List fileData = snapshot.data!;
-          return Stack(
-            alignment: Alignment.topRight,
-            children: <Widget>[
+          return _buildImageStack(fileData, file);
+  Widget _buildImageStack(Uint8List fileData, XFile file) {
+    return Stack(
+      alignment: Alignment.topRight,
+      children: <Widget>[
+        Image.memory(fileData, width: 100, height: 100),
+        _buildRemoveImageButton(file),
+      ],
+    );
+  }
+
+  Widget _buildRemoveImageButton(XFile file) {
+    return IconButton(
+      icon: const Icon(Icons.remove_circle, color: Colors.red),
+      onPressed: () => widget.onRemove(file),
+    );
+  }
               Image.memory(fileData, width: 100, height: 100),
               IconButton(
                 icon: const Icon(Icons.remove_circle, color: Colors.red),

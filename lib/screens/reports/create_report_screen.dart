@@ -53,87 +53,33 @@ class CreateReportPageState extends State<CreateReportPage> {
   final Map<String, VideoPlayerController> _videoControllers = {};
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-      if (_dateController.text.isEmpty) {
-        _dateController.text = DateFormat('yyyy-MM-dd').format(_violation.date!);
-      }
-
-      if (_timeController.text.isEmpty) {
-        _timeController.text = _violation.time!.format(context);
-      }
-  }
-
-  @override
-  void dispose() {
-    _dateController.dispose();
-    _timeController.dispose();
-
-    _videoControllers.forEach((_, controller) => controller.dispose());
-    _videoControllers.clear();
-    _dateController.dispose();
-    _timeController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Report'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ReportForm(
-              formKey: _formKey,
-              violation: _violation,
-              dateController: _dateController,
-              timeController: _timeController,
-              violations: _violations,
-              onDateSaved: (pickedDate) {
-                if (pickedDate != null) {
-                  setState(() {
-                    _violation.date = pickedDate;
-                    _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-                  });
-                }
-              },
-              onTimeSaved: (pickedTime) {
-                if (pickedTime != null) {
-                  setState(() {
-                    _violation.time = pickedTime;
-                    _timeController.text = pickedTime.format(context);
-                  });
-                }
-              },
-              onLicensePlateSaved: (value) => _violation.licensePlate = value,
-              onLocationSaved: (value) => _violation.location = value,
-              onOfficerSaved: (value) => _violation.officer = value,
-              onStatusChanged: (value) {
-                setState(() {
-                  _violation.status = value;
-                });
-              },
-            ),
-            // Media Upload
-            ElevatedButton(
-              onPressed: () => _pickMedia(),
-              child: const Text('Add Media'),
-            ),
-            const SizedBox(height: 10),
-            MediaPreview(
-              mediaFiles: _mediaFiles,
-              onRemove: _removeMedia,
-            ),
-            // Submit Button
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  _submitReport();
-                }
-              },
+  Widget _buildReportForm() {
+    return ReportForm(
+      formKey: _formKey,
+      violation: _violation,
+      dateController: _dateController,
+      timeController: _timeController,
+      violations: _violations,
+      onDateSaved: (pickedDate) {
+        if (pickedDate != null) {
+          setState(() {
+            _violation.date = pickedDate;
+            _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+          });
+        }
+      },
+      onTimeSaved: (pickedTime) {
+        if (pickedTime != null) {
+          setState(() {
+            _violation.time = pickedTime;
+            _timeController.text = pickedTime.format(context);
+          });
+        }
+      },
+      onLicensePlateSaved: (value) => _violation.licensePlate = value,
+      onLocationSaved: (value) => _violation.location = value,
+            );
+            }
               child: const Text('Submit Report'),
             ),
           ],
