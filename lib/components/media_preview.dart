@@ -52,9 +52,9 @@ class _MediaPreviewState extends State<MediaPreview> {
     return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
   }
 
-  Widget _buildVideoPreview(XFile file) {
-    var controller = _videoControllers[file.path];
-    if (controller == null || !controller.value.isInitialized) {
+  Widget _initializeVideoController(XFile file) {
+    var _videoController = _getVideoController(file);
+    if (_videoController == null || !_videoController.value.isInitialized) {
       controller = VideoPlayerController.file(File(file.path))
         ..initialize().then((_) {
           logger.i('Video initialized successfully.');
@@ -62,25 +62,26 @@ class _MediaPreviewState extends State<MediaPreview> {
         }).catchError((error) {
           logger.e('Video initialization error: $error');
         });
-      _videoControllers[file.path] = controller;
+      _videoControllers[file.path] = _videoController;
     }
     return Stack(
       alignment: Alignment.topRight,
       children: <Widget>[
-        VideoPlayer(controller),
+        _createVideoPlayer(_videoController),
         IconButton(
           icon: const Icon(Icons.remove_circle),
           onPressed: () {
             widget.onRemove(file);
-            controller.dispose();
+            _videoController.dispose();
             _videoControllers.remove(file.path);
+          _removeVideoFile(file);
           },
         ),
       ],
     );
   }
 
-  Widget _buildImagePreview(XFile file) {
+Widget _readImageFile(XFile file) {
     return FutureBuilder<Uint8List>(
       future: file.readAsBytes(),
       builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
