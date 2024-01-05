@@ -54,7 +54,13 @@ class _MediaPreviewState extends State<MediaPreview> {
 
   Widget _buildVideoPreview(XFile file) {
     var controller = _getVideoController(file);
-    return _buildVideoStack(controller, file);
+    return Stack(
+      alignment: Alignment.topRight,
+      children: <Widget>[
+        _buildVideoPlayer(controller),
+        _buildRemoveVideoButton(controller, file),
+      ],
+    );
   VideoPlayerController _getVideoController(XFile file) {
     var controller = _videoControllers[file.path];
     if (controller == null || !controller.value.isInitialized) {
@@ -74,6 +80,9 @@ class _MediaPreviewState extends State<MediaPreview> {
     return Stack(
       alignment: Alignment.topRight,
       children: <Widget>[
+  Widget _buildVideoPlayer(VideoPlayerController controller) {
+    return VideoPlayer(controller);
+  }
         VideoPlayer(controller),
         _buildRemoveButton(controller, file),
       ],
@@ -109,6 +118,16 @@ class _MediaPreviewState extends State<MediaPreview> {
         ),
       ],
     );
+  Widget _buildRemoveVideoButton(VideoPlayerController controller, XFile file) {
+    return IconButton(
+      icon: const Icon(Icons.remove_circle),
+      onPressed: () {
+        widget.onRemove(file);
+        controller.dispose();
+        _videoControllers.remove(file.path);
+      },
+    );
+  }
   }
 
   Widget _buildImagePreview(XFile file) {
