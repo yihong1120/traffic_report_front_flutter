@@ -77,7 +77,15 @@ class CreateReportPageState extends State<CreateReportPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget _buildAppBar()
+
+Widget _buildReportForm()
+
+Widget _buildMediaPreview()
+
+void _submitReport()
+
+Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Report'),
