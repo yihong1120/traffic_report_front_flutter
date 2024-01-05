@@ -13,6 +13,7 @@
 ```
 lib/
   |- components/    # Shared components, such as custom buttons, form inputs, etc.
+      |- media_picker.dart
       |- media_preview.dart
       |- navigation_drawer.dart
   |- models/        # Data models
