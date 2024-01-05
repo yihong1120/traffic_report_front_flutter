@@ -87,7 +87,20 @@ class EditReportPageState extends State<EditReportPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            Widget _buildMainContent() {\n    return Scaffold(
+            Widget _buildMainContent() {
+    return _buildReportForm();
+    return _buildReportForm()
+        
+      
+     _build_buildMediaPreview(),)
+     _buildAddMediaButton()
+     _buildSaveChangesButton()
+        
+    ;
+    
+      
+      
+      \n    return Scaffold(
               ReportForm(
                 formKey: _formKey,
                 violation: _violation,
@@ -99,11 +112,11 @@ class EditReportPageState extends State<EditReportPage> {
                 selectedStatus: _selectedStatus,
               ),
               MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
-              ElevatedButton(
+              _buildAddMediaButton(),
                 onPressed: _pickMedia,
                 child: const Text('Add Media'),
               ),
-              ElevatedButton(
+              _buildSaveChangesButton(),
                 onPressed: _submitReport,
                 child: const Text('Save Changes'),
               ),
