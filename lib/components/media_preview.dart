@@ -1,4 +1,9 @@
 import 'dart:io';
+
+/// This file contains the MediaPreview class, which is responsible for previewing and managing media files such as images and videos in the app.
+///
+
+/// This file contains the MediaPreview class, which is responsible for previewing and managing media files such as images and videos in the app.
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +13,10 @@ import 'package:logger/logger.dart';
 final Logger logger = Logger();
 
 class MediaPreview extends StatefulWidget {
+  /// Widget for previewing and managing media files such as images and videos.
+  ///
+  /// The [mediaFiles] parameter is a list of XFile objects representing the media files to be previewed.
+  /// The [onRemove] parameter is a function that specifies the action to be taken when a media file is removed.
   final List<XFile> mediaFiles;
   final Function(XFile file) onRemove;
 
@@ -32,7 +41,9 @@ class _MediaPreviewState extends State<MediaPreview> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  /// Builds the widget for displaying the media files.
+  ///
+  /// Returns a Wrap widget containing the preview of the media files.
     return Wrap(
       spacing: 8.0,
       runSpacing: 8.0,
@@ -48,11 +59,16 @@ class _MediaPreviewState extends State<MediaPreview> {
     );
   }
 
-  bool _isVideoFile(String path) {
+  /// Checks if the specified path is a video file.
+  ///
+  /// Returns true if the path ends with '.mp4' or '.mov'; otherwise, returns false.
     return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
   }
 
-  Widget _buildVideoPreview(XFile file) {
+  /// Builds the widget for previewing a video file.
+  ///
+  /// The [file] parameter is the XFile object representing the video file to be previewed.
+  /// Returns a Stack widget with a video player and a remove button.
     var controller = _videoControllers[file.path];
     if (controller == null || !controller.value.isInitialized) {
       controller = VideoPlayerController.file(File(file.path))
