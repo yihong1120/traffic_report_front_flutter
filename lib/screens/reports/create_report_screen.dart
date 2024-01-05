@@ -77,13 +77,73 @@ class CreateReportPageState extends State<CreateReportPage> {
   }
 
   @override
-  Widget _buildAppBar()
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: const Text('Create Report'),
+    );
+  }
 
-Widget _buildReportForm()
+  ReportForm _buildReportForm() {
+    return ReportForm(
+      formKey: _formKey,
+      violation: _violation,
+      dateController: _dateController,
+      timeController: _timeController,
+      violations: _violations,
+      onDateSaved: (pickedDate) {
+        if (pickedDate != null) {
+          setState(() {
+            _violation.date = pickedDate;
+            _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+          });
+        }
+      },
+      onTimeSaved: (pickedTime) {
+        if (pickedTime != null) {
+          setState(() {
+            _violation.time = pickedTime;
+            _timeController.text = pickedTime.format(context);
+          });
+        }
+      },
+      onLicensePlateSaved: (value) => _violation.licensePlate = value,
+      onLocationSaved: (value) => _violation.location = value,
+      onOfficerSaved: (value) => _violation.officer = value,
+      onStatusChanged: (value) => setState(() => _violation.status = value),
+    );
+  }
 
-Widget _buildMediaPreview()
+  MediaPreview _buildMediaPreview() {
+    return MediaPreview(
+      mediaFiles: _mediaFiles,
+      onRemove: _removeMedia,
+    );
+  }
 
-void _submitReport()
+  void _submitReport() async {
+    // Ensure at least one video file is included
+    bool hasVideo = _mediaFiles.any((file) => _isVideoFile(file.path));
+    if (!hasVideo) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please include at least one video file.')),
+      );
+      return;
+    }
+
+    // Retrieve dependent information from context
+    final reportService = Provider.of<ReportService>(context, listen: false);
+
+    bool success = await reportService.createReport(_violation, _mediaFiles);
+    
+    if (!mounted) return; // Check if the widget is still mounted
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report submitted successfully')));
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to submit report')));
+    }
+  }
 
 Widget build(BuildContext context) {
     return Scaffold(
@@ -93,12 +153,7 @@ Widget build(BuildContext context) {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ReportForm(
-              formKey: _formKey,
-              violation: _violation,
-              dateController: _dateController,
-              timeController: _timeController,
-              violations: _violations,
+            _buildReportForm(),
               onDateSaved: (pickedDate) {
                 if (pickedDate != null) {
                   setState(() {
@@ -130,10 +185,7 @@ Widget build(BuildContext context) {
               child: const Text('Add Media'),
             ),
             const SizedBox(height: 10),
-            MediaPreview(
-              mediaFiles: _mediaFiles,
-              onRemove: _removeMedia,
-            ),
+            _buildMediaPreview(),
             // Submit Button
             ElevatedButton(
               onPressed: () {
