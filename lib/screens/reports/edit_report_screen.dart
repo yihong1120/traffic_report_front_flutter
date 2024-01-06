@@ -1,17 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/traffic_violation.dart';
+import '../../models/media_file.dart';
 import '../../services/report_service.dart';
 import '../../components/media_preview.dart';
 import '../../components/report_form.dart';
-
-// 创建一个自定义的类来表示远程媒体文件
-class RemoteMediaFile {
-  final String url;
-  RemoteMediaFile(this.url);
-}
 
 class EditReportPage extends StatefulWidget {
   final int recordId;
@@ -25,7 +21,8 @@ class EditReportPage extends StatefulWidget {
 class EditReportPageState extends State<EditReportPage> {
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
-  final List<RemoteMediaFile> _remoteMediaFiles = []; // 用于存储远程媒体文件
+  final List<XFile> _localMediaFiles = []; // 用于存储本地媒体文件
+  final List<MediaFile> _remoteMediaFiles = []; // 用于存储远程媒体文件
   bool _isLoading = true;
 
   final _formKey = GlobalKey<FormState>();
@@ -37,8 +34,8 @@ class EditReportPageState extends State<EditReportPage> {
   String _selectedStatus = '';
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _loadViolation();
   }
 
@@ -52,7 +49,7 @@ class EditReportPageState extends State<EditReportPage> {
       _officerController.text = _violation.officer ?? '';
       _selectedStatus = _violation.status ?? '';
       // 加载远程媒体文件
-      _remoteMediaFiles.addAll(_violation.mediaUrls.map((url) => RemoteMediaFile(url)).toList());
+      _remoteMediaFiles.addAll(_violation.mediaFiles);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load report: $e')),
@@ -70,6 +67,7 @@ class EditReportPageState extends State<EditReportPage> {
     _locationController.dispose();
     _officerController.dispose();
     super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +91,29 @@ class EditReportPageState extends State<EditReportPage> {
                 violation: _violation,
                 dateController: _dateController,
                 timeController: _timeController,
-                licensePlateController: _licensePlateController,
-                locationController: _locationController,
-                officerController: _officerController,
-                selectedStatus: _selectedStatus,
+                violations: TrafficViolation.violations, // 这里传递违规类型列表
+                onDateSaved: (pickedDate) {
+                  // 保存选择的日期
+                },
+                onTimeSaved: (pickedTime) {
+                  // 保存选择的时间
+                },
+                onLicensePlateSaved: (value) {
+                  _violation.licensePlate = value;
+                },
+                onLocationSaved: (value) {
+                  _violation.location = value;
+                },
+                onOfficerSaved: (value) {
+                  _violation.officer = value;
+                },
+                onStatusChanged: (value) {
+                  setState(() {
+                    _violation.status = value;
+                  });
+                },
               ),
-              MediaPreview(mediaFiles: _mediaFiles, onRemove: _removeMedia),
+              MediaPreview(mediaFiles: _localMediaFiles, onRemove: _removeLocalMedia),
               ElevatedButton(
                 onPressed: _pickMedia,
                 child: const Text('Add Media'),
@@ -117,57 +132,61 @@ class EditReportPageState extends State<EditReportPage> {
   void _pickMedia() async {
     final List<XFile>? pickedFiles = await _picker.pickMultiImage();
     if (pickedFiles != null) {
-      setState(() {
-        _mediaFiles.addAll(pickedFiles);
-      });
+      // 这里添加了对文件大小的检查
+      for (var file in pickedFiles) {
+        final fileSize = await File(file.path).length();
+        if (fileSize <= 100 * 1024 * 1024) { // 限制文件大小为100MB
+          setState(() {
+            _localMediaFiles.add(file);
+          });
+        }
+      }
     }
   }
 
-  void _removeMedia(XFile file) {
+  void _removeLocalMedia(XFile file) {
     setState(() {
-      _mediaFiles.remove(file);
+      _localMediaFiles.remove(file);
     });
   }
 
+
   void _submitReport() async {
     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       final navigator = Navigator.of(context);
 
+      // 更新违规实例的属性
       _violation.licensePlate = _licensePlateController.text;
       _violation.location = _locationController.text;
       _violation.officer = _officerController.text;
       _violation.status = _selectedStatus;
 
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
 
       try {
         final reportService = Provider.of<ReportService>(context, listen: false);
-        // 注意：这里需要传递本地媒体文件列表，如果有的话
-        // 如果您还需要处理远程媒体文件，请确保 ReportService 的 updateReport 方法支持它
-        bool success = await reportService.updateReport(_violation, /* 本地媒体文件列表 */);
+
+        // 将远程和本地媒体文件传递给更新方法
+        bool success = await reportService.updateReport(
+          _violation,
+          localMediaFiles: _localMediaFiles,
+          remoteMediaFiles: _remoteMediaFiles.map((e) => e.url).toList(),
+        );
 
         if (success) {
-          scaffoldMessenger.showSnackBar(
-            const SnackBar(content: Text('Report updated successfully')),
-          );
+          scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Report updated successfully')));
           navigator.pop();
         } else {
-          scaffoldMessenger.showSnackBar(
-            const SnackBar(content: Text('Failed to update report')),
-          );
+          scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Failed to update report')));
         }
       } catch (e) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(content: Text('An error occurred: $e')),
-        );
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text('An error occurred: $e')));
       } finally {
         if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
+          setState(() => _isLoading = false);
         }
       }
     }
