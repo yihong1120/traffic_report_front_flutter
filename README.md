@@ -18,6 +18,7 @@ lib/
       |- navigation_drawer.dart
       |- report_form.dart
   |- models/        # Data models
+      |- media_file.dart
       |- social_account.dart
       |- traffic_violation.dart
   |- screens/       # Different screens/pages
@@ -42,6 +43,7 @@ lib/
       |- report_service.dart
       |- social_service.dart
   |- utils/         # Utility classes, such as utility functions, constant definitions
+      |- media_utils.dart
   main.dart         # Entry file
 ```
 
@@ -53,7 +55,7 @@ lib/
 - [ ] Integrate with the backend API for data retrieval and submission
 - [ ] Implement responsive design for mobile and tablet views
 - [ ] Test functionalities across different browsers and devices
-- [ ] Optimize performance and loading times
+- [ ] Optimise performance and loading times
 - [ ] Implement user feedback and rating system
 - [ ] Prepare for production deployment
 
@@ -63,7 +65,7 @@ To run the project locally:
 1. Ensure you have Flutter installed on your system. Visit [Flutter Installation Guide](https://flutter.dev/docs/get-started/install) for instructions.
 2. Clone the repository:
    ```
-   git clone https://github.com/your-username/Traffic-Report-Flutter-Web.git
+   git clone https://github.com/yihong1120/traffic_report_front_flutter.git
    ```
 3. Navigate to the project directory:
    ```
