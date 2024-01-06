@@ -23,21 +23,17 @@ class PasswordChangePageState extends State<PasswordChangePage> {
         _isLoading = true;
       });
 
-      // 在执行异步操作前获取 Navigator 和 ScaffoldMessenger 状态
-      final navigator = Navigator.of(context);
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
-
       // 执行异步操作
       bool passwordChanged = await AuthService.changePassword(_oldPassword, _newPassword);
 
       // 根据操作结果使用先前获取的状态
       if (passwordChanged) {
-        scaffoldMessenger.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Password changed successfully')),
         );
-        navigator.pop();
+        Navigator.of(context).pop();
       } else {
-        scaffoldMessenger.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to change password')),
         );
       }
@@ -46,7 +42,6 @@ class PasswordChangePageState extends State<PasswordChangePage> {
         _isLoading = false;
       });
     }
-  }
 
   @override
   Widget build(BuildContext context) {
