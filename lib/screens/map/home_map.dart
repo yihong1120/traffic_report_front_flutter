@@ -12,7 +12,7 @@ class HomeMapPage extends StatefulWidget {
 class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
-  String _searchKeyword = '';
+  
   final Set<Marker> _markers = {};
 
   @override
