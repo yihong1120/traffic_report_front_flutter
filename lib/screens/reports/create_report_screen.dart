@@ -11,6 +11,7 @@ import '../../services/report_service.dart';
 import '../../components/media_picker.dart';
 import '../../components/media_preview.dart';
 import '../../components/report_form.dart';
+import '../../utils/media_utils.dart';
 
 final Logger logger = Logger();
 
@@ -33,20 +34,7 @@ class CreateReportPageState extends State<CreateReportPage> {
   );
 
   // 违规类型选项
-  final List<String> _violations = [
-    '紅線停車',
-    '黃線臨車',
-    '行駛人行道',
-    '未停讓行人',
-    '切換車道未打方向燈',
-    '人行道停車',
-    '騎樓停車',
-    '闖紅燈',
-    '逼車',
-    '未禮讓直行車',
-    '未依標線行駛',
-    '其他',
-  ];
+  final List<String> _violations = TrafficViolation.violations; // 假设这是从 TrafficViolation 类获取的
 
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
@@ -179,7 +167,7 @@ class CreateReportPageState extends State<CreateReportPage> {
       setState(() {
         _mediaFiles.addAll(validFiles);
         for (var file in validFiles) {
-          if (_isVideoFile(file.path)) {
+          if (MediaUtils.isVideoFile(file.path)) {
             _initVideoController(file);
           }
         }
@@ -208,7 +196,7 @@ class CreateReportPageState extends State<CreateReportPage> {
 
   void _submitReport() async {
     // 确保至少有一个视频文件
-    bool hasVideo = _mediaFiles.any((file) => _isVideoFile(file.path));
+    bool hasVideo = _mediaFiles.any((file) => MediaUtils.isVideoFile(file.path));
     if (!hasVideo) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please include at least one video file.')),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:logger/logger.dart';
+import '../../utils/media_utils.dart';
 
 final Logger logger = Logger();
 
@@ -37,7 +38,7 @@ class _MediaPreviewState extends State<MediaPreview> {
       spacing: 8.0,
       runSpacing: 8.0,
       children: widget.mediaFiles.map((file) {
-        if (_isVideoFile(file.path)) {
+        if (MediaUtils.isVideoFile(file.path)) {
           // 处理视频文件
           return _buildVideoPreview(file);
         } else {
@@ -46,10 +47,6 @@ class _MediaPreviewState extends State<MediaPreview> {
         }
       }).toList(),
     );
-  }
-
-  bool _isVideoFile(String path) {
-    return path.toLowerCase().endsWith('.mp4') || path.toLowerCase().endsWith('.mov');
   }
 
   Widget _buildVideoPreview(XFile file) {
@@ -72,7 +69,7 @@ class _MediaPreviewState extends State<MediaPreview> {
           icon: const Icon(Icons.remove_circle),
           onPressed: () {
             widget.onRemove(file);
-            controller.dispose();
+            controller?.dispose();
             _videoControllers.remove(file.path);
           },
         ),

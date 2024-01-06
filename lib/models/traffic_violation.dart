@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'media_file.dart';
 
 class TrafficViolation {
   int? id; // 添加 id 属性
@@ -10,6 +11,7 @@ class TrafficViolation {
   String? status;
   String? location;
   String? officer;
+  List<MediaFile> mediaFiles;
 
   static const List<String> violations = [
     '紅線停車',
@@ -43,6 +45,7 @@ class TrafficViolation {
     this.status,
     this.location,
     this.officer,
+    this.mediaFiles = const [],
   });
 
   // Convert a TrafficViolation into a JSON map.
@@ -72,6 +75,9 @@ class TrafficViolation {
       status: json['status'] as String?,
       location: json['location'] as String?,
       officer: json['officer'] as String?,
+      mediaFiles: json['mediaFiles'] != null
+        ? (json['mediaFiles'] as List).map((e) => MediaFile.fromJson(e)).toList()
+        : [],
     );
   }
 
