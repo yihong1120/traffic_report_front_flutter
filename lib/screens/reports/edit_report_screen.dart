@@ -115,7 +115,7 @@ class EditReportPageState extends State<EditReportPage> {
   }
 
   @override
-  PreferredSizeWidget build(BuildContext context) {
+  Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
         appBar: _buildAppBar(),
@@ -127,8 +127,8 @@ class EditReportPageState extends State<EditReportPage> {
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
   }
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
