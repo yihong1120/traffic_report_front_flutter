@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:traffic_report_front_flutter/services/report_service.dart';
+import 'package:traffic_report_front_flutter/models/traffic_violation.dart;
 
 class MockMultipartRequest extends http.MultipartRequest {
   MockMultipartRequest(String method, Uri url) : super(method, url);
