@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:logger/logger.dart';
-import 'dart:typed_data';
+
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import '../../components/media_picker.dart';
