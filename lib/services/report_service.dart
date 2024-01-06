@@ -64,8 +64,8 @@ class ReportService {
     }
   }
 
-  // 更新報告的方法
-  Future<bool> updateReport(TrafficViolation violation, List<XFile> mediaFiles) async {
+  // 更新报告的方法，现在包括本地和远程媒体文件的处理
+  Future<bool> updateReport(TrafficViolation violation, {List<XFile>? localMediaFiles, List<String>? remoteMediaFiles}) async {
     try {
       var reportJson = violation.toJson();
 
@@ -77,9 +77,17 @@ class ReportService {
         }
       });
 
-      for (var file in mediaFiles) {
-        var multipartFile = await http.MultipartFile.fromPath('media', file.path);
-        request.files.add(multipartFile);
+      // 添加本地媒体文件
+      if (localMediaFiles != null) {
+        for (var file in localMediaFiles) {
+          var multipartFile = await http.MultipartFile.fromPath('media', file.path);
+          request.files.add(multipartFile);
+        }
+      }
+
+      // 处理远程媒体文件
+      if (remoteMediaFiles != null) {
+        request.fields['remoteMediaFiles'] = jsonEncode(remoteMediaFiles);
       }
 
       var response = await request.send();
