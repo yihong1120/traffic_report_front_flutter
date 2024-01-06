@@ -26,6 +26,32 @@ class MockLogger extends Logger {
   void d(dynamic message) {
     // Do nothing in the mock logger
   }
+  
+  test('Update Report Failure Test', () async {
+    // Mock the necessary dependencies
+    final mockRequest = MockMultipartRequest('PUT', Uri.parse('http://127.0.0.1:8000/reports/1/'));
+    final mockResponse = MockResponse(mockRequest, 400);
+    final mockLogger = MockLogger();
+  
+    // Mock the local media files
+    final localMediaFiles = [
+      XFile('path/to/file1.jpg'),
+      XFile('path/to/file2.jpg'),
+    ];
+  
+    // Mock the remote media files
+    final remoteMediaFiles = ['http://example.com/file1.jpg', 'http://example.com/file2.jpg'];
+  
+    // Call the updateReport method
+    final result = await reportService.updateReport(
+      TrafficViolation(id: 1),
+      localMediaFiles: localMediaFiles,
+      remoteMediaFiles: remoteMediaFiles,
+    );
+  
+    // Assert the expected behavior and outcomes
+    expect(result, false);
+  })
 }
 
 void main() {
@@ -67,3 +93,28 @@ void main() {
 
   });
 }
+  test('Update Report Failure Test', () async {
+    // Mock the necessary dependencies
+    final mockRequest = MockMultipartRequest('PUT', Uri.parse('http://127.0.0.1:8000/reports/1/'));
+    final mockResponse = MockResponse(mockRequest, 400);
+    final mockLogger = MockLogger();
+
+    // Mock the local media files
+    final localMediaFiles = [
+      XFile('path/to/file1.jpg'),
+      XFile('path/to/file2.jpg'),
+    ];
+
+    // Mock the remote media files
+    final remoteMediaFiles = ['http://example.com/file1.jpg', 'http://example.com/file2.jpg'];
+
+    // Call the updateReport method
+    final result = await reportService.updateReport(
+      TrafficViolation(id: 1),
+      localMediaFiles: localMediaFiles,
+      remoteMediaFiles: remoteMediaFiles,
+    );
+
+    // Assert the expected behavior and outcomes
+    expect(result, false);
+  })
