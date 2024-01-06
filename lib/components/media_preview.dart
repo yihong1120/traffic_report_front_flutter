@@ -109,7 +109,7 @@ Widget _buildImagePreview(XFile file) {
               ),
             ],
           );
-        } else {
+        } else { {
           return const CircularProgressIndicator();
         }
       },
