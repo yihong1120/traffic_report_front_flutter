@@ -1,6 +1,7 @@
 import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:test/fake.dart;
 import 'package:logger/logger.dart';
 import 'package:traffic_report_front_flutter/services/report_service.dart';
 import 'package:traffic_report_front_flutter/models/traffic_violation.dart;
@@ -51,7 +52,25 @@ class MockLogger extends Logger {
   
     // Assert the expected behavior and outcomes
     expect(result, false);
-  })
+    // Mock the local media files
+  final localMediaFiles = [
+    XFile('path/to/file1.jpg'),
+    XFile('path/to/file2.jpg'),
+  ];
+
+  // Mock the remote media files
+  final remoteMediaFiles = ['http://example.com/file1.jpg', 'http://example.com/file2.jpg'];
+
+  // Call the updateReport method
+  final result = await reportService.updateReport(
+    TrafficViolation(id: 1),
+    localMediaFiles: localMediaFiles,
+    remoteMediaFiles: remoteMediaFiles,
+  );
+
+  // Assert the expected behavior and outcomes
+  expect(result, false);
+})
 }
 
 void main() {
