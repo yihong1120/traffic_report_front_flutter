@@ -1,11 +1,11 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb; // 引入這個來檢查是否在Web平台
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:logger/logger.dart';
-import 'dart:typed_data';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import '../../components/media_picker.dart';
@@ -24,7 +24,6 @@ class CreateReportPage extends StatefulWidget {
 
 class CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
-  final _picker = ImagePicker();
   final List<XFile> _mediaFiles = [];
   final TrafficViolation _violation = TrafficViolation(
     date: DateTime.now(),
@@ -133,24 +132,22 @@ class CreateReportPageState extends State<CreateReportPage> {
   void _pickMedia() async {
     final List<XFile>? pickedFiles = await MediaPicker.pickMedia(context, enableCamera: true);
 
-    // 检查是否有文件被选中
+    if (!mounted) return; // 檢查異步操作之後是否仍掛載
+
     if (pickedFiles == null || pickedFiles.isEmpty) return;
 
-    // 检查选择的媒体数量
     if (pickedFiles.length > 5) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You can only select up to 5 media files.')),
-        );
-      }
+      if (!mounted) return; // 再次檢查
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You can only select up to 5 media files.')),
+      );
       return;
     }
 
     List<XFile> validFiles = [];
-    
-    // 检查每个媒体文件的大小
     for (var file in pickedFiles) {
-      final fileLength = await File(file.path).length();
+      // 在 Web 上使用 file.length 而不是 File(file.path).length()
+      final fileLength = await file.length();
       if (fileLength > 100 * 1024 * 1024) { // 100MB
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -162,7 +159,6 @@ class CreateReportPageState extends State<CreateReportPage> {
       }
     }
 
-    // 更新状态
     if (mounted) {
       setState(() {
         _mediaFiles.addAll(validFiles);
@@ -176,14 +172,20 @@ class CreateReportPageState extends State<CreateReportPage> {
   }
 
   void _initVideoController(XFile file) {
-    VideoPlayerController controller = VideoPlayerController.file(File(file.path))
-      ..initialize().then((_) {
-        logger.i('Video initialized successfully.');
-        setState(() {});
-      }).catchError((error) {
-        logger.e('Video initialization error: $error');
-      });
-    _videoControllers[file.path] = controller;
+    // 僅在非Web平台上初始化 VideoPlayerController
+    if (!kIsWeb) {
+      VideoPlayerController controller = VideoPlayerController.file(File(file.path))
+        ..initialize().then((_) {
+          logger.i('Video initialized successfully.');
+          setState(() {});
+        }).catchError((error) {
+          logger.e('Video initialization error: $error');
+        });
+      _videoControllers[file.path] = controller;
+    } else {
+      // 對於Web平台，你可以選擇不做任何事，或者實現一個替代的預覽機制
+      logger.i('Skipping video initialization on web platform.');
+    }
   }
 
   void _removeMedia(XFile file) {
