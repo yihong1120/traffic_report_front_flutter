@@ -45,13 +45,5 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>GOOGLE_MAPS_API_KEY</key>
-	<string>$(GOOGLE_MAPS_API_KEY)</string>
-	<key>NSCameraUsageDescription</key>
-	<string>需要您的同意才能访问相机</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>需要您的同意才能使用麦克风</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>需要您的同意才能访问相册</string>
 </dict>
 </plist>
