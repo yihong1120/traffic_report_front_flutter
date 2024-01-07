@@ -27,7 +27,6 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
-		1D76A991E4DADC96000D37BA /* NewBusinessLogicTests.dart in Sources */ = {isa = PBXBuildFile; fileRef = 50C2EE8F1DCAF8EC40157772 /* NewBusinessLogicTests.dart */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -337,7 +336,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */,
-				1D76A991E4DADC96000D37BA /* NewBusinessLogicTests.dart in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

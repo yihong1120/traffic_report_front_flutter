@@ -38,9 +38,3 @@ target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
 # Run the Flutter tool portions of the build. This must not be removed.
 add_dependencies(${BINARY_NAME} flutter_assemble)
-
-# Custom target for running Dart unit tests
-add_custom_target(run_dart_tests
-  COMMAND ${FLUTTER_TESTER} --run-forever -d $<TARGET_FILE:${BINARY_NAME}> "${CMAKE_CURRENT_SOURCE_DIR}/tests/NewBusinessLogicTests.dart"
-)
-add_dependencies(run_dart_tests flutter_tester)
