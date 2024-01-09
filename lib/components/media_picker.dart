@@ -8,7 +8,7 @@ class MediaPicker {
 
     if (enableCamera) {
       try {
-        // 嘗試獲取可用相機列表
+         // 嘗試獲取可用相機列表
         final cameras = await availableCameras();
         if (cameras.isNotEmpty) {
           // 如果有可用相機，顯示完整菜單
@@ -36,6 +36,9 @@ class _MediaPickerMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Store the Navigator state before the async gap
+    final NavigatorState navigator = Navigator.of(context);
+
     return Wrap(
       children: <Widget>[
         ListTile(
@@ -43,7 +46,7 @@ class _MediaPickerMenu extends StatelessWidget {
           title: const Text('Select Photos'),
           onTap: () async {
             final List<XFile> photos = await picker.pickMultiImage();
-            Navigator.pop(context, photos); // 確保返回 List<XFile>
+            navigator.pop(photos); // Use the stored Navigator state
           },
         ),
         ListTile(
@@ -51,7 +54,7 @@ class _MediaPickerMenu extends StatelessWidget {
           title: const Text('Select Videos'),
           onTap: () async {
             final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
-            Navigator.pop(context, video != null ? [video] : null); // 將單個 XFile 包裝為 List
+            navigator.pop(video != null ? [video] : null);
           },
         ),
         ListTile(
@@ -59,7 +62,7 @@ class _MediaPickerMenu extends StatelessWidget {
           title: const Text('Take a Photo'),
           onTap: () async {
             final XFile? photo = await picker.pickImage(source: ImageSource.camera);
-            Navigator.pop(context, photo != null ? [photo] : null); // 同上
+            navigator.pop(photo != null ? [photo] : null);
           },
         ),
         ListTile(
@@ -67,7 +70,7 @@ class _MediaPickerMenu extends StatelessWidget {
           title: const Text('Record a Video'),
           onTap: () async {
             final XFile? video = await picker.pickVideo(source: ImageSource.camera);
-            Navigator.pop(context, video != null ? [video] : null); // 同上
+            navigator.pop(video != null ? [video] : null);
           },
         ),
       ],
