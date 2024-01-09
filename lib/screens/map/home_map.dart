@@ -18,10 +18,11 @@ class _HomeMapPageState extends State<HomeMapPage> {
   String _searchKeyword = '';
   DateTimeRange? _selectedDateRange;
   final Set<Marker> _markers = {};
-  String _selectedTimeRange = '昨天';
+  String _selectedTimeRange = '今日';
 
   // 定義時間範圍選項
   final List<String> _timeRangeOptions = [
+    '今日',
     '昨天',
     '過去七天',
     '過去一個月',
@@ -33,8 +34,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
   @override
   void initState() {
     super.initState();
-    String GOOGLE_MAPS_API_KEY =
-        dotenv.env['GOOGLE_MAPS_API_KEY'] ?? ''; // 獲取 API 密鑰
+    // String GOOGLE_MAPS_API_KEY =
+    //    dotenv.env['GOOGLE_MAPS_API_KEY'] ?? ''; // 獲取 API 密鑰
     // 使用 apiKey 進行相關操作
     // 初始加載標記
     _loadMarkers();
@@ -194,14 +195,20 @@ class _HomeMapPageState extends State<HomeMapPage> {
                 DropdownButton<String>(
                   value: _selectedTimeRange,
                   onChanged: (String? newValue) {
-                    if (newValue == '自訂時間範圍') {
-                      _selectDateRange(context);
-                    } else {
-                      setState(() {
+                    setState(() {
+                      if (newValue == '自訂時間範圍') {
+                        _selectDateRange(context);
+                      } else if (newValue == '今日') {
+                        _selectedTimeRange = newValue;
+                        _selectedDateRange = DateTimeRange(
+                          start: DateTime.now(),
+                          end: DateTime.now(),
+                        );
+                      } else {
                         _selectedTimeRange = newValue!;
                         _selectedDateRange = null;
-                      });
-                    }
+                      }
+                    });
                   },
                   items: _timeRangeOptions
                       .map<DropdownMenuItem<String>>((String value) {
