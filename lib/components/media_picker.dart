@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  Future<List<XFile>?> pickMedia(BuildContext context) async {
+  Future <List<XFile>?> pickMedia() async {
     final ImagePicker picker = ImagePicker();
 
     bool enableCamera = true;
@@ -58,7 +58,7 @@ class _MediaPickerMenu extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.camera_alt),
           title: const Text('Take a Photo'),
-          onTap: () async {
+        onTap: () async {
             final XFile? photo = await picker.pickImage(source: ImageSource.camera);
             Navigator.pop(context, photo != null ? [photo] : null); // 同上
           },
