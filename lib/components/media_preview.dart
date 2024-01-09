@@ -12,7 +12,7 @@ class MediaPreview extends StatefulWidget {
   final List<XFile> mediaFiles;
   final Function(XFile file) onRemove;
 
-  const MediaPreview({
+  const MediaPreview({ Key? key,
     Key? key,
     required this.mediaFiles,
     required this.onRemove,

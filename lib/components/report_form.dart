@@ -15,7 +15,8 @@ class ReportForm extends StatelessWidget {
   final Function(String?) onStatusChanged;
 
   const ReportForm({
-    Key? key,
+    // Convert 'key' parameter to a super parameter
+    @required Key? key,
     required this.formKey,
     required this.violation,
     required this.dateController,

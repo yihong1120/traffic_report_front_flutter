@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
 
@@ -16,7 +16,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
   String _searchKeyword = '';
-  DateTimeRange? _selectedDateRange;
+  DateTimeRange _selectedDateRange;
   final Set<Marker> _markers = {};
   String _selectedTimeRange = '今日';
 
