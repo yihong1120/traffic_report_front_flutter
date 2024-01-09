@@ -6,6 +6,7 @@ class MediaPicker {
   Future<List<XFile>> showMediaPicker(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
 
+    bool enableCamera = true;
     if (enableCamera) {
       try {
         // 嘗試獲取可用相機列表
