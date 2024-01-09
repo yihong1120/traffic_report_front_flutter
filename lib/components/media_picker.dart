@@ -65,7 +65,7 @@ class _MediaPickerMenu extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.videocam),
           title: const Text('Record a Video'),
-          onTap: () async {
+          onTap: () {
             final XFile? video = await picker.pickVideo(source: ImageSource.camera);
             Navigator.pop(context, video != null ? [video] : null); // 同上
           },
@@ -73,7 +73,7 @@ class _MediaPickerMenu extends StatelessWidget {
       ],
     );
   }
-          onTap: () async {
+          onTap: () {
             final XFile? photo = await picker.pickImage(source: ImageSource.camera);
             Navigator.pop(_, photo != null ? [photo] : null); // 同上
           },
@@ -90,7 +90,7 @@ class _MediaPickerMenu extends StatelessWidget {
     );
   }
 }
-          onTap: () async {
+          onTap: () {
             final XFile? photo = await picker.pickImage(source: ImageSource.camera);
             Navigator.pop(_, photo != null ? [photo] : null); // 同上
           },
