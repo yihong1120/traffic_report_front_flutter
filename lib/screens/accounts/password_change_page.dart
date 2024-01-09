@@ -12,7 +12,6 @@ class PasswordChangePageState extends State<PasswordChangePage> {
   final _formKey = GlobalKey<FormState>();
   String _oldPassword = '';
   String _newPassword = '';
-  String _confirmNewPassword = '';
   bool _isLoading = false;
 
   void _changePassword() async {
@@ -28,7 +27,8 @@ class PasswordChangePageState extends State<PasswordChangePage> {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
 
       // 执行异步操作
-      bool passwordChanged = await AuthService.changePassword(_oldPassword, _newPassword);
+      bool passwordChanged =
+          await AuthService.changePassword(_oldPassword, _newPassword);
 
       // 根据操作结果使用先前获取的状态
       if (passwordChanged) {
@@ -65,7 +65,8 @@ class PasswordChangePageState extends State<PasswordChangePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        decoration: const InputDecoration(labelText: 'Old Password'),
+                        decoration:
+                            const InputDecoration(labelText: 'Old Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -76,7 +77,8 @@ class PasswordChangePageState extends State<PasswordChangePage> {
                         onSaved: (value) => _oldPassword = value!,
                       ),
                       TextFormField(
-                        decoration: const InputDecoration(labelText: 'New Password'),
+                        decoration:
+                            const InputDecoration(labelText: 'New Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -87,9 +89,11 @@ class PasswordChangePageState extends State<PasswordChangePage> {
                           _newPassword = value;
                           return null;
                         },
+                        onSaved: (value) => _newPassword = value!,
                       ),
                       TextFormField(
-                        decoration: const InputDecoration(labelText: 'Confirm New Password'),
+                        decoration: const InputDecoration(
+                            labelText: 'Confirm New Password'),
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -99,7 +103,6 @@ class PasswordChangePageState extends State<PasswordChangePage> {
                           }
                           return null;
                         },
-                        onSaved: (value) => _confirmNewPassword = value!,
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
