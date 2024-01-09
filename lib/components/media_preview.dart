@@ -13,14 +13,10 @@ class MediaPreview extends StatefulWidget {
   final Function(XFile file) onRemove;
 
   const MediaPreview({
-    Key? key,
+    Key? key = const Key('media_preview_key'),
     required this.mediaFiles,
     required this.onRemove,
-  });
-
-  @override
-  State<MediaPreview> createState() => _MediaPreviewState();
-}
+  }) : super(key: key);
 
 class _MediaPreviewState extends State<MediaPreview> {
   final Map<String, VideoPlayerController> _videoControllers = {};
@@ -48,7 +44,6 @@ class _MediaPreviewState extends State<MediaPreview> {
       }).toList(),
     );
   }
-
   Widget _buildVideoPreview(XFile file) {
     var controller = _videoControllers[file.path];
     if (controller == null || !controller.value.isInitialized) {
