@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  static Future<List<XFile>?> pickMedia(BuildContext context, {bool enableCamera = false}) async {
+  static void _pickMedia(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
 
     if (enableCamera) {
