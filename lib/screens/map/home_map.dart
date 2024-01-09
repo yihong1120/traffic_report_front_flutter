@@ -59,7 +59,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
       _markers.clear();
       for (var markerData in mockData) {
         final marker = Marker(
-          markerId: MarkerId(markerData['title']),
+          markerId: String markerId = '',
           position: LatLng(markerData['lat'], markerData['lng']),
           infoWindow: InfoWindow(
             title: markerData['title'],
