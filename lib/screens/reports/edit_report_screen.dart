@@ -23,15 +23,15 @@ class EditReportPageState extends State<EditReportPage> {
   final ImagePicker _picker = ImagePicker();
   final List<XFile> _localMediaFiles = []; // 用于存储本地媒体文件
   final List<MediaFile> _remoteMediaFiles = []; // 用于存储远程媒体文件
-  bool _isLoading = true;
-
+  var _isLoading = true;
+  
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _licensePlateController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _officerController = TextEditingController();
-  String _selectedStatus = '';
+  var _selectedStatus = '';
 
   @override
   void didChangeDependencies() {
