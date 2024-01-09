@@ -13,7 +13,7 @@ class MediaPicker {
         final cameras = await availableCameras();
         if (cameras.isNotEmpty) {
           // 如果有可用相機，顯示完整菜單
-          return return showModalBottomSheet<List<XFile>>(
+          showModalBottomSheet<List<XFile>>(
             context: context,
             builder: (context) => _MediaPickerMenu(picker: picker),
           );
