@@ -199,13 +199,13 @@ class _HomeMapPageState extends State<HomeMapPage> {
                       if (newValue == '自訂時間範圍') {
                         _selectDateRange(context);
                       } else if (newValue == '今日') {
-                        _selectedTimeRange = newValue!;
+                        _selectedTimeRange = newValue ?? '今日'; // 使用空合併運算符
                         _selectedDateRange = DateTimeRange(
                           start: DateTime.now(),
                           end: DateTime.now(),
                         );
                       } else {
-                        _selectedTimeRange = newValue!;
+                        _selectedTimeRange = newValue ?? _selectedTimeRange; // 使用空合併運算符
                         _selectedDateRange = null;
                       }
                     });
