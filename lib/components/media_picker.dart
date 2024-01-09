@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  Future<List<XFile>> showMediaPicker(BuildContext context) async {
+  Future<List<XFile>?> showMediaPicker(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
 
     bool enableCamera = true;
@@ -13,7 +13,7 @@ class MediaPicker {
         final cameras = await availableCameras();
         if (cameras.isNotEmpty) {
           // 如果有可用相機，顯示完整菜單
-          showModalBottomSheet<List<XFile>>(
+          showModalBottomSheet<List<XFile>?>(
             context: context,
             builder: (context) => _MediaPickerMenu(picker: picker),
           );
