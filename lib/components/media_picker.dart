@@ -59,7 +59,7 @@ class _MediaPickerMenu extends StatelessWidget {
           title: const Text('Take a Photo'),
         onTap: () async {
             final XFile? photo = await picker.pickImage(source: ImageSource.camera);
-            Navigator.pop(context, photo != null ? [photo] : null); // 同上
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
           },
         ),
         ListTile(
