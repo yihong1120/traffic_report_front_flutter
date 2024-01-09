@@ -18,7 +18,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
   String _searchKeyword = '';
   late DateTimeRange _selectedDateRange;
   final Set<Marker> _markers = {};
-  String _selectedTimeRange = '今日';
+  String _selectedTimeRange;
 
   // 定義時間範圍選項
   final List<String> _timeRangeOptions = [
