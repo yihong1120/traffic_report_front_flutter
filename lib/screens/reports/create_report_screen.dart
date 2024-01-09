@@ -16,7 +16,7 @@ import '../../utils/media_utils.dart';
 final Logger logger = Logger();
 
 class CreateReportPage extends StatefulWidget {
-  const CreateReportPage({super.key});
+  const CreateReportPage({Key? key});
 
   @override
   CreateReportPageState createState() => CreateReportPageState();
