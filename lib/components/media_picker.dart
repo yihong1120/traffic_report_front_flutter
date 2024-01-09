@@ -14,8 +14,7 @@ class MediaPicker {
         if (cameras.isNotEmpty) {
           // 如果有可用相機，顯示完整菜單
           showModalBottomSheet<List<XFile>?>(
-            context: context,
-            builder: (context) => _MediaPickerMenu(picker: picker),
+            builder: (_) => _MediaPickerMenu(picker: picker),
           );
         }
       } catch (e) {
@@ -36,7 +35,7 @@ class _MediaPickerMenu extends StatelessWidget {
   const _MediaPickerMenu({required this.picker});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return Wrap(
       children: <Widget>[
         ListTile(
@@ -74,4 +73,55 @@ class _MediaPickerMenu extends StatelessWidget {
       ],
     );
   }
+          onTap: () async {
+            final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.videocam),
+          title: const Text('Record a Video'),
+          onTap: () async {
+            final XFile? video = await picker.pickVideo(source: ImageSource.camera);
+            Navigator.pop(_, video != null ? [video] : null); // 同上
+          },
+        ),
+      ],
+    );
+  }
+}
+          onTap: () async {
+            final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.videocam),
+          title: const Text('Record a Video'),
+          onTap: () async {
+            final XFile? video = await picker.pickVideo(source: ImageSource.camera);
+            Navigator.pop(_, video != null ? [video] : null); // 同上
+          },
+        ),
+      ],
+    );
+  }
+}
+          onTap: () async {
+            final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.videocam),
+          title: const Text('Record a Video'),
+          onTap: () async {
+            final XFile? video = await picker.pickVideo(source: ImageSource.camera);
+            Navigator.pop(_, video != null ? [video] : null); // 同上
+          },
+        ),
+      ],
+    );
+  }
+}
 }
