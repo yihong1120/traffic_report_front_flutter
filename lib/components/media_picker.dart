@@ -3,18 +3,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  Future<List<XFile>> showMediaPicker(BuildContext context) async {
+Future<List<XFile>?> pickMedia(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
 
+    bool enableCamera = true;
     if (enableCamera) {
       try {
         // 嘗試獲取可用相機列表
         final cameras = await availableCameras();
         if (cameras.isNotEmpty) {
           // 如果有可用相機，顯示完整菜單
-          return return showModalBottomSheet<List<XFile>>(
-            context: context,
-            builder: (context) => _MediaPickerMenu(picker: picker),
+          showModalBottomSheet<List<XFile>?>(
+            builder: (_) => _MediaPickerMenu(picker: picker),
           );
         }
       } catch (e) {
@@ -35,7 +35,7 @@ class _MediaPickerMenu extends StatelessWidget {
   const _MediaPickerMenu({required this.picker});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return Wrap(
       children: <Widget>[
         ListTile(
@@ -57,15 +57,15 @@ class _MediaPickerMenu extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.camera_alt),
           title: const Text('Take a Photo'),
-          onTap: () async {
+        onTap: () async {
             final XFile? photo = await picker.pickImage(source: ImageSource.camera);
-            Navigator.pop(context, photo != null ? [photo] : null); // 同上
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
           },
         ),
         ListTile(
           leading: const Icon(Icons.videocam),
           title: const Text('Record a Video'),
-          onTap: () async {
+          onTap: () {
             final XFile? video = await picker.pickVideo(source: ImageSource.camera);
             Navigator.pop(context, video != null ? [video] : null); // 同上
           },
@@ -73,4 +73,55 @@ class _MediaPickerMenu extends StatelessWidget {
       ],
     );
   }
+          onTap: () {
+            final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.videocam),
+          title: const Text('Record a Video'),
+          onTap: () async {
+            final XFile? video = await picker.pickVideo(source: ImageSource.camera);
+            Navigator.pop(_, video != null ? [video] : null); // 同上
+          },
+        ),
+      ],
+    );
+  }
+}
+          onTap: () {
+            final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.videocam),
+          title: const Text('Record a Video'),
+          onTap: () async {
+            final XFile? video = await picker.pickVideo(source: ImageSource.camera);
+            Navigator.pop(_, video != null ? [video] : null); // 同上
+          },
+        ),
+      ],
+    );
+  }
+}
+          onTap: () async {
+            final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+            Navigator.pop(_, photo != null ? [photo] : null); // 同上
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.videocam),
+          title: const Text('Record a Video'),
+          onTap: () async {
+            final XFile? video = await picker.pickVideo(source: ImageSource.camera);
+            Navigator.pop(_, video != null ? [video] : null); // 同上
+          },
+        ),
+      ],
+    );
+  }
+}
 }
