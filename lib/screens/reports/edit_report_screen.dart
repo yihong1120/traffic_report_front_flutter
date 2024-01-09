@@ -53,7 +53,7 @@ class EditReportPageState extends State<EditReportPage> {
       // 加载远程媒体文件
       _remoteMediaFiles.addAll(_violation.mediaFiles);
     } catch (e) {
-      final messenger = ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to load report: $e')),
       );
     } finally {
