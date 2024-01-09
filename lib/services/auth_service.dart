@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthService {
-  static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000';
+  static final String _baseUrl =
+      dotenv.env['API_URL'] ?? 'http://localhost:8000';
 
   static Future<bool> login(String username, String password) async {
     var url = Uri.parse('$_baseUrl/login/');
@@ -21,7 +21,8 @@ class AuthService {
     }
   }
 
-  static Future<bool> register(String username, String email, String password1, String password2) async {
+  static Future<bool> register(
+      String username, String email, String password1, String password2) async {
     var url = Uri.parse('$_baseUrl/register/');
     var response = await http.post(url, body: {
       'username': username,
@@ -63,7 +64,8 @@ class AuthService {
     }
   }
 
-  static Future<bool> changePassword(String oldPassword, String newPassword) async {
+  static Future<bool> changePassword(
+      String oldPassword, String newPassword) async {
     var url = Uri.parse('$_baseUrl/change-password/');
     var response = await http.post(url, body: {
       'old_password': oldPassword,
