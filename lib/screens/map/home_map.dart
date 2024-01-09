@@ -78,9 +78,9 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
     // 這裡是搜索邏輯的假設實現，你需要根據你的後端API進行調整
     logger.i('搜索关键字: $_searchKeyword');
-    if (_selectedDateRange != null) {
+    
       logger.i(
-          '搜索时间范围: ${_selectedDateRange!.start} - ${_selectedDateRange!.end}');
+          '搜索时间范围: $_selectedDateRange.start - $_selectedDateRange.end');
     } else {
       logger.i('搜索预设时间范围: $_selectedTimeRange');
     }
