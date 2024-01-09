@@ -16,7 +16,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
   String _searchKeyword = '';
-  late DateTimeRange _selectedDateRange;
+  late late DateTimeRange _selectedDateRange;
   final Set<Marker> _markers = {};
   String _selectedTimeRange;
 
