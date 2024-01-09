@@ -15,7 +15,7 @@ class ReportForm extends StatelessWidget {
   final Function(String?) onStatusChanged;
 
   const ReportForm({
-    Key? key,
+    super.key,
     required this.formKey,
     required this.violation,
     required this.dateController,
@@ -27,7 +27,7 @@ class ReportForm extends StatelessWidget {
     required this.onLocationSaved,
     required this.onOfficerSaved,
     required this.onStatusChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
