@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger();
 
 class HomeMapPage extends StatefulWidget {
   const HomeMapPage({super.key});
@@ -13,12 +16,25 @@ class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
   String _searchKeyword = '';
+  DateTimeRange? _selectedDateRange;
   final Set<Marker> _markers = {};
+  String _selectedTimeRange = '昨天';
+
+  // 定義時間範圍選項
+  final List<String> _timeRangeOptions = [
+    '昨天',
+    '過去七天',
+    '過去一個月',
+    '過去半年',
+    '過去一年',
+    '自訂時間範圍',
+  ];
 
   @override
   void initState() {
     super.initState();
-    String GOOGLE_MAPS_API_KEY = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? ''; // 獲取 API 密鑰
+    String GOOGLE_MAPS_API_KEY =
+        dotenv.env['GOOGLE_MAPS_API_KEY'] ?? ''; // 獲取 API 密鑰
     // 使用 apiKey 進行相關操作
     // 初始加載標記
     _loadMarkers();
@@ -55,9 +71,53 @@ class _HomeMapPageState extends State<HomeMapPage> {
   }
 
   void _searchData() async {
-    // 根據 _searchKeyword 進行搜索
+    // 根據 _searchKeyword 和 _selectedDateRange 進行搜索
     // 搜索後的處理可能會涉及與後端的交互
     // 更新 _markers 集合以反映搜索結果
+
+    // 這裡是搜索邏輯的假設實現，你需要根據你的後端API進行調整
+    logger.i('搜索关键字: $_searchKeyword');
+    if (_selectedDateRange != null) {
+      logger.i(
+          '搜索时间范围: ${_selectedDateRange!.start} - ${_selectedDateRange!.end}');
+    } else {
+      logger.i('搜索预设时间范围: $_selectedTimeRange');
+    }
+
+    // 假設這是從後端獲取的搜索結果
+    List<Map<String, dynamic>> searchResults = [
+      // ... 搜索結果數據
+    ];
+
+    setState(() {
+      _markers.clear();
+      for (var result in searchResults) {
+        final marker = Marker(
+          markerId: MarkerId(result['title']),
+          position: LatLng(result['lat'], result['lng']),
+          infoWindow: InfoWindow(
+            title: result['title'],
+            snippet: '點擊查看詳情',
+          ),
+        );
+        _markers.add(marker);
+      }
+    });
+  }
+
+  Future<void> _selectDateRange(BuildContext context) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2021),
+      lastDate: DateTime.now(),
+      initialDateRange: _selectedDateRange,
+    );
+    if (picked != null && picked != _selectedDateRange) {
+      setState(() {
+        _selectedDateRange = picked;
+        _selectedTimeRange = '自訂時間範圍';
+      });
+    }
   }
 
   @override
@@ -116,15 +176,42 @@ class _HomeMapPageState extends State<HomeMapPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: (value) => _searchKeyword = value,
-              decoration: InputDecoration(
-                labelText: '搜索',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: _searchData,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) => _searchKeyword = value,
+                    decoration: InputDecoration(
+                      labelText: '搜索',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: _searchData,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(width: 10),
+                DropdownButton<String>(
+                  value: _selectedTimeRange,
+                  onChanged: (String? newValue) {
+                    if (newValue == '自訂時間範圍') {
+                      _selectDateRange(context);
+                    } else {
+                      setState(() {
+                        _selectedTimeRange = newValue!;
+                        _selectedDateRange = null;
+                      });
+                    }
+                  },
+                  items: _timeRangeOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
           Expanded(
