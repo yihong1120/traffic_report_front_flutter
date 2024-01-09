@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  Future <List<XFile>?> pickMedia() async {
+Future<List<XFile>?> pickMedia(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
 
     bool enableCamera = true;
@@ -35,7 +35,7 @@ class _MediaPickerMenu extends StatelessWidget {
   const _MediaPickerMenu({required this.picker});
 
   @override
-  Widget build(_) {
+  Widget build(BuildContext _) {
     return Wrap(
       children: <Widget>[
         ListTile(
