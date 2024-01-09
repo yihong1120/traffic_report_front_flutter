@@ -5,7 +5,6 @@ import 'screens/reports/routes.dart' as reports_routes;
 import 'screens/chat/routes.dart' as chat_routes;
 import 'screens/accounts/routes.dart' as account_routes;
 import 'screens/map/home_map.dart';
-import 'components/navigation_drawer.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env"); // 加載.env文件
@@ -23,7 +22,7 @@ class TrafficReportApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      
+
       routes: {
         ...map_routes.mapRoutes,
         ...reports_routes.reportsRoutes,
@@ -31,7 +30,7 @@ class TrafficReportApp extends StatelessWidget {
         ...account_routes.accountsRoutes,
       },
       // 將 HomeMapPage 設為首頁
-      home: const HomeMapPage(), 
+      home: const HomeMapPage(),
     );
   }
 }
