@@ -130,16 +130,14 @@ class EditReportPageState extends State<EditReportPage> {
   }
 
   void _pickMedia() async {
-    final List<XFile>? pickedFiles = await _picker.pickMultiImage();
-    if (pickedFiles != null) {
-      // 这里添加了对文件大小的检查
-      for (var file in pickedFiles) {
-        final fileSize = await File(file.path).length();
-        if (fileSize <= 100 * 1024 * 1024) { // 限制文件大小为100MB
-          setState(() {
-            _localMediaFiles.add(file);
-          });
-        }
+    final List<XFile> pickedFiles = await _picker.pickMultiImage();
+    // 这里添加了对文件大小的检查
+    for (var file in pickedFiles) {
+      final fileSize = await File(file.path).length();
+      if (fileSize <= 100 * 1024 * 1024) { // 限制文件大小为100MB
+        setState(() {
+          _localMediaFiles.add(file);
+        });
       }
     }
   }
