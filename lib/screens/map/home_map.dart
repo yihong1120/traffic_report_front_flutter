@@ -16,9 +16,9 @@ class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
   String _searchKeyword = '';
-  DateTimeRange _selectedDateRange;
+  DateTimeRange? _selectedDateRange;
   final Set<Marker> _markers = {};
-  String _selectedTimeRange = '今日';
+  String _selectedTimeRange;
 
   // 定義時間範圍選項
   final List<String> _timeRangeOptions = [
@@ -78,9 +78,9 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
     // 這裡是搜索邏輯的假設實現，你需要根據你的後端API進行調整
     logger.i('搜索关键字: $_searchKeyword');
-    if (_selectedDateRange != null) {
+    
       logger.i(
-          '搜索时间范围: ${_selectedDateRange!.start} - ${_selectedDateRange!.end}');
+          '搜索时间范围: $_selectedDateRange.start - $_selectedDateRange.end');
     } else {
       logger.i('搜索预设时间范围: $_selectedTimeRange');
     }
@@ -113,7 +113,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
       lastDate: DateTime.now(),
       initialDateRange: _selectedDateRange,
     );
-    if (picked != null && picked != _selectedDateRange) {
+    if (picked != null && picked != _selectedDateRange!) {
       setState(() {
         _selectedDateRange = picked;
         _selectedTimeRange = '自訂時間範圍';
@@ -196,7 +196,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
                   value: _selectedTimeRange,
                   onChanged: (String? newValue) {
                     setState(() {
-                      if (newValue == '自訂時間範圍') {
+                      if (newValue == '自訂時間範圍' || newValue == null) {
                         _selectDateRange(context);
                       } else if (newValue == '今日') {
                         _selectedTimeRange = newValue;
