@@ -16,7 +16,7 @@ class MediaPreview extends StatefulWidget {
     Key? key,
     required this.mediaFiles,
     required this.onRemove,
-  });
+  }) : super(key: key); 
 
   @override
   State<MediaPreview> createState() => _MediaPreviewState();
