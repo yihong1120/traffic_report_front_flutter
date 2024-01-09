@@ -13,10 +13,10 @@ class MediaPreview extends StatefulWidget {
   final Function(XFile file) onRemove;
 
   const MediaPreview({
-    Key? key, // 添加了key参数
+    Key? key,
     required this.mediaFiles,
     required this.onRemove,
-  }) : super(key: key); // 将key传递给super构造函数
+  }) : super(key: key); 
 
   @override
   State<MediaPreview> createState() => _MediaPreviewState();
