@@ -16,7 +16,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
   String _searchKeyword = '';
-  late DateTimeRange _selectedDateRange;
+  DateTimeRange? _selectedDateRange;
   final Set<Marker> _markers = {};
   String _selectedTimeRange;
 
@@ -113,7 +113,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
       lastDate: DateTime.now(),
       initialDateRange: _selectedDateRange,
     );
-    if (picked != null && picked != _selectedDateRange) {
+    if (picked != null && picked != _selectedDateRange!) {
       setState(() {
         _selectedDateRange = picked;
         _selectedTimeRange = '自訂時間範圍';
@@ -196,7 +196,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
                   value: _selectedTimeRange,
                   onChanged: (String? newValue) {
                     setState(() {
-                      if (newValue == '自訂時間範圍') {
+                      if (newValue == '自訂時間範圍' || newValue == null) {
                         _selectDateRange(context);
                       } else if (newValue == '今日') {
                         _selectedTimeRange = newValue;
