@@ -1,4 +1,6 @@
 import 'dart:io';
+
+/// This file contains the screen for editing a traffic violation report.
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
