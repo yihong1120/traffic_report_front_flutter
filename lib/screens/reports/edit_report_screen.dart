@@ -39,23 +39,39 @@ class EditReportPageState extends State<EditReportPage> {
     _loadViolation();
   }
 
+  void _showSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
+  }
+
   void _loadViolation() async {
     try {
-      _violation = await Provider.of<ReportService>(context, listen: false).getViolation(widget.recordId);
+      _violation = await Provider.of<ReportService>(context, listen: false)
+          .getViolation(widget.recordId);
       _dateController.text = DateFormat('yyyy-MM-dd').format(_violation.date!);
-      _timeController.text = _violation.time!.format(context);
+      // Save TimeOfDay in a variable before using it with context
+      TimeOfDay? violationTime = _violation.time;
+
       _licensePlateController.text = _violation.licensePlate ?? '';
       _locationController.text = _violation.location ?? '';
       _officerController.text = _violation.officer ?? '';
       _selectedStatus = _violation.status ?? '';
-      // 加载远程媒体文件
+      // Load remote media files
       _remoteMediaFiles.addAll(_violation.mediaFiles);
+
+      // Check if the widget is still mounted before using context
+      if (mounted && violationTime != null) {
+        _timeController.text = violationTime.format(context);
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load report: $e')),
-      );
+      _showSnackBar('Failed to load report: $e');
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -113,7 +129,8 @@ class EditReportPageState extends State<EditReportPage> {
                   });
                 },
               ),
-              MediaPreview(mediaFiles: _localMediaFiles, onRemove: _removeLocalMedia),
+              MediaPreview(
+                  mediaFiles: _localMediaFiles, onRemove: _removeLocalMedia),
               ElevatedButton(
                 onPressed: _pickMedia,
                 child: const Text('Add Media'),
@@ -134,7 +151,8 @@ class EditReportPageState extends State<EditReportPage> {
     // 这里添加了对文件大小的检查
     for (var file in pickedFiles) {
       final fileSize = await File(file.path).length();
-      if (fileSize <= 100 * 1024 * 1024) { // 限制文件大小为100MB
+      if (fileSize <= 100 * 1024 * 1024) {
+        // 限制文件大小为100MB
         setState(() {
           _localMediaFiles.add(file);
         });
@@ -147,7 +165,6 @@ class EditReportPageState extends State<EditReportPage> {
       _localMediaFiles.remove(file);
     });
   }
-
 
   void _submitReport() async {
     if (_formKey.currentState!.validate()) {
@@ -165,7 +182,8 @@ class EditReportPageState extends State<EditReportPage> {
       setState(() => _isLoading = true);
 
       try {
-        final reportService = Provider.of<ReportService>(context, listen: false);
+        final reportService =
+            Provider.of<ReportService>(context, listen: false);
 
         // 将远程和本地媒体文件传递给更新方法
         bool success = await reportService.updateReport(
@@ -175,13 +193,16 @@ class EditReportPageState extends State<EditReportPage> {
         );
 
         if (success) {
-          scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Report updated successfully')));
+          scaffoldMessenger.showSnackBar(
+              const SnackBar(content: Text('Report updated successfully')));
           navigator.pop();
         } else {
-          scaffoldMessenger.showSnackBar(const SnackBar(content: Text('Failed to update report')));
+          scaffoldMessenger.showSnackBar(
+              const SnackBar(content: Text('Failed to update report')));
         }
       } catch (e) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+        scaffoldMessenger
+            .showSnackBar(SnackBar(content: Text('An error occurred: $e')));
       } finally {
         if (mounted) {
           setState(() => _isLoading = false);
