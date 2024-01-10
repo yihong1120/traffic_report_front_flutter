@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:traffic_report_front_flutter/screens/reports/edit_report_screen.dart';
 
-class MockReportService extends Mock implements ReportService {}
+class MockReportService extends Mock implements ReportService {  });
 
 void main() {
   group('EditReportPageState', () {
@@ -11,8 +11,22 @@ void main() {
 
     setUp(() {
       mockReportService = MockReportService();
-      editReportPageState = EditReportPageState();
+      editReportPageState = EditReportPageState(recordId: widget.recordId);
       editReportPageState.reportService = mockReportService;
+        });
+    late BuildContext context; // Add context to test
+    setUp(() {
+      mockReportService = MockReportService();
+      editReportPageState = EditReportPageState(recordId: 1);
+      editReportPageState.reportService = mockReportService;
+      context = MockBuildContext(); // Initialize context
+    });
+    late BuildContext context; // Add context to test
+    setUp(() {
+      mockReportService = MockReportService();
+      editReportPageState = EditReportPageState(recordId: widget.recordId);
+      editReportPageState.reportService = mockReportService;
+      context = MockBuildContext(); // Initialize context
     });
 
     test('_loadViolation should retrieve the violation record and update the state', () async {
