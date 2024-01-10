@@ -3,28 +3,29 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  static Future<List<XFile>?> pickMedia(BuildContext context, {bool enableCamera = false}) async {
+  static Future<List<XFile>?> pickMedia(BuildContext context,
+      {bool enableCamera = false}) async {
     final ImagePicker picker = ImagePicker();
 
     if (enableCamera) {
       try {
-         // 嘗試獲取可用相機列表
+        // Attempt to get the list of available cameras
         final cameras = await availableCameras();
         if (cameras.isNotEmpty) {
-          // 如果有可用相機，顯示完整菜單
+          // If there are available cameras, show the full menu
           return showModalBottomSheet<List<XFile>>(
             context: context,
-            builder: (context) => _MediaPickerMenu(picker: picker),
+            builder: (BuildContext context) => _MediaPickerMenu(picker: picker),
           );
         }
       } catch (e) {
-        // 如果捕獲到異常（例如，相機存取被拒絕）
+        // If an exception is caught (e.g., camera access denied)
         debugPrint('Camera access denied: $e');
-        // 直接顯示從圖片庫選擇的選項
+        // Directly show the option to select from the gallery
         return picker.pickMultiImage();
       }
     }
-    // 沒有啟用相機或相機不可用，直接從圖片庫中選擇
+    // If the camera is not enabled or not available, directly select from the gallery
     return picker.pickMultiImage();
   }
 }
@@ -36,7 +37,7 @@ class _MediaPickerMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Store the Navigator state before the async gap
+    // Capture the values that depend on the context before the async gap
     final NavigatorState navigator = Navigator.of(context);
 
     return Wrap(
@@ -44,36 +45,54 @@ class _MediaPickerMenu extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.photo_library),
           title: const Text('Select Photos'),
-          onTap: () async {
-            final List<XFile> photos = await picker.pickMultiImage();
-            navigator.pop(photos); // Use the stored Navigator state
-          },
+          onTap: () => _handleImageSelection(
+              context, navigator, picker, ImageSource.gallery, false),
         ),
         ListTile(
           leading: const Icon(Icons.videocam),
           title: const Text('Select Videos'),
-          onTap: () async {
-            final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
-            navigator.pop(video != null ? [video] : null);
-          },
+          onTap: () => _handleImageSelection(
+              context, navigator, picker, ImageSource.gallery, true),
         ),
         ListTile(
           leading: const Icon(Icons.camera_alt),
           title: const Text('Take a Photo'),
-          onTap: () async {
-            final XFile? photo = await picker.pickImage(source: ImageSource.camera);
-            navigator.pop(photo != null ? [photo] : null);
-          },
+          onTap: () => _handleImageSelection(
+              context, navigator, picker, ImageSource.camera, false),
         ),
         ListTile(
           leading: const Icon(Icons.videocam),
           title: const Text('Record a Video'),
-          onTap: () async {
-            final XFile? video = await picker.pickVideo(source: ImageSource.camera);
-            navigator.pop(video != null ? [video] : null);
-          },
+          onTap: () => _handleImageSelection(
+              context, navigator, picker, ImageSource.camera, true),
         ),
       ],
     );
+  }
+
+  void _handleImageSelection(BuildContext context, NavigatorState navigator,
+      ImagePicker picker, ImageSource source, bool isVideo) async {
+    try {
+      List<XFile>? files;
+      if (isVideo) {
+        final XFile? video = await picker.pickVideo(source: source);
+        if (video != null) {
+          files = [video];
+        }
+      } else {
+        if (source == ImageSource.camera) {
+          final XFile? photo = await picker.pickImage(source: source);
+          if (photo != null) {
+            files = [photo];
+          }
+        } else {
+          files = await picker.pickMultiImage();
+        }
+      }
+      navigator.pop(files);
+    } catch (e) {
+      debugPrint('Error picking media: $e');
+      navigator.pop();
+    }
   }
 }
