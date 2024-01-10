@@ -75,20 +75,20 @@ class _HomeMapPageState extends State<HomeMapPage> {
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
 
-    setState(() {
-      _markers.clear();
+        setState(() {
+          _markers.clear();
           for (var markerData in data) {
-        final marker = Marker(
+            final marker = Marker(
               markerId: MarkerId(markerData['title'] ?? 'Unknown'), // 使用 'Unknown' 作為後備值
-          position: LatLng(markerData['lat'], markerData['lng']),
-          infoWindow: InfoWindow(
+              position: LatLng(markerData['lat'], markerData['lng']),
+              infoWindow: InfoWindow(
                 title: markerData['title'] ?? 'Unknown', // 同上
-            snippet: '點擊查看詳情',
-          ),
-        );
-        _markers.add(marker);
-      }
-    });
+                snippet: '點擊查看詳情',
+              ),
+            );
+            _markers.add(marker);
+          }
+        });
       } else {
         logger.e('Failed to load markers. Status code: ${response.statusCode}');
       }
