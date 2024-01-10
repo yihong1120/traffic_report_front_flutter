@@ -17,6 +17,8 @@ class ReportListPageState extends State<ReportListPage> {
   bool _isFetching = false;
 
   @override
+  /// This function is called when the dependencies of the widget change.
+  /// It fetches the reports and updates the state accordingly.
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fetchReports();
