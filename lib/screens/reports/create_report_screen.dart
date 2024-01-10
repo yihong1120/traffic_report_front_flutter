@@ -58,8 +58,6 @@ class CreateReportPageState extends State<CreateReportPage> {
 
     _videoControllers.forEach((_, controller) => controller.dispose());
     _videoControllers.clear();
-    _dateController.dispose();
-    _timeController.dispose();
     super.dispose();
   }
 
