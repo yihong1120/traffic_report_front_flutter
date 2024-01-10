@@ -19,6 +19,9 @@ class EditReportPage extends StatefulWidget {
 }
 
 class EditReportPageState extends State<EditReportPage> {
+  void _loadViolation() {
+    // Add your implementation here
+  }
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
   final List<XFile> _localMediaFiles = []; // 用于存储本地媒体文件
