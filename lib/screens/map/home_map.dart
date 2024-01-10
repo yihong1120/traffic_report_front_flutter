@@ -48,7 +48,9 @@ class _HomeMapPageState extends State<HomeMapPage> {
     mapController = controller;
   }
 
-  void _loadMarkers() async {
+  /// Loads the markers from the backend API and updates the _markers set.
+  ///
+  /// This function retrieves marker data from the backend API and updates the _markers set with the data obtained.
     try {
       var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-markers/');
       var response = await http.get(url);
