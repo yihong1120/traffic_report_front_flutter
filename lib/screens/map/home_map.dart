@@ -80,6 +80,9 @@ class _HomeMapPageState extends State<HomeMapPage> {
     }
   }
 
+    /// Searches for data based on the _searchKeyword and _selectedDateRange and updates the _markers set.
+  ///
+  /// This function triggers a search based on the _searchKeyword and _selectedDateRange, and updates the _markers set with the search results.
   void _searchData() async {
     // 根據 _searchKeyword 和 _selectedDateRange 進行搜索
     // 搜索後的處理可能會涉及與後端的交互
