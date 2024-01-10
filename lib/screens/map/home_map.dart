@@ -119,6 +119,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
   }
 
   Future<void> _selectDateRange(BuildContext context) async {
+  /// Shows a date range picker dialog and updates the _selectedDateRange and _selectedTimeRange variables.
     final DateTimeRange? picked = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2021),
