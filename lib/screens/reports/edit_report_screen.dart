@@ -47,7 +47,7 @@ class EditReportPageState extends State<EditReportPage> {
     }
   }
 
-  void _loadViolation() async {
+  void _loadViolationDetails() async {
     try {
       _violation = await Provider.of<ReportService>(context, listen: false)
           .getViolation(widget.recordId);
