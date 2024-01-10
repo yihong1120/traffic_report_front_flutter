@@ -39,6 +39,9 @@ class EditReportPageState extends State<EditReportPage> {
     _loadViolation();
   }
 
+  /// Shows a snackbar with the given [message].
+  ///
+  /// [message]: The message to display in the snackbar.
   void _showSnackBar(String message) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
