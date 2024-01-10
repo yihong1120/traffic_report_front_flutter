@@ -50,7 +50,7 @@ class EditReportPageState extends State<EditReportPage> {
     }
   }
 
-  void _loadViolation() async {
+  void /// Loads the violation data and populates the form fields with the retrieved values.\n  void _loadViolation() async {
     try {
       _violation = await Provider.of<ReportService>(context, listen: false)
           .getViolation(widget.recordId);
