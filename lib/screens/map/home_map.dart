@@ -14,6 +14,7 @@ class HomeMapPage extends StatefulWidget {
   State<HomeMapPage> createState() => _HomeMapPageState();
 }
 
+/// A State class that represents the state of the home map page in the Traffic Violation Report System.
 class _HomeMapPageState extends State<HomeMapPage> {
   late GoogleMapController mapController;
   final LatLng _center = const LatLng(23.6978, 120.9605);
