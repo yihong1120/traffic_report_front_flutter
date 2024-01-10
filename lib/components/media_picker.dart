@@ -15,7 +15,7 @@ class MediaPicker {
           // If there are available cameras, show the full menu
           return showModalBottomSheet<List<XFile>>(
             context: context,
-            builder: (BuildContext context) => _MediaPickerMenu(picker: picker),
+            builder: () => _MediaPickerMenu(picker: picker),
           );
         }
       } catch (e) {
@@ -70,7 +70,7 @@ class _MediaPickerMenu extends StatelessWidget {
     );
   }
 
-  void _handleImageSelection(BuildContext context, NavigatorState navigator,
+  void _handleImageSelection( NavigatorState navigator,
       ImagePicker picker, ImageSource source, bool isVideo) async {
     try {
       List<XFile>? files;
