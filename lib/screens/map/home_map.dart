@@ -68,29 +68,33 @@ class _HomeMapPageState extends State<HomeMapPage> {
   }
 
   void _loadMarkers() async {
-    // 此處模擬從後端加載標記數據
-    // 您需要根據您的API替換這部分代碼
-    // 假設從API獲取到的數據是一個包含經緯度和標題的列表
+    try {
+      var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-markers/');
+      var response = await http.get(url);
 
-    List<Map<String, dynamic>> mockData = [
-      {"lat": 23.6978, "lng": 120.9605, "title": "違規地點1"},
-      // ... 其他數據
-    ];
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
 
     setState(() {
       _markers.clear();
-      for (var markerData in mockData) {
+          for (var markerData in data) {
         final marker = Marker(
-          markerId: MarkerId(markerData['title']),
+              markerId: MarkerId(markerData['title'] ?? 'Unknown'), // 使用 'Unknown' 作為後備值
           position: LatLng(markerData['lat'], markerData['lng']),
           infoWindow: InfoWindow(
-            title: markerData['title'],
+                title: markerData['title'] ?? 'Unknown', // 同上
             snippet: '點擊查看詳情',
           ),
         );
         _markers.add(marker);
       }
     });
+      } else {
+        logger.e('Failed to load markers. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e('Error loading markers: $e');
+    }
   }
 
   void _searchData() async {
