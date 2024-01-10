@@ -188,29 +188,31 @@ class EditReportPageState extends State<EditReportPage> {
         final reportService =
             Provider.of<ReportService>(context, listen: false);
 
-        // 将远程和本地媒体文件传递给更新方法
-        bool success = await reportService.updateReport(
-          _violation,
-          localMediaFiles: _localMediaFiles,
-          remoteMediaFiles: _remoteMediaFiles.map((e) => e.url).toList(),
-        );
+        // Submits the report data to the server for processing and validation.
+        void _submitReport() async {
+          try {
+            // 将远程和本地媒体文件传递给更新方法
+            bool success = await reportService.updateReport(
+              _violation,
+              localMediaFiles: _localMediaFiles,
+              remoteMediaFiles: _remoteMediaFiles.map((e) => e.url).toList(),
+            );
 
-        if (success) {
-          scaffoldMessenger.showSnackBar(
-              const SnackBar(content: Text('Report updated successfully')));
-          navigator.pop();
-        } else {
-          scaffoldMessenger.showSnackBar(
-              const SnackBar(content: Text('Failed to update report')));
+            if (success) {
+              scaffoldMessenger.showSnackBar(
+                  const SnackBar(content: Text('Report updated successfully')));
+              navigator.pop();
+            } else {
+              scaffoldMessenger.showSnackBar(
+                  const SnackBar(content: Text('Failed to update report')));
+            }
+          } catch (e) {
+            scaffoldMessenger
+                .showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+          } finally {
+            if (mounted) {
+              setState(() => _isLoading = false);
+            }
+          }
         }
-      } catch (e) {
-        scaffoldMessenger
-            .showSnackBar(SnackBar(content: Text('An error occurred: $e')));
-      } finally {
-        if (mounted) {
-          setState(() => _isLoading = false);
-        }
-      }
-    }
-  }
 }
