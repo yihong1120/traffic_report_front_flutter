@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 var logger = Logger();
 
+/// A StatefulWidget that represents the home map page of the Traffic Violation Report System.
 class HomeMapPage extends StatefulWidget {
   const HomeMapPage({super.key});
 
