@@ -6,10 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
+import 'package:mockito/mockito.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
 
 var logger = Logger();
 
-class HomeMapPage extends StatefulWidget {
+class HomeMapPage  {
   const HomeMapPage({Key? key}) : super(key: key);
   const HomeMapPage({super.key});
 
@@ -75,15 +79,15 @@ class _HomeMapPageState extends State<HomeMapPage> {
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
 
-        setState(() {
+        await setState(() {
           _markers.clear();
           for (var markerData in data) {
             final marker = Marker(
-              markerId: MarkerId(markerData['title'] ?? 'Unknown'), // 使用 'Unknown' 作為後備值
+              markerId: MarkerId(markerData['title']!), // 使用 'Unknown' 作為後備值
               position: LatLng(markerData['lat'], markerData['lng']),
               infoWindow: InfoWindow(
-                title: markerData['title'] ?? 'Unknown', // 同上
-                snippet: '點擊查看詳情',
+                title: markerData['title']!,
+                snippet: '點擊查看詳情'
               ),
             );
             _markers.add(marker);
@@ -116,7 +120,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
       // ... 搜索結果數據
     ];
 
-    setState(() {
+    await await await setState(() {
       _markers.clear();
       for (var result in searchResults) {
         final marker = Marker(
