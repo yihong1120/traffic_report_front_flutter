@@ -1,7 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
 
 var logger = Logger();
 
@@ -46,29 +47,80 @@ class _HomeMapPageState extends State<HomeMapPage> {
   }
 
   void _loadMarkers() async {
-    // 此處模擬從後端加載標記數據
-    // 您需要根據您的API替換這部分代碼
-    // 假設從API獲取到的數據是一個包含經緯度和標題的列表
+    try {
+      var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-markers/');
+      var response = await http.get(url);
 
-    List<Map<String, dynamic>> mockData = [
-      {"lat": 23.6978, "lng": 120.9605, "title": "違規地點1"},
-      // ... 其他數據
-    ];
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
 
-    setState(() {
-      _markers.clear();
-      for (var markerData in mockData) {
-        final marker = Marker(
-          markerId: MarkerId(markerData['title']),
-          position: LatLng(markerData['lat'], markerData['lng']),
-          infoWindow: InfoWindow(
-            title: markerData['title'],
-            snippet: '點擊查看詳情',
-          ),
-        );
-        _markers.add(marker);
+        setState(() {
+          _markers.clear();
+          for (var markerData in data) {
+            final marker = Marker(
+              markerId: MarkerId(markerData['traffic_violation_id']),
+              position: LatLng(markerData['lat'], markerData['lng']),
+              onTap: () => _onMarkerTapped(markerData['traffic_violation_id']),
+            );
+            _markers.add(marker);
+          }
+        });
+      } else {
+        logger.e('Failed to load markers. Status code: ${response.statusCode}');
       }
-    });
+    } catch (e) {
+      logger.e('Error loading markers: $e');
+    }
+  }
+
+  void _onMarkerTapped(String trafficViolationId) async {
+    var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-details/$trafficViolationId/');
+    try {
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        // 确保解析为 UTF-8 编码
+        var decodedData = utf8.decode(response.bodyBytes);
+        var data = json.decode(decodedData);
+        // print(data);
+        setState(() {
+          var newMarkers = <Marker>{};
+          for (var marker in _markers) {
+            if (marker.markerId.value == trafficViolationId) {
+              String title = '${data['license_plate']?.toString() ?? '未知'} - ${data['violation']?.toString() ?? '未知'}';
+              String snippet = '车牌号: ${data['license_plate']?.toString() ?? '未知'}\n'
+                                '违章: ${data['violation']?.toString() ?? '未知'}\n'
+                                '日期: ${data['date']?.toString() ?? '未知'}\n'
+                                '时间: ${data['time']?.toString() ?? '未知'}\n'
+                                '地址: ${data['address']?.toString() ?? '未知'}\n'
+                                '官员: ${data['officer']?.toString() ?? '未知'}'; // 当 data['officer'] 为空时，显示 '未知'
+
+
+              print(snippet);
+              newMarkers.add(
+                Marker(
+                  markerId: marker.markerId,
+                  position: marker.position,
+                  infoWindow: InfoWindow(
+                    title: title,
+                    snippet: snippet,
+                  ),
+                  onTap: () => _onMarkerTapped(marker.markerId.value), // 保持原有的 onTap 行为
+                ),
+              );
+            } else {
+              newMarkers.add(marker);
+            }
+          }
+
+          _markers.clear();
+          _markers.addAll(newMarkers);
+        });
+      } else {
+        logger.e('Failed to load traffic violation details. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e('Error loading traffic violation details: $e');
+    }
   }
 
   void _searchData() async {
