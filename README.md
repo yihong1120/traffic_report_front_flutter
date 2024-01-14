@@ -13,6 +13,7 @@
 ```
 lib/
   |- components/    # Shared components, such as custom buttons, form inputs, etc.
+      |- custom_info_window.dart
       |- media_picker.dart
       |- media_preview.dart
       |- navigation_drawer.dart
@@ -44,6 +45,11 @@ lib/
       |- social_service.dart
   |- utils/         # Utility classes, such as utility functions, constant definitions
       |- media_utils.dart
+  |- tests/         # Utility test files
+      |- components
+      |- models
+      |- services
+      |- utils
   main.dart         # Entry file
 ```
 
@@ -69,9 +75,9 @@ To run the project locally:
    ```
 3. Navigate to the project directory:
    ```
-   cd Traffic-Report-Flutter-Web
+   cd traffic_report_front_flutter
    ```
-4. Run the application:
+4. Run the application (web):
    ```
    flutter run -d chrome
    ```
