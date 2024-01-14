@@ -48,23 +48,36 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   void _loadMarkers() async {
     try {
+      // 指定 API URL
       var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-markers/');
+      // 发送请求并等待响应
       var response = await http.get(url);
 
       if (response.statusCode == 200) {
+        // 解析响应数据
         List<dynamic> data = json.decode(response.body);
 
         setState(() {
           _markers.clear();
           for (var markerData in data) {
+            // 安全地获取数据，并为缺失的字段提供默认值
+            String licensePlate = markerData['license_plate']?.toString() ?? '未知';
+            String violation = markerData['violation']?.toString() ?? '未知';
+            String date = markerData['date']?.toString() ?? '未知';
+            double lat = markerData['lat'] != null ? markerData['lat'].toDouble() : 0.0;
+            double lng = markerData['lng'] != null ? markerData['lng'].toDouble() : 0.0;
+
+            // 创建标记
             final marker = Marker(
-              markerId: MarkerId(markerData['title'] ?? 'Unknown'), // 使用 'Unknown' 作為後備值
-              position: LatLng(markerData['lat'], markerData['lng']),
+              markerId: MarkerId(markerData['traffic_violation_id'].toString()),
+              position: LatLng(lat, lng),
               infoWindow: InfoWindow(
-                title: markerData['title'] ?? 'Unknown', // 同上
-                snippet: '點擊查看詳情',
+                title: '$licensePlate - $violation',
+                snippet: '车牌号: $licensePlate\n违章: $violation\n日期: $date',
               ),
+              onTap: () => _onMarkerTapped(markerData['traffic_violation_id'].toString()),
             );
+            // 将标记添加到地图上
             _markers.add(marker);
           }
         });
@@ -73,6 +86,56 @@ class _HomeMapPageState extends State<HomeMapPage> {
       }
     } catch (e) {
       logger.e('Error loading markers: $e');
+    }
+  }
+
+  void _onMarkerTapped(String trafficViolationId) async {
+    var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-details/$trafficViolationId/');
+    try {
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        // 确保解析为 UTF-8 编码
+        var decodedData = utf8.decode(response.bodyBytes);
+        var data = json.decode(decodedData);
+        // print(data);
+        setState(() {
+          var newMarkers = <Marker>{};
+          for (var marker in _markers) {
+            if (marker.markerId.value == trafficViolationId) {
+              String title = '${data['license_plate']?.toString() ?? '未知'} - ${data['violation']?.toString() ?? '未知'}';
+              String snippet = '车牌号: ${data['license_plate']?.toString() ?? '未知'}\n'
+                                '违章: ${data['violation']?.toString() ?? '未知'}\n'
+                                '日期: ${data['date']?.toString() ?? '未知'}\n'
+                                '时间: ${data['time']?.toString() ?? '未知'}\n'
+                                '地址: ${data['address']?.toString() ?? '未知'}\n'
+                                '官员: ${data['officer']?.toString() ?? '未知'}';
+
+
+              print(snippet);
+              newMarkers.add(
+                Marker(
+                  markerId: marker.markerId,
+                  position: marker.position,
+                  infoWindow: InfoWindow(
+                    title: title,
+                    snippet: snippet,
+                  ),
+                  onTap: () => _onMarkerTapped(marker.markerId.value), // 保持原有的 onTap 行为
+                ),
+              );
+            } else {
+              newMarkers.add(marker);
+            }
+          }
+
+          _markers.clear();
+          _markers.addAll(newMarkers);
+        });
+      } else {
+        logger.e('Failed to load traffic violation details. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      logger.e('Error loading traffic violation details: $e');
     }
   }
 
@@ -128,58 +191,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('交通違規報告系統')),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('菜單'),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                // 導航到 Home 頁面
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Create Report'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/create');
-              },
-            ),
-            ListTile(
-              title: const Text('Edit Report'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/reports');
-              },
-            ),
-            ListTile(
-              title: const Text('Chatbot'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/chat');
-              },
-            ),
-            ListTile(
-              title: const Text('Accounts'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/accounts');
-              },
-            ),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
+    return Column(
+      children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -237,7 +250,6 @@ class _HomeMapPageState extends State<HomeMapPage> {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }

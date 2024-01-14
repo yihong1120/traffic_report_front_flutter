@@ -53,11 +53,16 @@ class CreateReportPageState extends State<CreateReportPage> {
 
   @override
   void dispose() {
+    // 一次释放 TextEditingControllers
     _dateController.dispose();
     _timeController.dispose();
 
-    _videoControllers.forEach((_, controller) => controller.dispose());
+    // 释放 VideoPlayerControllers
+    for (var controller in _videoControllers.values) {
+      controller.dispose();
+    }
     _videoControllers.clear();
+    
     super.dispose();
   }
 
