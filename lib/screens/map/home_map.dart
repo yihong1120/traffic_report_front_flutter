@@ -48,20 +48,36 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   void _loadMarkers() async {
     try {
+      // 指定 API URL
       var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-markers/');
+      // 发送请求并等待响应
       var response = await http.get(url);
 
       if (response.statusCode == 200) {
+        // 解析响应数据
         List<dynamic> data = json.decode(response.body);
 
         setState(() {
           _markers.clear();
           for (var markerData in data) {
+            // 安全地获取数据，并为缺失的字段提供默认值
+            String licensePlate = markerData['license_plate']?.toString() ?? '未知';
+            String violation = markerData['violation']?.toString() ?? '未知';
+            String date = markerData['date']?.toString() ?? '未知';
+            double lat = markerData['lat'] != null ? markerData['lat'].toDouble() : 0.0;
+            double lng = markerData['lng'] != null ? markerData['lng'].toDouble() : 0.0;
+
+            // 创建标记
             final marker = Marker(
-              markerId: MarkerId(markerData['traffic_violation_id']),
-              position: LatLng(markerData['lat'], markerData['lng']),
-              onTap: () => _onMarkerTapped(markerData['traffic_violation_id']),
+              markerId: MarkerId(markerData['traffic_violation_id'].toString()),
+              position: LatLng(lat, lng),
+              infoWindow: InfoWindow(
+                title: '$licensePlate - $violation',
+                snippet: '车牌号: $licensePlate\n违章: $violation\n日期: $date',
+              ),
+              onTap: () => _onMarkerTapped(markerData['traffic_violation_id'].toString()),
             );
+            // 将标记添加到地图上
             _markers.add(marker);
           }
         });
@@ -92,7 +108,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
                                 '日期: ${data['date']?.toString() ?? '未知'}\n'
                                 '时间: ${data['time']?.toString() ?? '未知'}\n'
                                 '地址: ${data['address']?.toString() ?? '未知'}\n'
-                                '官员: ${data['officer']?.toString() ?? '未知'}'; // 当 data['officer'] 为空时，显示 '未知'
+                                '官员: ${data['officer']?.toString() ?? '未知'}';
 
 
               print(snippet);
