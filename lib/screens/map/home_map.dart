@@ -191,58 +191,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('交通違規報告系統')),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('菜單'),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                // 導航到 Home 頁面
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Create Report'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/create');
-              },
-            ),
-            ListTile(
-              title: const Text('Edit Report'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/reports');
-              },
-            ),
-            ListTile(
-              title: const Text('Chatbot'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/chat');
-              },
-            ),
-            ListTile(
-              title: const Text('Accounts'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/accounts');
-              },
-            ),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
+    return Column(
+      children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -300,7 +250,6 @@ class _HomeMapPageState extends State<HomeMapPage> {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }
