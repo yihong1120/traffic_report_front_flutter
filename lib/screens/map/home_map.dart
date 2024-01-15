@@ -97,7 +97,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
         // 确保解析为 UTF-8 编码
         var decodedData = utf8.decode(response.bodyBytes);
         var data = json.decode(decodedData);
-        // print(data);
+        // logger.i(data);
         setState(() {
           var newMarkers = <Marker>{};
           for (var marker in _markers) {
