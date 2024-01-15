@@ -4,6 +4,8 @@ import 'package:mockito/mockito.dart';
 import 'package:traffic_report_front_flutter/components/navigation_drawer.dart' as app_drawer;
 
 // 创建Navigator的mock类
+/// Mock class for NavigatorObserver
+
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
@@ -15,7 +17,8 @@ void main() {
       mockObserver = MockNavigatorObserver();
     });
 
-    Widget createWidgetUnderTest() {
+    /// Creates the widget under test
+Widget createWidgetUnderTest() {
       return MaterialApp(
         home: const app_drawer.NavigationDrawer(),
         navigatorObservers: [mockObserver],
