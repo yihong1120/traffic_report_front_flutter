@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CustomInfoWindow extends StatelessWidget {
-  final String title;
-  final String snippet;
+  final String licensePlate;
+  final String violation;
+  final String date;
 
-  const CustomInfoWindow({super.key, required this.title, required this.snippet});
+  const CustomInfoWindow({
+    super.key,
+    required this.licensePlate,
+    required this.violation,
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +21,20 @@ class CustomInfoWindow extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black45,
+            color: Colors.black26,
             blurRadius: 5,
             offset: Offset(0, 2),
           ),
         ],
       ),
+
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 5),
-          Text(snippet),
+        children: [
+          Text('车牌号: $licensePlate', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('违章: $violation'),
+          Text('日期: $date'),
         ],
       ),
     );
