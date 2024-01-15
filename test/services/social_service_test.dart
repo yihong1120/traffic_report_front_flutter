@@ -13,7 +13,7 @@ class MockClient extends Mock implements http.Client {}
 void main() {
   group('SocialService', () {
     late http.Client client;
-    late SocialService socialService;
+    late SocialService socialService = SocialService(client: http.Client());
 
     setUp(() async {
       client = MockClient();
@@ -41,14 +41,14 @@ void main() {
     });
 
     test('getAvailableProviders returns a list of SocialProvider', () async {
-      when(client.get(isA<Uri>())).thenAnswer((_) async => http.Response(
+      when(client.get(Uri.parse('https://www.example.com'))).thenAnswer((_) async => http.Response(
           json.encode([
             {'id': '123e4567-e89b-12d3-a456-426614174002', 'name': 'Facebook'},
             {'id': '123e4567-e89b-12d3-a456-426614174003', 'name': 'Twitter'}
           ]),
           200));
 
-      expect(await SocialService.getAvailableProviders(),
+      expect(await socialService.getAvailableProviders(),
           isA<List<SocialProvider>>());
     });
 
@@ -67,7 +67,7 @@ void main() {
         () async {
       SocialProvider provider = SocialProvider(
           id: '123e4567-e89b-12d3-a456-426614174004', name: 'Facebook');
-      when(canLaunchUrlisA<Uri>())).thenAnswer((_) async => false);
+      when(canLaunch(any())).thenAnswer((_) async => Future.value(false));
 
       expect(() async => await SocialService.connectWithProvider(provider),
           throwsA(isA<String>()));
