@@ -8,8 +8,12 @@ var logger = Logger();
 
 class ReportService {
   final String apiUrl = 'http://127.0.0.1:8000/reports/';
+  http.Client client;
 
-  Future<bool> createReport(TrafficViolation violation, List<XFile> mediaFiles) async {
+  ReportService({http.Client? client}) : client = client ?? http.Client();
+
+  Future<bool> createReport(
+      TrafficViolation violation, List<XFile> mediaFiles) async {
     try {
       var reportJson = violation.toJson();
 
@@ -21,7 +25,8 @@ class ReportService {
       });
 
       for (var file in mediaFiles) {
-        var multipartFile = await http.MultipartFile.fromPath('media', file.path);
+        var multipartFile =
+            await http.MultipartFile.fromPath('media', file.path);
         request.files.add(multipartFile);
       }
 
@@ -65,12 +70,14 @@ class ReportService {
   }
 
   // 更新报告的方法，现在包括本地和远程媒体文件的处理
-  Future<bool> updateReport(TrafficViolation violation, {List<XFile>? localMediaFiles, List<String>? remoteMediaFiles}) async {
+  Future<bool> updateReport(TrafficViolation violation,
+      {List<XFile>? localMediaFiles, List<String>? remoteMediaFiles}) async {
     try {
       var reportJson = violation.toJson();
 
       // 假設後端 API 需要 PUT 請求來更新報告
-      var request = http.MultipartRequest('PUT', Uri.parse('$apiUrl${violation.id}/'));
+      var request =
+          http.MultipartRequest('PUT', Uri.parse('$apiUrl${violation.id}/'));
       reportJson.forEach((key, value) {
         if (value != null) {
           request.fields[key] = value.toString();
@@ -80,7 +87,8 @@ class ReportService {
       // 添加本地媒体文件
       if (localMediaFiles != null) {
         for (var file in localMediaFiles) {
-          var multipartFile = await http.MultipartFile.fromPath('media', file.path);
+          var multipartFile =
+              await http.MultipartFile.fromPath('media', file.path);
           request.files.add(multipartFile);
         }
       }
