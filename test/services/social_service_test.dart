@@ -23,7 +23,7 @@ void main() {
     });
 
     test('getConnectedAccounts returns a list of SocialAccount', () async {
-      when(client.get(any as Uri)).thenAnswer((_) async => http.Response(
+      when(client.get(isA<Uri>())).thenAnswer((_) async => http.Response(
           json.encode([
             {
               'provider': 'Facebook',
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('getAvailableProviders returns a list of SocialProvider', () async {
-      when(client.get(any as Uri)).thenAnswer((_) async => http.Response(
+      when(client.get(isA<Uri>())).thenAnswer((_) async => http.Response(
           json.encode([
             {'id': '123e4567-e89b-12d3-a456-426614174002', 'name': 'Facebook'},
             {'id': '123e4567-e89b-12d3-a456-426614174003', 'name': 'Twitter'}
@@ -54,7 +54,7 @@ void main() {
 
     test('disconnectAccount returns true on successful disconnection',
         () async {
-      when(client.post(any as Uri, body: anyNamed('body')))
+      when(client.post(isA Uri, body: anyNamed('body')))
           .thenAnswer((_) async => http.Response('', 200));
 
       SocialAccount account = SocialAccount(
@@ -67,7 +67,7 @@ void main() {
         () async {
       SocialProvider provider = SocialProvider(
           id: '123e4567-e89b-12d3-a456-426614174004', name: 'Facebook');
-      when(canLaunchUrl(any as Uri)).thenAnswer((_) async => false);
+      when(canLaunchUrlisA<Uri>())).thenAnswer((_) async => false);
 
       expect(() async => await SocialService.connectWithProvider(provider),
           throwsA(isA<String>()));

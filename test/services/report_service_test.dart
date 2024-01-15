@@ -22,7 +22,7 @@ void main() {
     test(
       'createReport should return true when the http call completes successfully',
       () async {
-        when(client.send(any as http.BaseRequest)).thenAnswer((_) async =>
+        when(client.send(isA<http.BaseRequest>())).thenAnswer((_) async =>
             http.StreamedResponse(Stream.value(utf8.encode('')), 200));
 
         final violation = TrafficViolation(
@@ -46,7 +46,7 @@ void main() {
     test(
       'getReports should return a list of TrafficViolation when the http call completes successfully',
       () async {
-        when(client.get(any as Uri)).thenAnswer((_) async => http.Response(
+        when(client.get(isA<Uri>())).thenAnswer((_) async => http.Response(
             jsonEncode([
               {
                 'id': 1,
@@ -72,7 +72,7 @@ void main() {
       'getViolation should return a TrafficViolation when the http call completes successfully',
       () async {
         const int recordId = 1;
-        when(client.get(any as Uri)).thenAnswer((_) async => http.Response(
+        when(client.get(isA<Uri>())).thenAnswer((_) async => http.Response(
             jsonEncode({
               'id': recordId,
               'title': 'Parking Violation',
@@ -94,7 +94,7 @@ void main() {
     test(
       'updateReport should return true when the http call completes successfully',
       () async {
-        when(client.send(any as http.BaseRequest)).thenAnswer((_) async =>
+        when(client.send(isA<http.BaseRequest>())).thenAnswer((_) async =>
             http.StreamedResponse(Stream.value(utf8.encode('')), 200));
 
         final violation = TrafficViolation(
