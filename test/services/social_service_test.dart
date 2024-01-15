@@ -67,7 +67,7 @@ void main() {
         () async {
       SocialProvider provider = SocialProvider(
           id: '123e4567-e89b-12d3-a456-426614174004', name: 'Facebook');
-      when(canLaunchUrl(any as Uri)).thenAnswer((_) async => false);
+      when(canLaunchUrl(isA<Uri>())).thenAnswer((_) async => false);
 
       expect(() async => await SocialService.connectWithProvider(provider),
           throwsA(isA<String>()));
