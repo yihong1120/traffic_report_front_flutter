@@ -11,7 +11,10 @@ class SocialConnectionsPage extends StatefulWidget {
 
 class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   List<SocialAccount> _connectedAccounts = [];
-  List<SocialProvider> _availableProviders = []; // 假設 SocialProvider 是一個包含提供者信息的模型
+  List<SocialProvider> _availableProviders =
+      []; // Assuming SocialProvider is a model containing provider information
+  final SocialService _socialService =
+      SocialService(); // Create an instance of SocialService
 
   @override
   void initState() {
@@ -20,15 +23,18 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   }
 
   void _loadSocialConnections() async {
-    // 加載已連結的社交帳號和可用的社交帳號提供者
-    _connectedAccounts = await SocialService.getConnectedAccounts();
-    _availableProviders = await SocialService.getAvailableProviders();
+    // Load connected social accounts and available social account providers
+    _connectedAccounts = await _socialService
+        .getConnectedAccounts(); // Call the method on the instance
+    _availableProviders = await SocialService
+        .getAvailableProviders(); // Call the method on the instance
     setState(() {});
   }
 
   void _disconnectSocialAccount(SocialAccount account) async {
-    // 處理取消連結邏輯
-    bool disconnected = await SocialService.disconnectAccount(account);
+    // Handle disconnect logic
+    bool disconnected = await SocialService.disconnectAccount(
+        account); // Call the method on the instance
     if (disconnected) {
       setState(() {
         _connectedAccounts.remove(account);
@@ -73,8 +79,9 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
                 ..._availableProviders.map((provider) => ListTile(
                       title: Text('Connect with ${provider.name}'),
                       onTap: () {
-                        // 處理連結邏輯
-                        SocialService.connectWithProvider(provider);
+                        // Handle connect logic
+                        SocialService.connectWithProvider(
+                            provider); // Call the method on the instance
                       },
                     )),
               ],
