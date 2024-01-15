@@ -54,7 +54,7 @@ void main() {
 
     test('disconnectAccount returns true on successful disconnection',
         () async {
-      when(client.post(any as Uri, body: anyNamed('body')))
+      when(client.post(isA Uri, body: anyNamed('body')))
           .thenAnswer((_) async => http.Response('', 200));
 
       SocialAccount account = SocialAccount(
