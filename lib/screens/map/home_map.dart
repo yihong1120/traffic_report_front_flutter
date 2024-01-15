@@ -111,7 +111,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
                                 '官员: ${data['officer']?.toString() ?? '未知'}';
 
 
-              print(snippet);
+              logger.i(snippet);
               newMarkers.add(
                 Marker(
                   markerId: marker.markerId,
