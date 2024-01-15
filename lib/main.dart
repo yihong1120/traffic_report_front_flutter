@@ -5,7 +5,7 @@ import 'screens/map/routes.dart' as map_routes;
 import 'screens/reports/routes.dart' as reports_routes;
 import 'screens/chat/routes.dart' as chat_routes;
 import 'screens/accounts/routes.dart' as account_routes;
-import 'components/navigation_drawer.dart' as app_drawer;
+ 
 
 Future main() async {
   await dotenv.load(fileName: ".env"); // 加载 .env 文件
@@ -31,7 +31,7 @@ class TrafficReportApp extends StatelessWidget {
       },
       home: Scaffold(
         appBar: AppBar(title: const Text('Traffic Report System')),
-        drawer: const AppDrawer.NavigationDrawer(), // 使用 NavigationDrawer
+        drawer: const ValidClassName(), // 使用 NavigationDrawer
         body: const HomeMapPage(), // 设置 HomeMapPage 作为主体内容
       ),
     );
