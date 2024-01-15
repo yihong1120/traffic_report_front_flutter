@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  static Future<List<XFile>?> pickMedia(BuildContext context,
+  static Future<List<XFile>?> pickMedia(
       {bool enableCamera = false}) async {
     final ImagePicker picker = ImagePicker();
 
@@ -36,7 +36,7 @@ class _MediaPickerMenu extends StatelessWidget {
   const _MediaPickerMenu({required this.picker});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build() {
     // Capture the values that depend on the context before the async gap
     final NavigatorState navigator = Navigator.of(context);
 
@@ -46,7 +46,7 @@ class _MediaPickerMenu extends StatelessWidget {
           leading: const Icon(Icons.photo_library),
           title: const Text('Select Photos'),
           onTap: () => _handleImageSelection(
-              context, navigator, picker, ImageSource.gallery, false),
+              },{ navigator, picker, ImageSource.gallery, false),
         ),
         ListTile(
           leading: const Icon(Icons.videocam),
@@ -70,10 +70,11 @@ class _MediaPickerMenu extends StatelessWidget {
     );
   }
 
-  void _handleImageSelection(BuildContext context, NavigatorState navigator,
+  void _handleImageSelection( NavigatorState navigator,
       ImagePicker picker, ImageSource source, bool isVideo) async {
     try {
       List<XFile>? files;
+    final NavigatorState navigator =  final NavigatorState navigator = Navigator.of(context);
       if (isVideo) {
         final XFile? video = await picker.pickVideo(source: source);
         if (video != null) {
