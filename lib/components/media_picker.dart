@@ -38,7 +38,7 @@ class _MediaPickerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Capture the values that depend on the context before the async gap
-    final NavigatorState? navigator = Navigator.of(context);
+    final NavigatorState navigator = Navigator.of(context);
 
     return Wrap(
       children: <Widget>[
@@ -70,7 +70,7 @@ class _MediaPickerMenu extends StatelessWidget {
     );
   }
 
-  void _handleImageSelection(BuildContext context, NavigatorState navigator,
+  void _handleImageSelection(BuildContext context, NavigatorState? navigator,
       ImagePicker picker, ImageSource source, bool isVideo) async {
     try {
       List<XFile>? files;
