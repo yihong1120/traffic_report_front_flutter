@@ -48,7 +48,7 @@ Widget createWidgetUnderTest() {
       await tester.pumpAndSettle();
 
       // 验证并获取第一个路由
-      final capturedRoute = verify(mockObserver.didPush(captureAny, any)).captured.single as Route<dynamic>;
+      final capturedRoute = verify(mockObserver.didPush(captureAny, any)).captured.single as Route<dynamic>
       expect(capturedRoute.settings.name, '/home');
     });
 
