@@ -5,10 +5,13 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/social_account.dart';
 
 class SocialService {
-  static Future<List<SocialAccount>> getConnectedAccounts() async {
-    // 这里的 URL 应该指向您的后端 API
+  final http.Client httpClient;
+
+  SocialService({http.Client? client}) : httpClient = client ?? http.Client();
+
+  Future<List<SocialAccount>> getConnectedAccounts() async {
     var url = Uri.parse('${dotenv.env['API_URL']}/connected-accounts');
-    var response = await http.get(url);
+    var response = await httpClient.get(url);
 
     if (response.statusCode == 200) {
       List<dynamic> accountsJson = json.decode(response.body);
@@ -48,20 +51,13 @@ class SocialService {
   static Future<void> connectWithProvider(SocialProvider provider) async {
     // 构建 OAuth 登录 URL
     final String baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000';
-    final String loginUrl = '$baseUrl/social/login/${provider.id}';
+    final Uri loginUri = Uri.parse('$baseUrl/social/login/${provider.id}');
 
     // 使用 url_launcher 打开浏览器窗口
-    /// Launches the provided URL in the browser.
-  ///
-  /// Throws an exception if the URL cannot be launched.
-  ///
-  /// [url] is the URL to be launched.
-  ///
-  /// Returns a Future that completes when the URL has been launched.
-  if (await canLaunchUrl(loginUrl as Uri)) {
-      await launchUrl(loginUrl as Uri);
+    if (await canLaunchUrl(loginUri)) {
+      await launchUrl(loginUri);
     } else {
-      throw 'Could not launch $loginUrl';
+      throw 'Could not launch $loginUri';
     }
   }
 }
