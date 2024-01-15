@@ -22,8 +22,9 @@ void main() {
     test(
       'createReport should return true when the http call completes successfully',
       () async {
-        when(client.send(isA<http.BaseRequest>())).thenAnswer((_) async =>
-            http.StreamedResponse(Stream.value(utf8.encode('')), 200));
+        when(client.send(isA<http.BaseRequest>() as http.BaseRequest))
+            .thenAnswer((_) async =>
+                http.StreamedResponse(Stream.value(utf8.encode('')), 200));
 
         final violation = TrafficViolation(
           id: 1,
@@ -46,23 +47,24 @@ void main() {
     test(
       'getReports should return a list of TrafficViolation when the http call completes successfully',
       () async {
-        when(client.get(isA<Uri>())).thenAnswer((_) async => http.Response(
-            jsonEncode([
-              {
-                'id': 1,
-                'title': 'Parking Violation',
-                'date': '2024-01-15',
-                'time': '14:00',
-                'licensePlate': 'ABC123',
-                'violation': '紅線停車',
-                'status': 'Pending',
-                'location': 'Main St and 1st Ave',
-                'officer': 'Officer123',
-                'mediaFiles': [],
-              },
-              // Add more violation reports if needed
-            ]),
-            200));
+        when(client.get(isA<Uri>() as Uri))
+            .thenAnswer((_) async => http.Response(
+                jsonEncode([
+                  {
+                    'id': 1,
+                    'title': 'Parking Violation',
+                    'date': '2024-01-15',
+                    'time': '14:00',
+                    'licensePlate': 'ABC123',
+                    'violation': '紅線停車',
+                    'status': 'Pending',
+                    'location': 'Main St and 1st Ave',
+                    'officer': 'Officer123',
+                    'mediaFiles': [],
+                  },
+                  // Add more violation reports if needed
+                ]),
+                200));
 
         expect(await service.getReports(), isA<List<TrafficViolation>>());
       },
@@ -72,20 +74,21 @@ void main() {
       'getViolation should return a TrafficViolation when the http call completes successfully',
       () async {
         const int recordId = 1;
-        when(client.get(isA<Uri>())).thenAnswer((_) async => http.Response(
-            jsonEncode({
-              'id': recordId,
-              'title': 'Parking Violation',
-              'date': '2024-01-15',
-              'time': '14:00',
-              'licensePlate': 'ABC123',
-              'violation': '紅線停車',
-              'status': 'Pending',
-              'location': 'Main St and 1st Ave',
-              'officer': 'Officer123',
-              'mediaFiles': [],
-            }),
-            200));
+        when(client.get(isA<Uri>() as Uri))
+            .thenAnswer((_) async => http.Response(
+                jsonEncode({
+                  'id': recordId,
+                  'title': 'Parking Violation',
+                  'date': '2024-01-15',
+                  'time': '14:00',
+                  'licensePlate': 'ABC123',
+                  'violation': '紅線停車',
+                  'status': 'Pending',
+                  'location': 'Main St and 1st Ave',
+                  'officer': 'Officer123',
+                  'mediaFiles': [],
+                }),
+                200));
 
         expect(await service.getViolation(recordId), isA<TrafficViolation>());
       },
@@ -94,8 +97,9 @@ void main() {
     test(
       'updateReport should return true when the http call completes successfully',
       () async {
-        when(client.send(isA<http.BaseRequest>())).thenAnswer((_) async =>
-            http.StreamedResponse(Stream.value(utf8.encode('')), 200));
+        when(client.send(isA<http.BaseRequest>() as http.BaseRequest))
+            .thenAnswer((_) async =>
+                http.StreamedResponse(Stream.value(utf8.encode('')), 200));
 
         final violation = TrafficViolation(
           id: 1,
