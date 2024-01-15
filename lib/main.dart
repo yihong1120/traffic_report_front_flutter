@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:traffic_report_front_flutter/screens/map/home_map.dart';
 import 'screens/map/routes.dart' as map_routes;
@@ -31,7 +31,7 @@ class TrafficReportApp extends StatelessWidget {
       },
       home: Scaffold(
         appBar: AppBar(title: const Text('Traffic Report System')),
-        drawer: const AppDrawer.NavigationDrawer(), // 使用 NavigationDrawer
+        drawer: const app_drawer.NavigationDrawer(), // 使用 NavigationDrawer
         body: const HomeMapPage(), // 设置 HomeMapPage 作为主体内容
       ),
     );
