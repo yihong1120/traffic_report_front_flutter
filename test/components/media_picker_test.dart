@@ -7,7 +7,7 @@ import 'package:traffic_report_front_flutter/components/media_picker.dart';
 
 // Create a mock class for ImagePicker
 class MockImagePicker extends Mock implements ImagePicker {
-  MockImagePicker._() : implements = null;
+  MockImagePicker._() : _implements = null;
 
 
 class MockCamera extends Mock implements CameraDescription { };
@@ -108,7 +108,7 @@ class MockCamera extends Mock implements CameraDescription {}
     testWidgets('pickMedia should allow picking a single image from the camera',
         (WidgetTester tester) async {
       // Mock the ImagePicker pickImage method to return a single image file
-      final XFile mockFile = XFile('path/to/image.png');
+      final dynamic mockFile = XFile('path/to/image.png');
       when(mockImagePicker.pickImage(source: ImageSource.camera))
           .thenAnswer((_) async => mockFile);
 
@@ -140,7 +140,7 @@ class MockCamera extends Mock implements CameraDescription {}
         'pickMedia should allow picking multiple images from the gallery',
         (WidgetTester tester) async {
       // Mock the ImagePicker pickMultiImage method to return multiple image files
-      final List<XFile> mockFiles = [
+      final List<dynamic> mockFiles = [
         XFile('path/to/image1.png'),
         XFile('path/to/image2.png'),
       ];
