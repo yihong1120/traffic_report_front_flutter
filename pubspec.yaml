@@ -47,6 +47,7 @@ dependencies:
   camera: ^0.10.5+8
   camera_avfoundation: ^0.9.13+9
   uuid: ^4.3.3
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:
