@@ -11,6 +11,7 @@ class MediaPicker {
       try {
         // Attempt to get the list of available cameras
         final cameras = await availableCameras();
+      final NavigatorState navigator = Navigator.of(context);
         if (cameras.isNotEmpty) {
           // If there are available cameras, show the full menu
           return showModalBottomSheet<List<XFile>>(
