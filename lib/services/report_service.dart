@@ -7,7 +7,7 @@ import '../models/traffic_violation.dart';
 var logger = Logger();
 
 class ReportService {
-  final String apiUrl = 'http://127.0.0.1:8000/reports/';
+  final String apiUrl = 'http://127.0.0.1:8000/reports/api/traffic-violations-list/';
   http.Client client;
 
   ReportService({http.Client? client}) : client = client ?? http.Client();
