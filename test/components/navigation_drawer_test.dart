@@ -24,7 +24,7 @@ void main() {
       );
     }
 
-    testWidgets('tapping on a tile should navigate to the correct screen',
+    testWidgets  // This section contains the line that may have null('tapping on a tile should navigate to the correct screen',
         (WidgetTester tester) async {
       await tester.pumpWidget(
           createTestableWidget(child: const custom.NavigationDrawer()));
