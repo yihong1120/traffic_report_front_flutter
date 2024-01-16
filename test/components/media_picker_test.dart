@@ -6,15 +6,19 @@ import 'package:mockito/mockito.dart';
 import 'package:traffic_report_front_flutter/components/media_picker.dart';
 
 // Create a mock class for ImagePicker
-class MockImagePicker extends Mock implements ImagePicker {}
+class MockImagePicker extends Mock implements ImagePicker {
+  MockImagePicker._();
+  final dynamic _givenName;
+  final dynamic _givenHashCode;
+  final dynamic _defaultResponse;
 
 // Create a mock class for Camera
 class MockCamera extends Mock implements CameraDescription {}
 
 void main() {
   group('MediaPicker', () {
-    late MockImagePicker mockImagePicker;
-    late List<CameraDescription> mockCameras;
+    late final MockImagePicker mockImagePicker;
+    late final List<CameraDescription> mockCameras;
 
     setUp(() {
       mockImagePicker = MockImagePicker();
