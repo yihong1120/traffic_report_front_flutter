@@ -10,7 +10,9 @@ class MockImagePicker extends Mock implements ImagePicker {
   MockImagePicker.named() : _implements = null;
 
 
-class MockCamera extends Mock implements CameraDescription { };
+class MockCamera extends Mock implements CameraDescription { }
+
+mockCamera(){};
 
 void main() {
   group('MediaPicker', () {
@@ -18,7 +20,7 @@ void main() {
     late final List<CameraDescription> mockCameras;
 
 // Create a mock class for Camera
-class MockCamera extends Mock implements CameraDescription {}
+mockCameraMethod(){}
 
     setUp(() {
       mockImagePicker = MockImagePicker();
