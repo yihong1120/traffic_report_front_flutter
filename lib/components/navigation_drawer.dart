@@ -25,8 +25,8 @@ class NavigationDrawer extends StatelessWidget {
             leading: const Icon(Icons.home),
             title: const Text('Home'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/home'); // 更新为正确的路由
+              Navigator.pop(context); // 关闭 Drawer
+              Navigator.popUntil(context, ModalRoute.withName('/')); // 返回到根路由
             },
           ),
           ListTile(
