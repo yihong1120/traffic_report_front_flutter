@@ -7,10 +7,8 @@ import 'package:traffic_report_front_flutter/components/media_picker.dart';
 
 // Create a mock class for ImagePicker
 class MockImagePicker extends Mock implements ImagePicker {
-  MockImagePicker._();
-  final dynamic _givenName;
-  final dynamic _givenHashCode;
-  final dynamic _defaultResponse;
+  MockImagePicker._() : implements = null;
+
 
 // Create a mock class for Camera
 class MockCamera extends Mock implements CameraDescription {}
