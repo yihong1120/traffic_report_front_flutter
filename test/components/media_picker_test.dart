@@ -18,7 +18,7 @@ void main() {
     late final List<CameraDescription> mockCameras;
 
 // Create a mock class for Camera
-class MockCamera extends Mock implements CameraDescription { }
+class MockCamera extends Mock implements CameraDescription {}
 
     setUp(() {
       mockImagePicker = MockImagePicker();
