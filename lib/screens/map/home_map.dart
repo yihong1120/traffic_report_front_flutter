@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
+import 'package:collection/collection.dart'; // 引入 collection 包
 import 'package:http/http.dart' as http;
 import '../../components/custom_info_window.dart'; // 确保导入 CustomInfoWindow
 
@@ -52,7 +53,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
   void _loadMarkers() async {
     try {
       // 指定 API URL
-      var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-markers/');
+      var url =
+          Uri.parse('http://127.0.0.1:8000/api/traffic-violation-markers/');
       // 发送请求并等待响应
       var response = await http.get(url);
 
@@ -64,18 +66,23 @@ class _HomeMapPageState extends State<HomeMapPage> {
           _markers.clear();
           for (var markerData in data) {
             // 安全地获取数据，并为缺失的字段提供默认值
-            String licensePlate = markerData['license_plate']?.toString() ?? '未知';
+            String licensePlate =
+                markerData['license_plate']?.toString() ?? '未知';
             String violation = markerData['violation']?.toString() ?? '未知';
             String date = markerData['date']?.toString() ?? '未知';
-            double lat = markerData['lat'] != null ? markerData['lat'].toDouble() : 0.0;
-            double lng = markerData['lng'] != null ? markerData['lng'].toDouble() : 0.0;
+            double lat =
+                markerData['lat'] != null ? markerData['lat'].toDouble() : 0.0;
+            double lng =
+                markerData['lng'] != null ? markerData['lng'].toDouble() : 0.0;
 
             // 创建标记
             final marker = Marker(
               markerId: MarkerId(markerData['traffic_violation_id'].toString()),
               position: LatLng(lat, lng),
-              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed), // 设置标记为红色
-              onTap: () => _onMarkerTapped(markerData['traffic_violation_id'].toString()),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueRed), // 设置标记为红色
+              onTap: () => _onMarkerTapped(
+                  markerData['traffic_violation_id'].toString()),
             );
             // 将标记添加到地图上
             _markers.add(marker);
@@ -91,7 +98,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   void _onMarkerTapped(String trafficViolationId) async {
     // 获取违章详细信息
-    var url = Uri.parse('http://127.0.0.1:8000/api/traffic-violation-details/$trafficViolationId/');
+    var url = Uri.parse(
+        'http://127.0.0.1:8000/api/traffic-violation-details/$trafficViolationId/');
     try {
       var response = await http.get(url);
       if (response.statusCode == 200) {
@@ -114,7 +122,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
           );
         });
       } else {
-        logger.e('Failed to load traffic violation details. Status code: ${response.statusCode}');
+        logger.e(
+            'Failed to load traffic violation details. Status code: ${response.statusCode}');
       }
     } catch (e) {
       logger.e('Error loading traffic violation details: $e');
@@ -122,12 +131,13 @@ class _HomeMapPageState extends State<HomeMapPage> {
   }
 
   void _updateMarkerColor(String markerId, double hue) {
-    var marker = _markers.firstWhere((m) => m.markerId.value == markerId, orElse: () => null);
+    var marker = _markers.firstWhereOrNull((m) => m.markerId.value == markerId);
+
     if (marker != null) {
       setState(() {
         _markers.remove(marker);
         _markers.add(
-        Marker(
+          Marker(
             markerId: marker.markerId,
             position: marker.position,
             icon: BitmapDescriptor.defaultMarkerWithHue(hue),
@@ -187,7 +197,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
       });
     }
   }
-    
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -224,7 +234,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
                             end: DateTime.now(),
                           );
                         } else {
-                          _selectedTimeRange = newValue ?? _selectedTimeRange; // 使用空合併運算符
+                          _selectedTimeRange =
+                              newValue ?? _selectedTimeRange; // 使用空合併運算符
                           _selectedDateRange = null;
                         }
                       });
