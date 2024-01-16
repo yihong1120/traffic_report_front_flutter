@@ -1,9 +1,16 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
   static final String _baseUrl =
       dotenv.env['API_URL'] ?? 'http://localhost:8000';
+
+  // Allow for the storage to be set for testing purposes
+  static FlutterSecureStorage storage = FlutterSecureStorage();
+
+  // Allow for the client to be set for testing purposes
+  static http.Client client = http.Client();
 
   static Future<bool> login(String username, String password) async {
     var url = Uri.parse('$_baseUrl/login/');
@@ -14,6 +21,9 @@ class AuthService {
 
     if (response.statusCode == 200) {
       // 这里应该处理登录成功后的逻辑，例如保存 token
+      // 假设服务器响应中包含了 'auth_token' 字段
+      String? authToken = response.body; // 这里应该是解析响应体获取令牌的逻辑
+      await storage.write(key: 'auth_token', value: authToken);
       return true;
     } else {
       // 登录失败
@@ -121,9 +131,13 @@ class AuthService {
   // 示例：获取存储的令牌
   static Future<String?> _getToken() async {
     // 这里应该包含从存储中获取令牌的逻辑
-    // 例如，使用 SharedPreferences
-
-    // 返回 null 表示没有令牌或令牌无效
-    return null;
+    // 例如，使用 FlutterSecureStorage 或 SharedPreferences
+    try {
+      final token = await storage.read(key: 'auth_token');
+      return token;
+    } catch (e) {
+      // 处理任何异常，例如无法访问存储
+      return null;
+    }
   }
 }
