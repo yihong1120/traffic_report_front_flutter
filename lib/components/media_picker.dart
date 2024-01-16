@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 
 class MediaPicker {
-  static Future<List<XFile>?> pickMedia(BuildContext context,
+  static Future<List<XFile>?> pickMedia(String route, BuildContext context,
       {bool enableCamera = false}) async {
     final ImagePicker picker = ImagePicker();
 
@@ -36,7 +36,7 @@ class _MediaPickerMenu extends StatelessWidget {
   const _MediaPickerMenu({required this.picker});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(String route, BuildContext context) {
     // Capture the values that depend on the context before the async gap
     final NavigatorState navigator = Navigator.of(context);
 
