@@ -13,7 +13,7 @@ class MockCamera extends Mock implements CameraDescription {}
 
 void main() {
   group('MediaPicker', () {
-    late MockImagePicker mockImagePicker;
+    late final MockImagePicker mockImagePicker;
     late List<CameraDescription> mockCameras;
 
     setUp(() {
