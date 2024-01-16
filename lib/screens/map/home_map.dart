@@ -209,45 +209,48 @@ class _HomeMapPageState extends State<HomeMapPage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      onChanged: (value) => _searchKeyword = value,
-                      decoration: InputDecoration(
-                        labelText: '搜索',
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: _searchData,
+                    child: Material(
+                      child: TextField(
+                        onChanged: (value) => _searchKeyword = value,
+                        decoration: InputDecoration(
+                          labelText: '搜索',
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.search),
+                            onPressed: _searchData,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(width: 10),
-                  DropdownButton<String>(
-                    value: _selectedTimeRange,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        if (newValue == '自訂時間範圍') {
-                          _selectDateRange(context);
-                        } else if (newValue == '今日') {
-                          _selectedTimeRange = newValue ?? '今日'; // 使用空合併運算符
-                          _selectedDateRange = DateTimeRange(
-                            start: DateTime.now(),
-                            end: DateTime.now(),
-                          );
-                        } else {
-                          _selectedTimeRange =
-                              newValue ?? _selectedTimeRange; // 使用空合併運算符
-                          _selectedDateRange = null;
-                        }
-                      });
-                    },
-                    items: _timeRangeOptions
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
+                  Material(
+                    child: DropdownButton<String>(
+                      value: _selectedTimeRange,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          if (newValue == '自訂時間範圍') {
+                            _selectDateRange(context);
+                          } else if (newValue == '今日') {
+                            _selectedTimeRange = newValue ?? '今日'; // 使用空合併運算符
+                            _selectedDateRange = DateTimeRange(
+                              start: DateTime.now(),
+                              end: DateTime.now(),
+                            );
+                          } else {
+                            _selectedTimeRange =
+                                newValue ?? _selectedTimeRange; // 使用空合併運算符
+                            _selectedDateRange = null;
+                          }
+                        });
+                      },
+                      items: _timeRangeOptions.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  )
                 ],
               ),
             ),
