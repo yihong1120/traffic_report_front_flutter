@@ -36,9 +36,9 @@ class _MediaPickerMenu extends StatelessWidget {
   const _MediaPickerMenu({required this.picker});
 
   @override
-  Widget build(String route, BuildContext context) {
+  Widget build(BuildContext context) {
     // Capture the values that depend on the context before the async gap
-    final NavigatorState navigator = Navigator.of(context);
+    final NavigatorState? navigator = Navigator.of(context);
 
     return Wrap(
       children: <Widget>[
