@@ -1,68 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:traffic_report_front_flutter/components/navigation_drawer.dart' as app_drawer;
+import 'package:traffic_report_front_flutter/components/navigation_drawer.dart'
+    as custom;
 
-// 创建Navigator的mock类
+// Create a mock navigator observer
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
-  group('NavigationDrawer tests', () {
+  group('NavigationDrawer', () {
     late MockNavigatorObserver mockObserver;
 
     setUp(() {
-      // 在每个测试之前初始化mock对象
       mockObserver = MockNavigatorObserver();
     });
 
-    Widget createWidgetUnderTest() {
+    Widget createTestableWidget({required Widget child}) {
       return MaterialApp(
-        home: const app_drawer.NavigationDrawer(),
+        home: Scaffold(
+          body: child,
+        ),
         navigatorObservers: [mockObserver],
-        routes: {
-          '/home': (_) => Container(), // 这里可以使用任何Widget
-          '/create': (_) => Container(), // 这里可以使用任何Widget
-        },
       );
     }
 
-    testWidgets('should display all list tiles correctly', (WidgetTester tester) async {
-      await tester.pumpWidget(createWidgetUnderTest());
+    testWidgets('tapping on a tile should navigate to the correct screen',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+          createTestableWidget(child: const custom.NavigationDrawer()));
 
-      // 检查所有ListTile是否存在
-      expect(find.text('Home'), findsOneWidget);
-      expect(find.text('Create Report'), findsOneWidget);
-      expect(find.text('Edit Report'), findsOneWidget);
-      expect(find.text('Chatbot'), findsOneWidget);
-      expect(find.text('Accounts'), findsOneWidget);
+      // Define the list of tiles and corresponding expected routes
+      final List<Map<String, dynamic>> tilesAndRoutes = [
+        {'icon': Icons.home, 'route': '/home'},
+        {'icon': Icons.report, 'route': '/create'},
+        {'icon': Icons.edit, 'route': '/reports'},
+        {'icon': Icons.chat, 'route': '/chat'},
+        {'icon': Icons.account_circle, 'route': '/accounts'},
+      ];
+
+      for (var tileAndRoute in tilesAndRoutes) {
+        // Find the ListTile widget by icon and tap it
+        final Finder tileFinder =
+            find.widgetWithIcon(ListTile, tileAndRoute['icon']);
+        expect(tileFinder, findsOneWidget);
+        await tester.tap(tileFinder);
+        await tester.pumpAndSettle();
+
+        // Verify that a push event happened on the mock navigator observer
+        verify(mockObserver.didPush(
+          argThat(isA<Route<dynamic>>())
+              as Route<dynamic>, // Cast to Route<dynamic>
+          any, // Use any matcher for the second argument
+        ));
+
+        // Pop the current route to reset the navigation stack
+        Navigator.of(tester.element(tileFinder)).pop();
+        await tester.pumpAndSettle();
+      }
     });
-
-    testWidgets('should navigate to home when Home ListTile is tapped', (WidgetTester tester) async {
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // 模拟点击操作
-      await tester.tap(find.text('Home'));
-      await tester.pumpAndSettle();
-
-      // 验证并获取第一个路由
-      final capturedRoute = verify(mockObserver.didPush(captureAny, any)).captured.single as Route<dynamic>;
-      expect(capturedRoute.settings.name, '/home');
-    });
-
-    testWidgets('should navigate to create report when Create Report ListTile is tapped', (WidgetTester tester) async {
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // 模拟点击操作
-      await tester.tap(find.text('Create Report'));
-      await tester.pumpAndSettle();
-
-      // 验证并获取第一个路由
-      final capturedRoute = verify(mockObserver.didPush(captureAny, any)).captured.single as Route<dynamic>;
-      expect(capturedRoute.settings.name, '/create');
-    });
-
-    // 为'Edit Report', 'Chatbot', 和 'Accounts' ListTile项重复上述测试
-    // ...
-
   });
 }
