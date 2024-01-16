@@ -66,10 +66,10 @@ class _HomeMapPageState extends State<HomeMapPage> {
           _markers.clear();
           for (var markerData in data) {
             // 安全地获取数据，并为缺失的字段提供默认值
-            String licensePlate =
+            // Removed unused variable licensePlate =
                 markerData['license_plate']?.toString() ?? '未知';
-            String violation = markerData['violation']?.toString() ?? '未知';
-            String date = markerData['date']?.toString() ?? '未知';
+            // Removed unused variable violation = markerData['violation']?.toString() ?? '未知';
+            // Removed unused variable date = markerData['date']?.toString() ?? '未知';
             double lat =
                 markerData['lat'] != null ? markerData['lat'].toDouble() : 0.0;
             double lng =
