@@ -43,7 +43,7 @@ void main() {
         final Finder tileFinder =
             find.widgetWithIcon(ListTile, tileAndRoute['icon']);
         expect(tileFinder, findsOneWidget);
-        await tester.tap(tileFinder);
+        await tester.tap(tileFinder)
         await tester.pumpAndSettle();
 
         // Verify that a push event happened on the mock navigator observer
