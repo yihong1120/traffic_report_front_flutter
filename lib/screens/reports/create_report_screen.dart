@@ -25,6 +25,7 @@ class CreateReportPage extends StatefulWidget {
 class CreateReportPageState extends State<CreateReportPage> {
   final _formKey = GlobalKey<FormState>();
   final List<XFile> _mediaFiles = [];
+  String route = 'your_route'; // Replace 'your_route' with the actual route
   final TrafficViolation _violation = TrafficViolation(
     date: DateTime.now(),
     time: TimeOfDay.now(),
@@ -133,7 +134,7 @@ class CreateReportPageState extends State<CreateReportPage> {
   }
 
   void _pickMedia() async {
-    final List<XFile>? pickedFiles = await MediaPicker.pickMedia(context, enableCamera: true);
+    final List<XFile>? pickedFiles = await MediaPicker.pickMedia(route, context, enableCamera: true);
 
     if (!mounted) return; // 檢查異步操作之後是否仍掛載
 
