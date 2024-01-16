@@ -30,7 +30,7 @@ class MediaPicker {
   }
 }
 
-class _MediaPickerMenu extends StatelessWidget {
+class _MediaPickerMenu extends StatelessWidget{\n  const _MediaPickerMenu({required this.picker});\n\n  @override\n  Widget build(BuildContext context) {
   final ImagePicker picker;
 
   const _MediaPickerMenu({required this.picker});
