@@ -10,30 +10,47 @@ class MapService {
 
   Set<Marker> get markers => _markers;
 
-  Future<void> loadMarkers(Function(String) onMarkerTapped) async {
+  Future<Set<Marker>> loadMarkers(Function(String) onMarkerTapped) async {
     var url = Uri.parse('$_baseUrl/traffic-violation-markers/');
     var response = await http.get(url);
+    Set<Marker> markers = {};
 
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
+      var decodedBody = utf8.decode(response.bodyBytes);
+      List<dynamic> data = json.decode(decodedBody);
 
-      _markers.clear();
       for (var markerData in data) {
-        final marker = Marker(
-          markerId: MarkerId(markerData['id'].toString()),
-          position: LatLng(
-            double.parse(markerData['latitude'].toString()),
-            double.parse(markerData['longitude'].toString()),
-          ),
-          infoWindow: InfoWindow(
-            title: markerData['title'],
-            snippet: markerData['snippet'],
-          ),
-          onTap: () => onMarkerTapped(markerData['id'].toString()),
-        );
+        var lat = markerData['lat'];
+        var lng = markerData['lng'];
+        var license_plate = markerData['license_plate'];
+        var violation = markerData['violation'];
+        var traffic_violation_id = markerData['traffic_violation_id'];
 
-        _markers.add(marker);
+        if (lat == null || lng == null) {
+          debugPrint('Error: latitude or longitude is null.');
+          continue;
+        }
+
+        try {
+          String markerTitle = '${license_plate ?? 'Unknown'}-${violation ?? 'Unknown'}';
+          final marker = Marker(
+            markerId: MarkerId(markerData['id'].toString()),
+            position: LatLng(
+              double.parse(lat.toString()),
+              double.parse(lng.toString()),
+            ),
+            infoWindow: InfoWindow(
+              title: markerTitle,
+            ),
+            onTap: () => onMarkerTapped(markerData['traffic_violation_id'].toString()),
+          );
+
+          markers.add(marker);
+        } catch (e) {
+          debugPrint('Error parsing latitude or longitude: $e');
+        }
       }
+      return markers; // 返回加载的标记
     } else {
       throw Exception(
           'Failed to load markers. Status code: ${response.statusCode}');
@@ -44,10 +61,14 @@ class MapService {
       String trafficViolationId) async {
     var url =
         Uri.parse('$_baseUrl/traffic-violation-details/$trafficViolationId/');
+        print(url);
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
+      var decodedBody = utf8.decode(response.bodyBytes);
+      // List<dynamic> data = json.decode(decodedBody);
+      var data = json.decode(decodedBody);
+      print(data);
       return TrafficViolation.fromJson(data);
     } else {
       throw Exception(
