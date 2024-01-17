@@ -32,7 +32,19 @@ class _HomeMapPageState extends State<HomeMapPage> {
   @override
   void initState() {
     super.initState();
-    _mapService.loadMarkers(_onMarkerTapped);
+    _loadMarkers();
+  }
+
+  void _loadMarkers() async {
+    try {
+      Set<Marker> markers = await _mapService.loadMarkers(_onMarkerTapped);
+      setState(() {
+        // 使用 _markersManagement 更新标记
+        _markersManagement.updateMarkers(markers);
+      });
+    } catch (e) {
+      debugPrint('Failed to load markers: $e');
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -40,6 +52,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
   }
 
   void _onMarkerTapped(String trafficViolationId) {
+    print('Clicked Marker ID: $trafficViolationId'); // 输出点击的标记的 ID
     // Handle marker tap
     _mapService.getTrafficViolationDetails(trafficViolationId).then((details) {
       if (details != null) {
@@ -89,11 +102,17 @@ class _HomeMapPageState extends State<HomeMapPage> {
     String licensePlate =
         _selectedViolation?.licensePlate ?? 'Unknown License Plate';
     String violation = _selectedViolation?.violation ?? 'Unknown Violation';
+    String location = _selectedViolation?.location ?? 'Unknown location';
+    // String time = _selectedViolation?.time ?? 'Unknown time';
+    String time = _selectedViolation?.time?.toString() ?? 'Unknown time';
+
+    String officer = _selectedViolation?.officer ?? 'Unknown officers';
+    String status = _selectedViolation?.status ?? 'Unknown status';
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Map'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Home Map'),
+      // ),
       body: Stack(
         children: [
           Column(
@@ -129,7 +148,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
                     target: _center,
                     zoom: 11.0,
                   ),
-                  markers: _markersManagement.markers,
+                  // markers: _markersManagement.markers,
+                  markers: Set<Marker>.of(_markersManagement.markers), // 确保使用正确的标记集合
                 ),
               ),
             ],
@@ -142,6 +162,10 @@ class _HomeMapPageState extends State<HomeMapPage> {
                 licensePlate: licensePlate,
                 violation: violation,
                 date: formattedDate,
+                time: time,
+                location: location,
+                officer: officer,
+                status: status,
               ),
             ),
         ],

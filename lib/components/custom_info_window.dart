@@ -3,13 +3,21 @@ import 'package:flutter/material.dart';
 class CustomInfoWindow extends StatelessWidget {
   final String licensePlate;
   final String violation;
+  final String location;
   final String date;
+  final String time;
+  final String officer;
+  final String status;
 
   const CustomInfoWindow({
     super.key,
     required this.licensePlate,
     required this.violation,
+    required this.location,
     required this.date,
+    required this.time,
+    required this.officer,
+    required this.status,
   });
 
   @override
@@ -33,8 +41,12 @@ class CustomInfoWindow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('车牌号: $licensePlate', style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text('违章: $violation'),
-          Text('日期: $date'),
+          Text('違規項目: $violation',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('地點: $location',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('日期: $date',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('時間: $time',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('承辦人: $officer',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('開單情況: $status',style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
