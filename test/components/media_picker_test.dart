@@ -6,9 +6,11 @@ import 'package:mockito/mockito.dart';
 import 'package:traffic_report_front_flutter/components/media_picker.dart';
 
 // Create a mock class for ImagePicker
+@immutable
 class MockImagePicker extends Mock implements ImagePicker {}
 
 // Create a mock class for Camera
+@immutable
 class MockCamera extends Mock implements CameraDescription {}
 
 void main() {
