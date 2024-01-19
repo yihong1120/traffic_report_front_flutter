@@ -84,10 +84,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = _selectedViolation?.date != null
-        ? DateFormat('yyyy-MM-dd').format(_selectedViolation!.date!)
-        : 'Unknown Date';
-    String license_plate = _selectedViolation?.license_plate ?? 'Unknown License Plate';
+    _buildMap();
     String violation = _selectedViolation?.violation ?? 'Unknown Violation';
     String address = _selectedViolation?.address ?? 'Unknown address';
     String time = formatTimeOfDay(_selectedViolation?.time);
@@ -164,6 +161,79 @@ class _HomeMapPageState extends State<HomeMapPage> {
       ),
     );
   }
+  }
+}
+  void _buildMap() {
+    String formattedDate = _selectedViolation?.date != null
+        ? DateFormat('yyyy-MM-dd').format(_selectedViolation!.date!)
+        : 'Unknown Date';
+    String license_plate = _selectedViolation?.license_plate ?? 'Unknown License Plate';
+    String violation = _selectedViolation?.violation ?? 'Unknown Violation';
+    String address = _selectedViolation?.address ?? 'Unknown address';
+    String time = formatTimeOfDay(_selectedViolation?.time);
+    String officer = _selectedViolation?.officer ?? 'Unknown officers';
+    String status = _selectedViolation?.status ?? 'Unknown status';
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets(all: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: custom.SearchBar(
+                        onSearch: (value) {
+                          setState(() {
+                            _searchKeyword = value;
+                          });
+                          _searchData();
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    TimeRangeDropdown(
+                      selectedTimeRange: _selectedTimeRange,
+                      timeRangeOptions: timeRangeOptions,
+                      onTimeRangeChanged: _onTimeRangeChanged,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 11.0,
+                  ),
+                  markers: Set.of(_markersManagement.markers),
+                ),
+              ),
+            ],
+          ),
+          if (_showInfoWindow && _selectedViolation != null)
+            Positioned(
+              top: 100,
+              right: 50,
+              child: CustomInfoWindow(
+                license_plate: license_plate,
+                violation: violation,
+                date: formattedDate,
+                time: time,
+                address: address,
+                officer: officer,
+                status: status,
+              ),
+            ),
+  ],
+        ),
+      ),
+    ])
+  }
+}
 }
   void _searchData() {
     _mapService.searchData(_searchKeyword, _selectedDateRange, (results) {
