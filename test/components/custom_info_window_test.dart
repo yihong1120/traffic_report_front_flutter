@@ -16,6 +16,11 @@ void main() {
       await tester.pumpWidget(const MaterialApp(
         home: Scaffold(
           body: CustomInfoWindow(
+                address: "Test Address",
+                license_plate: testLicensePlate,
+                officer: "Test Officer",
+                status:"Test Status",
+                time: "Test Time",
             licensePlate: testLicensePlate,
             violation: testViolation,
             date: testDate,
