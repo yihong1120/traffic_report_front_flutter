@@ -61,14 +61,14 @@ class MapService {
       String trafficViolationId) async {
     var url =
         Uri.parse('$_baseUrl/traffic-violation-details/$trafficViolationId/');
-        print(url);
+        // print(url);
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
       var decodedBody = utf8.decode(response.bodyBytes);
       // List<dynamic> data = json.decode(decodedBody);
       var data = json.decode(decodedBody);
-      print(data);
+      // print(data);
       return TrafficViolation.fromJson(data);
     } else {
       throw Exception(
