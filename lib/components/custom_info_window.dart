@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomInfoWindow extends StatelessWidget {
-  final String licensePlate;
+  final String license_plate;
   final String violation;
-  final String location;
+  final String address;
   final String date;
   final String time;
   final String officer;
@@ -11,9 +11,9 @@ class CustomInfoWindow extends StatelessWidget {
 
   const CustomInfoWindow({
     super.key,
-    required this.licensePlate,
+    required this.license_plate,
     required this.violation,
-    required this.location,
+    required this.address,
     required this.date,
     required this.time,
     required this.officer,
@@ -40,9 +40,9 @@ class CustomInfoWindow extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('车牌号: $licensePlate', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('車牌: $license_plate', style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('違規項目: $violation',style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text('地點: $location',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('地點: $address',style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('日期: $date',style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('時間: $time',style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('承辦人: $officer',style: const TextStyle(fontWeight: FontWeight.bold)),

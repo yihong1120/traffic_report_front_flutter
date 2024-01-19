@@ -6,10 +6,10 @@ class TrafficViolation {
   String? title; // 添加 title 属性
   DateTime? date;
   TimeOfDay? time;
-  String? licensePlate;
+  String? license_plate;
   String? violation;
   String? status;
-  String? location;
+  String? address;
   String? officer;
   List<MediaFile> mediaFiles;
 
@@ -40,10 +40,10 @@ class TrafficViolation {
     this.title,
     this.date,
     this.time,
-    this.licensePlate,
+    this.license_plate,
     this.violation,
     this.status,
-    this.location,
+    this.address,
     this.officer,
     this.mediaFiles = const [],
   });
@@ -55,10 +55,10 @@ class TrafficViolation {
       'title': title,
       'date': date?.toIso8601String(),
       'time': time != null ? '${time!.hour}:${time!.minute}' : null,
-      'licensePlate': licensePlate,
+      'license_plate': license_plate,
       'violation': violation,
       'status': status,
-      'location': location,
+      'address': address,
       'officer': officer,
     };
   }
@@ -70,10 +70,10 @@ class TrafficViolation {
       title: json['title'] as String?,
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
       time: json['time'] != null ? _parseTime(json['time']) : null,
-      licensePlate: json['licensePlate'] as String?,
+      license_plate: json['license_plate'] as String?,
       violation: json['violation'] as String?,
       status: json['status'] as String?,
-      location: json['location'] as String?,
+      address: json['address'] as String?,
       officer: json['officer'] as String?,
       mediaFiles: json['mediaFiles'] != null
         ? (json['mediaFiles'] as List).map((e) => MediaFile.fromJson(e)).toList()

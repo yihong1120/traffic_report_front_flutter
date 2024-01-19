@@ -99,10 +99,10 @@ class _HomeMapPageState extends State<HomeMapPage> {
         : 'Unknown Date';
 
     // Provide fallback values for other nullable properties
-    String licensePlate =
-        _selectedViolation?.licensePlate ?? 'Unknown License Plate';
+    String license_plate =
+        _selectedViolation?.license_plate ?? 'Unknown License Plate';
     String violation = _selectedViolation?.violation ?? 'Unknown Violation';
-    String location = _selectedViolation?.location ?? 'Unknown location';
+    String address = _selectedViolation?.address ?? 'Unknown address';
     // String time = _selectedViolation?.time ?? 'Unknown time';
     String time = _selectedViolation?.time?.toString() ?? 'Unknown time';
 
@@ -157,13 +157,13 @@ class _HomeMapPageState extends State<HomeMapPage> {
           if (_showInfoWindow && _selectedViolation != null)
             Positioned(
               top: 100, // Adjust as needed
-              left: 50, // Adjust as needed
+              right: 50, // Adjust as needed
               child: CustomInfoWindow(
-                licensePlate: licensePlate,
+                license_plate: license_plate,
                 violation: violation,
                 date: formattedDate,
                 time: time,
-                location: location,
+                address: address,
                 officer: officer,
                 status: status,
               ),
