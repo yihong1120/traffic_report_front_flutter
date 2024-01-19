@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'media_file.dart';
+// import 'package:traffic_report_front_flutter/utils/date_time_utils.dart';
 
 class TrafficViolation {
   int? id; // 添加 id 属性
@@ -83,6 +84,10 @@ class TrafficViolation {
 
   static TimeOfDay? _parseTime(String timeStr) {
     final parts = timeStr.split(':').map(int.parse).toList();
-    return parts.length == 2 ? TimeOfDay(hour: parts[0], minute: parts[1]) : null;
+    // 确保字符串被正确地分割成小时和分钟
+    if (parts.length >= 2) {
+      return TimeOfDay(hour: parts[0], minute: parts[1]);
+    }
+    return null;
   }
 }
