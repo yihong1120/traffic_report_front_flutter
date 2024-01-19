@@ -18,6 +18,8 @@ lib/
       |- media_preview.dart
       |- navigation_drawer.dart
       |- report_form.dart
+      |- search_bar.dart
+      |- time_range_dropdown.dart
   |- models/        # Data models
       |- media_file.dart
       |- social_account.dart
@@ -41,9 +43,14 @@ lib/
           |- home_map.dart
   |- services/      # Services, like network requests, local storage
       |- auth_service.dart
+      |- map_service.dart
       |- report_service.dart
       |- social_service.dart
   |- utils/         # Utility classes, such as utility functions, constant definitions
+      |- constants.dart
+      |- date_time_range_util.dart
+      |- date_time_utils.dart
+      |- markers_management.dart
       |- media_utils.dart
   |- tests/         # Utility test files
       |- components

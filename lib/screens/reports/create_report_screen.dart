@@ -97,8 +97,8 @@ class CreateReportPageState extends State<CreateReportPage> {
                   });
                 }
               },
-              onLicensePlateSaved: (value) => _violation.licensePlate = value,
-              onLocationSaved: (value) => _violation.location = value,
+              onLicensePlateSaved: (value) => _violation.license_plate = value,
+              onLocationSaved: (value) => _violation.address = value,
               onOfficerSaved: (value) => _violation.officer = value,
               onStatusChanged: (value) {
                 setState(() {

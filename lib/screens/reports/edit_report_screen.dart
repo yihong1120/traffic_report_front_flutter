@@ -55,8 +55,8 @@ class EditReportPageState extends State<EditReportPage> {
       // Save TimeOfDay in a variable before using it with context
       TimeOfDay? violationTime = _violation.time;
 
-      _licensePlateController.text = _violation.licensePlate ?? '';
-      _locationController.text = _violation.location ?? '';
+      _licensePlateController.text = _violation.license_plate ?? '';
+      _locationController.text = _violation.address ?? '';
       _officerController.text = _violation.officer ?? '';
       _selectedStatus = _violation.status ?? '';
       // Load remote media files
@@ -115,10 +115,10 @@ class EditReportPageState extends State<EditReportPage> {
                   // 保存选择的时间
                 },
                 onLicensePlateSaved: (value) {
-                  _violation.licensePlate = value;
+                  _violation.license_plate = value;
                 },
                 onLocationSaved: (value) {
-                  _violation.location = value;
+                  _violation.address = value;
                 },
                 onOfficerSaved: (value) {
                   _violation.officer = value;
@@ -174,8 +174,8 @@ class EditReportPageState extends State<EditReportPage> {
       final navigator = Navigator.of(context);
 
       // 更新违规实例的属性
-      _violation.licensePlate = _licensePlateController.text;
-      _violation.location = _locationController.text;
+      _violation.license_plate = _licensePlateController.text;
+      _violation.address = _locationController.text;
       _violation.officer = _officerController.text;
       _violation.status = _selectedStatus;
 
