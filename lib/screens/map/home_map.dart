@@ -148,7 +148,19 @@ class _HomeMapPageState extends State<HomeMapPage> {
                 status: status,
               ),
             ),
-        ],
+  void _updateViolationDetails(String trafficViolationId) {
+    _mapService.getTrafficViolationDetails(trafficViolationId).then((details) {
+      if (details != null) {
+        setState(() {
+          _showInfoWindow = true;
+          _selectedViolation = details;
+          _markersManagement.updateMarkerColor(_selectedViolation.id, Colors.yellow);
+        });
+      }
+    }).catchError((error) {
+      debugPrint('Error fetching traffic violation details: $error');
+    });
+  }        ],
       ),
     );
   }
