@@ -165,3 +165,10 @@ class _HomeMapPageState extends State<HomeMapPage> {
     );
   }
 }
+  void _searchData() {
+    _mapService.searchData(_searchKeyword, _selectedDateRange, (results) {
+      setState(() {
+        _markersManagement.updateMarkers(results);
+      });
+    });
+  }
