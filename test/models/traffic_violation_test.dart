@@ -20,7 +20,7 @@ void main() {
         'title': '違規停車',
         'date': '2024-01-16',
         'time': '14:30',
-        'licensePlate': 'ABC-1234',
+        'location': 'ABC-1234',
         'violation': '紅線停車',
         'status': 'Pending',
         'location': '某街道',
