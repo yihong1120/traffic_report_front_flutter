@@ -16,6 +16,8 @@ class LoginPageState extends State<LoginPage> {
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save(); // 保存表单数据到变量
+
       setState(() {
         _isLoading = true;
       });
@@ -29,7 +31,7 @@ class LoginPageState extends State<LoginPage> {
 
       // 根据操作结果使用先前获取的状态
       if (loggedIn) {
-        navigator.pushReplacementNamed('/account');
+        navigator.pushReplacementNamed('/accounts'); // 导航到账户页面，路由需要根据你的项目设置
       } else {
         scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Invalid username or password')),

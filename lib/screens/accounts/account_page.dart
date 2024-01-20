@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../services/auth_service.dart'; // 假設您有一個處理身份驗證的服務
+import '../../services/auth_service.dart'; // 假设您有一个处理身份验证的服务
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -9,7 +9,8 @@ class AccountPage extends StatefulWidget {
 }
 
 class AccountPageState extends State<AccountPage> {
-  bool _isLoggedIn = false; // 這個應該根據實際的登入狀態來設定
+  bool _isLoggedIn = false; // 这个应该根据实际的登录状态来设置
+  // 可以添加更多的用户信息，例如用户名、电子邮件等
 
   @override
   void initState() {
@@ -33,10 +34,20 @@ class AccountPageState extends State<AccountPage> {
     }
   }
 
+  void _logout() async {
+    // 获取 Navigator 状态
+    final navigator = Navigator.of(context);
+
+    // 调用注销服务
+    await AuthService.logout();
+    // 导航回登录页面
+    navigator.pushReplacementNamed('/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_isLoggedIn) {
-      // 如果用戶未登入，顯示加載指示器，直到我們檢查完畢
+      // 如果用户未登录，显示加载指示器，直到我们检查完毕
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -44,13 +55,50 @@ class AccountPageState extends State<AccountPage> {
       );
     }
 
-    // 如果用戶已登入，顯示帳戶信息
+    // 如果用户已登录，显示账户信息
     return Scaffold(
       appBar: AppBar(
         title: const Text('Account'),
       ),
-      body: const Center(
-        child: Text('Welcome to your account page!'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Welcome to your account page!'),
+            const SizedBox(height: 20),
+            // 显示更多的用户信息
+
+            // 更改密码按钮
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/password-change');
+              },
+              child: const Text('Change Password'),
+            ),
+
+            // 账户删除确认按钮
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/account-delete-confirm');
+              },
+              child: const Text('Delete Account'),
+            ),
+
+            // 社交连接页面按钮
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/social-connections');
+              },
+              child: const Text('Social Connections'),
+            ),
+
+            // 注销按钮
+            ElevatedButton(
+              onPressed: _logout,
+              child: const Text('Logout'),
+            ),
+          ],
+        ),
       ),
     );
   }
