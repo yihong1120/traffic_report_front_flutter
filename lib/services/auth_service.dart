@@ -16,7 +16,7 @@ class AuthService {
     var url = Uri.parse('$_baseUrl/api/login/');
     var response = await client.post(
       url,
-      headers: {'Content-Type': 'application/json'}, // 指定发送的数据类型为 JSON
+      headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'username': username,
         'password': password,
@@ -25,27 +25,35 @@ class AuthService {
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      String? authToken = data['token']; // 从响应中获取 token
-      await storage.write(key: 'auth_token', value: authToken);
+      await storage.write(key: 'refresh_token', value: data['refresh']);
+      await storage.write(key: 'access_token', value: data['access']);
       return true;
     } else {
-      // 登录失败
       return false;
     }
   }
 
   static Future<bool> logout() async {
-    var url = Uri.parse('$_baseUrl/accounts/api/logout/');
-    var token = await _getToken();
-    var response = await client.post(url, headers: {
-      'Authorization': 'Token $token',
-    });
+    var url = Uri.parse('$_baseUrl/api/logout/');
+    var accessToken = await storage.read(key: 'access_token');
+    var refreshToken = await storage.read(key: 'refresh_token');
+    
+    var response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: json.encode({
+        'refresh': refreshToken,
+      }),
+    );
 
     if (response.statusCode == 204) {
-      await storage.delete(key: 'auth_token'); // 删除存储的 token
+      await storage.delete(key: 'access_token');
+      await storage.delete(key: 'refresh_token');
       return true;
     } else {
-      // 注销失败
       return false;
     }
   }
@@ -78,14 +86,19 @@ class AuthService {
   }
 
   static Future<bool> changePassword(String oldPassword, String newPassword) async {
-    var url = Uri.parse('$_baseUrl/api/password/change/');
-    var token = await _getToken();
-    var response = await client.post(url, body: {
-      'old_password': oldPassword,
-      'new_password': newPassword,
-    }, headers: {
-      'Authorization': 'Token $token',
-    });
+    var url = Uri.parse('$_baseUrl/api/password-change/');
+    var accessToken = await _getToken();
+    var response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: json.encode({
+        'old_password': oldPassword,
+        'new_password': newPassword,
+      }),
+    );
 
     if (response.statusCode == 200) {
       // 密码更改成功
@@ -97,13 +110,18 @@ class AuthService {
   }
 
   static Future<bool> changeEmail(String newEmail) async {
-    var url = Uri.parse('$_baseUrl/api/email/change/');
-    var token = await _getToken();
-    var response = await client.post(url, body: {
-      'email': newEmail,
-    }, headers: {
-      'Authorization': 'Token $token',
-    });
+    var url = Uri.parse('$_baseUrl/api/email-change/');
+    var accessToken = await _getToken();
+    var response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: json.encode({
+        'email': newEmail,
+      }),
+    );
 
     if (response.statusCode == 200) {
       // 邮箱更改成功
@@ -138,10 +156,30 @@ class AuthService {
 
   static Future<String?> _getToken() async {
     try {
-      final token = await storage.read(key: 'auth_token');
-      return token;
+      return await storage.read(key: 'access_token');
     } catch (e) {
-      // 处理任何异常，例如无法访问存储
+      return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> getUserInfo() async {
+    var url = Uri.parse('$_baseUrl/api/get-user-info/'); // 修改为正确的API路径
+    
+    var accessToken = await _getToken();
+    var response = await client.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      return data;
+    } else {
+      // 打印错误日志或进行其他错误处理
+      print('Failed to fetch user info: ${response.body}');
       return null;
     }
   }
