@@ -16,7 +16,7 @@ void main() {
       await tester.pumpWidget(const MaterialApp(
         home: Scaffold(
           body: CustomInfoWindow(
-            licensePlate: testLicensePlate,
+            license_plate: testLicensePlate,
             violation: testViolation,
             date: testDate,
           ),
@@ -41,7 +41,7 @@ void main() {
       await tester.pumpWidget(const MaterialApp(
         home: Scaffold(
           body: CustomInfoWindow(
-            licensePlate: testLicensePlate,
+            license_plate: testLicensePlate,
             violation: testViolation,
             date: testDate,
           ),

@@ -31,10 +31,10 @@ void main() {
           title: 'Parking Violation',
           date: DateTime.parse('2024-01-15'),
           time: const TimeOfDay(hour: 14, minute: 0),
-          licensePlate: 'ABC123',
+          license_plate: 'ABC123',
           violation: '紅線停車',
           status: 'Pending',
-          location: 'Main St and 1st Ave',
+          address: 'Main St and 1st Ave',
           officer: 'Officer123',
           mediaFiles: [], // Assuming no media files for simplicity
         );
@@ -106,10 +106,10 @@ void main() {
           title: 'Updated Parking Violation',
           date: DateTime.parse('2024-01-15'),
           time: const TimeOfDay(hour: 14, minute: 0),
-          licensePlate: 'ABC123',
+          license_plate: 'ABC123',
           violation: '紅線停車',
           status: 'Approved',
-          location: 'Main St and 1st Ave',
+          address: 'Main St and 1st Ave',
           officer: 'Officer123',
           mediaFiles: [], // Assuming no media files for simplicity
         );

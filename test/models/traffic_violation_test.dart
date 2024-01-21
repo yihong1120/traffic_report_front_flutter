@@ -37,10 +37,10 @@ void main() {
       expect(violation.title, '違規停車');
       expect(violation.date, testDate);
       expect(violation.time, testTime);
-      expect(violation.licensePlate, 'ABC-1234');
+      expect(violation.license_plate, 'ABC-1234');
       expect(violation.violation, '紅線停車');
       expect(violation.status, 'Pending');
-      expect(violation.location, '某街道');
+      expect(violation.address, '某街道');
       expect(violation.officer, '警員A');
       expect(violation.mediaFiles.length, 2);
       expect(violation.mediaFiles, isA<List<MediaFile>>());
@@ -53,10 +53,10 @@ void main() {
         title: '違規停車',
         date: testDate,
         time: testTime,
-        licensePlate: 'ABC-1234',
+        license_plate: 'ABC-1234',
         violation: '紅線停車',
         status: 'Pending',
-        location: '某街道',
+        address: '某街道',
         officer: '警員A',
         mediaFiles: testMediaFiles,
       );

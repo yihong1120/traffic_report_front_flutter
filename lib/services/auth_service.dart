@@ -1,47 +1,73 @@
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
-  static final String _baseUrl =
-      dotenv.env['API_URL'] ?? 'http://localhost:8000';
+  static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/accounts';
 
   // Allow for the storage to be set for testing purposes
-  static FlutterSecureStorage storage = FlutterSecureStorage();
+  static FlutterSecureStorage storage = const FlutterSecureStorage();
 
   // Allow for the client to be set for testing purposes
   static http.Client client = http.Client();
 
   static Future<bool> login(String username, String password) async {
-    var url = Uri.parse('$_baseUrl/login/');
-    var response = await http.post(url, body: {
-      'username': username,
-      'password': password,
-    });
+    var url = Uri.parse('$_baseUrl/api/login/');
+    var response = await client.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'username': username,
+        'password': password,
+      }),
+    );
 
     if (response.statusCode == 200) {
-      // 这里应该处理登录成功后的逻辑，例如保存 token
-      // 假设服务器响应中包含了 'auth_token' 字段
-      String? authToken = response.body; // 这里应该是解析响应体获取令牌的逻辑
-      await storage.write(key: 'auth_token', value: authToken);
+      var data = json.decode(response.body);
+      await storage.write(key: 'refresh_token', value: data['refresh']);
+      await storage.write(key: 'access_token', value: data['access']);
       return true;
     } else {
-      // 登录失败
       return false;
     }
   }
 
-  static Future<bool> register(
-      String username, String email, String password1, String password2) async {
+  static Future<bool> logout() async {
+    var url = Uri.parse('$_baseUrl/api/logout/');
+    var accessToken = await storage.read(key: 'access_token');
+    var refreshToken = await storage.read(key: 'refresh_token');
+    
+    var response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: json.encode({
+        'refresh': refreshToken,
+      }),
+    );
+
+    if (response.statusCode == 204) {
+      await storage.delete(key: 'access_token');
+      await storage.delete(key: 'refresh_token');
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> register(String username, String email, String password1, String password2) async {
     var url = Uri.parse('$_baseUrl/register/');
-    var response = await http.post(url, body: {
+    var response = await client.post(url, body: {
       'username': username,
       'email': email,
       'password1': password1,
       'password2': password2,
     });
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       // 注册成功
       return true;
     } else {
@@ -51,36 +77,28 @@ class AuthService {
   }
 
   static Future<bool> verify(String code) async {
-    var url = Uri.parse('$_baseUrl/verify/'); // 替换为正确的验证 API 端点
-    var response = await http.post(url, body: {
+    var url = Uri.parse('$_baseUrl/api/verify/'); // 确保这是正确的验证 API 端点
+    var response = await client.post(url, body: {
       'code': code,
     });
 
     return response.statusCode == 200;
   }
 
-  static Future<bool> verifyEmail(String code) async {
-    var url = Uri.parse('$_baseUrl/verify-email/');
-    var response = await http.post(url, body: {
-      'code': code,
-    });
-
-    if (response.statusCode == 200) {
-      // 验证成功
-      return true;
-    } else {
-      // 验证失败
-      return false;
-    }
-  }
-
-  static Future<bool> changePassword(
-      String oldPassword, String newPassword) async {
-    var url = Uri.parse('$_baseUrl/change-password/');
-    var response = await http.post(url, body: {
-      'old_password': oldPassword,
-      'new_password': newPassword,
-    });
+  static Future<bool> changePassword(String oldPassword, String newPassword) async {
+    var url = Uri.parse('$_baseUrl/api/password-change/');
+    var accessToken = await _getToken();
+    var response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: json.encode({
+        'old_password': oldPassword,
+        'new_password': newPassword,
+      }),
+    );
 
     if (response.statusCode == 200) {
       // 密码更改成功
@@ -92,10 +110,18 @@ class AuthService {
   }
 
   static Future<bool> changeEmail(String newEmail) async {
-    var url = Uri.parse('$_baseUrl/change-email/');
-    var response = await http.post(url, body: {
-      'email': newEmail,
-    });
+    var url = Uri.parse('$_baseUrl/api/email-change/');
+    var accessToken = await _getToken();
+    var response = await client.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+      body: json.encode({
+        'email': newEmail,
+      }),
+    );
 
     if (response.statusCode == 200) {
       // 邮箱更改成功
@@ -107,11 +133,15 @@ class AuthService {
   }
 
   static Future<bool> deleteAccount() async {
-    var url = Uri.parse('$_baseUrl/delete-account/');
-    var response = await http.delete(url);
+    var url = Uri.parse('$_baseUrl/api/delete-account/');
+    var token = await _getToken();
+    var response = await client.delete(url, headers: {
+      'Authorization': 'Token $token',
+    });
 
     if (response.statusCode == 200) {
       // 账户删除成功
+      await storage.delete(key: 'auth_token'); // 删除存储的 token
       return true;
     } else {
       // 账户删除失败
@@ -119,24 +149,37 @@ class AuthService {
     }
   }
 
-  // 示例：检查用户是否已登录
   static Future<bool> isLoggedIn() async {
-    // 这里的逻辑取决于您如何处理认证
-    // 例如，检查是否有有效的认证令牌
-
     final token = await _getToken(); // 获取存储的令牌
     return token != null && token.isNotEmpty;
   }
 
-  // 示例：获取存储的令牌
   static Future<String?> _getToken() async {
-    // 这里应该包含从存储中获取令牌的逻辑
-    // 例如，使用 FlutterSecureStorage 或 SharedPreferences
     try {
-      final token = await storage.read(key: 'auth_token');
-      return token;
+      return await storage.read(key: 'access_token');
     } catch (e) {
-      // 处理任何异常，例如无法访问存储
+      return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> getUserInfo() async {
+    var url = Uri.parse('$_baseUrl/api/get-user-info/'); // 修改为正确的API路径
+    
+    var accessToken = await _getToken();
+    var response = await client.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      return data;
+    } else {
+      // 打印错误日志或进行其他错误处理
+      print('Failed to fetch user info: ${response.body}');
       return null;
     }
   }

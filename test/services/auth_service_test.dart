@@ -88,7 +88,7 @@ void main() {
       AuthService.client = client; // Replace http client with mock client
 
       // Act
-      final result = await AuthService.verifyEmail('verification_code');
+      final result = await AuthService.verify('verification_code');
 
       // Assert
       expect(result, true);
@@ -102,7 +102,7 @@ void main() {
       AuthService.client = client; // Replace http client with mock client
 
       // Act
-      final result = await AuthService.verifyEmail('invalid_code');
+      final result = await AuthService.verify('invalid_code');
 
       // Assert
       expect(result, false);

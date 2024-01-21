@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import '../models/traffic_violation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/traffic_violation.dart';
 
 var logger = Logger();
 
 class ReportService {
-  final String apiUrl = 'http://127.0.0.1:8000/reports/api/traffic-violations-list/';
+  // final String apiUrl = 'http://127.0.0.1:8000/reports/api/traffic-violations-list/';
+  static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/reports';
+
   http.Client client;
 
   ReportService({http.Client? client}) : client = client ?? http.Client();
@@ -15,9 +20,11 @@ class ReportService {
   Future<bool> createReport(
       TrafficViolation violation, List<XFile> mediaFiles) async {
     try {
+      var url = Uri.parse('$_baseUrl/api/create-report/'); // 更新为新的API路径
+
       var reportJson = violation.toJson();
 
-      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+      var request = http.MultipartRequest('POST', Uri.parse(url as String));
       reportJson.forEach((key, value) {
         if (value != null) {
           request.fields[key] = value.toString();
@@ -45,7 +52,8 @@ class ReportService {
   }
 
   Future<List<TrafficViolation>> getReports({int page = 1}) async {
-    var response = await http.get(Uri.parse('$apiUrl?page=$page'));
+    var url = Uri.parse('$_baseUrl/api/traffic-violations-list/'); // 更新为新的API路径
+    var response = await http.get(Uri.parse('$url?page=$page'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
@@ -58,7 +66,8 @@ class ReportService {
 
   // 獲取特定違規報告的方法
   Future<TrafficViolation> getViolation(int recordId) async {
-    var response = await http.get(Uri.parse('$apiUrl$recordId/'));
+    var url = Uri.parse('$_baseUrl/api/traffic-violations-detail/'); // 更新为新的API路径
+    var response = await http.get(Uri.parse('$url$recordId/'));
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -73,11 +82,15 @@ class ReportService {
   Future<bool> updateReport(TrafficViolation violation,
       {List<XFile>? localMediaFiles, List<String>? remoteMediaFiles}) async {
     try {
+      var url = Uri.parse('$_baseUrl/api/update-report/${violation.id}/');
+
       var reportJson = violation.toJson();
 
-      // 假設後端 API 需要 PUT 請求來更新報告
-      var request =
-          http.MultipartRequest('PUT', Uri.parse('$apiUrl${violation.id}/'));
+      var request = http.MultipartRequest('PUT', url);
+
+      // 设置请求头，例如身份验证标头
+      // request.headers['Authorization'] = 'Bearer $token';
+
       reportJson.forEach((key, value) {
         if (value != null) {
           request.fields[key] = value.toString();
@@ -87,8 +100,9 @@ class ReportService {
       // 添加本地媒体文件
       if (localMediaFiles != null) {
         for (var file in localMediaFiles) {
+          var field = 'media'; // 请确保与后端API的约定一致
           var multipartFile =
-              await http.MultipartFile.fromPath('media', file.path);
+              await http.MultipartFile.fromPath(field, file.path);
           request.files.add(multipartFile);
         }
       }
@@ -104,10 +118,20 @@ class ReportService {
         return true;
       } else {
         logger.d('Failed to update report: ${response.statusCode}');
+        // 返回更具体的错误信息
         return false;
       }
+    } on SocketException catch (e) {
+      logger.d('Network error: $e');
+      // 返回网络错误信息
+      return false;
+    } on HttpException catch (e) {
+      logger.d('HTTP error: $e');
+      // 返回HTTP错误信息
+      return false;
     } catch (e) {
       logger.d('Caught error: $e');
+      // 返回其他错误信息
       return false;
     }
   }

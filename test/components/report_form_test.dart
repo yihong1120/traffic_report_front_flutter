@@ -17,8 +17,8 @@ void main() {
         date: DateTime.now(),
         time: TimeOfDay.now(),
         violation: 'Speeding',
-        licensePlate: 'ABC123',
-        location: 'Main Street',
+        license_plate: 'ABC123',
+        address: 'Main Street',
         officer: 'Officer Doe',
         status: 'Reported',
       );

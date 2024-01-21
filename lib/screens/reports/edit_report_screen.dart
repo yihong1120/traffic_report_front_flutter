@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:traffic_report_front_flutter/screens/accounts/login.dart';
+import 'package:traffic_report_front_flutter/services/auth_service.dart';
 import '../../models/traffic_violation.dart';
 import '../../models/media_file.dart';
 import '../../services/report_service.dart';
@@ -19,6 +21,31 @@ class EditReportPage extends StatefulWidget {
 }
 
 class EditReportPageState extends State<EditReportPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus(); // 检查登录状态
+  }
+
+  void _checkLoginStatus() async {
+      bool isLoggedIn = await AuthService.isLoggedIn();
+      if (!isLoggedIn) {
+          final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LoginPage(redirectTo: '/edit'),
+              ),
+          );
+
+          // 如果result为true，表示用户已成功登录
+          if (result == true) {
+              // 你可以在这里重新加载页面，或者进行其他需要的操作
+              setState(() {});
+          }
+      }
+  }
+
   late TrafficViolation _violation;
   final ImagePicker _picker = ImagePicker();
   final List<XFile> _localMediaFiles = []; // 用于存储本地媒体文件
