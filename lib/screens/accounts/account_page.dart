@@ -10,7 +10,8 @@ class AccountPage extends StatefulWidget {
 
 class AccountPageState extends State<AccountPage> {
   bool _isLoggedIn = false; // 这个应该根据实际的登录状态来设置
-  // 可以添加更多的用户信息，例如用户名、电子邮件等
+  String _username = ''; // 假设你有一个用户名变量
+  String _email = ''; // 假设你有一个电子邮件变量
 
   @override
   void initState() {
@@ -27,6 +28,8 @@ class AccountPageState extends State<AccountPage> {
     if (!_isLoggedIn) {
       // 如果用户未登录，使用先前获取的 Navigator 状态导航到登录页面
       navigator.pushReplacementNamed('/login');
+    } else {
+      await _fetchUserInfo();  // 获取用户信息
     }
     // 通知 Flutter 需要重建 Widget
     if (mounted) {
@@ -34,14 +37,37 @@ class AccountPageState extends State<AccountPage> {
     }
   }
 
-  void _logout() async {
-    // 获取 Navigator 状态
-    final navigator = Navigator.of(context);
+  Future<void> _fetchUserInfo() async {
+    var userInfo = await AuthService.getUserInfo();
+    if (!mounted) return;  // 检查Widget是否还挂载
 
-    // 调用注销服务
-    await AuthService.logout();
-    // 导航回登录页面
-    navigator.pushReplacementNamed('/login');
+    if (userInfo != null) {
+      setState(() {
+        _username = userInfo['username'] ?? 'N/A';  // 根据你的API调整字段名
+        _email = userInfo['email'] ?? 'N/A';        // 根据你的API调整字段名
+      });
+    } else {
+      // 处理userInfo为空的情况，例如通过显示错误消息
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to fetch user info')),
+      );
+    }
+  }
+
+  void _logout() async {
+    final navigator = Navigator.of(context);
+    bool loggedOut = await AuthService.logout();
+    if (!mounted) return;  // Add this check
+    
+    if (loggedOut) {
+      // 如果注销成功，导航回登录页面
+      navigator.pushReplacementNamed('/login');
+    } else {
+      // 如果注销失败，显示错误信息
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to log out')),
+      );
+    }
   }
 
   @override
@@ -60,42 +86,57 @@ class AccountPageState extends State<AccountPage> {
       appBar: AppBar(
         title: const Text('Account'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
           children: [
-            const Text('Welcome to your account page!'),
             const SizedBox(height: 20),
-            // 显示更多的用户信息
-
+            // 用户名
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Username'),
+              subtitle: Text(_username),
+            ),
+            const Divider(),
+            // 电子邮件
+            ListTile(
+              leading: const Icon(Icons.email),
+              title: const Text('Email'),
+              subtitle: Text(_email),
+            ),
+            const Divider(),
             // 更改密码按钮
-            ElevatedButton(
-              onPressed: () {
+            ListTile(
+              leading: const Icon(Icons.lock),
+              title: const Text('Change Password'),
+              onTap: () {
                 Navigator.of(context).pushNamed('/password-change');
               },
-              child: const Text('Change Password'),
             ),
-
+            const Divider(),
             // 账户删除确认按钮
-            ElevatedButton(
-              onPressed: () {
+            ListTile(
+              leading: const Icon(Icons.delete_forever),
+              title: const Text('Delete Account'),
+              onTap: () {
                 Navigator.of(context).pushNamed('/account-delete-confirm');
               },
-              child: const Text('Delete Account'),
             ),
-
+            const Divider(),
             // 社交连接页面按钮
-            ElevatedButton(
-              onPressed: () {
+            ListTile(
+              leading: const Icon(Icons.link),
+              title: const Text('Social Connections'),
+              onTap: () {
                 Navigator.of(context).pushNamed('/social-connections');
               },
-              child: const Text('Social Connections'),
             ),
-
+            const Divider(),
             // 注销按钮
-            ElevatedButton(
-              onPressed: _logout,
-              child: const Text('Logout'),
+            ListTile(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text('Logout'),
+              onTap: _logout,
             ),
           ],
         ),
