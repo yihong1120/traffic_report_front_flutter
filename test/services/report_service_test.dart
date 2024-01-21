@@ -9,6 +9,15 @@ import 'package:flutter/material.dart';
 
 class MockClient extends Mock implements http.Client {}
 
+import 'dart:convert';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:traffic_report_front_flutter/services/report_service.dart';
+import 'package:traffic_report_front_flutter/models/traffic_violation.dart';
+import 'package:flutter/material.dart';
+
 void main() {
   group('ReportService', () {
     late ReportService service;
