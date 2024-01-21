@@ -7,7 +7,7 @@ class AuthService {
   static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/accounts';
 
   // Allow for the storage to be set for testing purposes
-  static FlutterSecureStorage storage = FlutterSecureStorage();
+  static FlutterSecureStorage storage = const FlutterSecureStorage();
 
   // Allow for the client to be set for testing purposes
   static http.Client client = http.Client();
