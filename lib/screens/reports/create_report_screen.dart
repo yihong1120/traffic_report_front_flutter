@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:traffic_report_front_flutter/screens/accounts/login.dart';
 import 'package:video_player/video_player.dart';
 import 'package:logger/logger.dart';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
+import '../../services/auth_service.dart';
 import '../../components/media_picker.dart';
 import '../../components/media_preview.dart';
 import '../../components/report_form.dart';
@@ -23,6 +25,31 @@ class CreateReportPage extends StatefulWidget {
 }
 
 class CreateReportPageState extends State<CreateReportPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus(); // 检查登录状态
+  }
+
+  void _checkLoginStatus() async {
+      bool isLoggedIn = await AuthService.isLoggedIn();
+      if (!isLoggedIn) {
+          final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LoginPage(redirectTo: '/create'),
+              ),
+          );
+
+          // 如果result为true，表示用户已成功登录
+          if (result == true) {
+              // 你可以在这里重新加载页面，或者进行其他需要的操作
+              setState(() {});
+          }
+      }
+  }
+
   final _formKey = GlobalKey<FormState>();
   final List<XFile> _mediaFiles = [];
   final TrafficViolation _violation = TrafficViolation(

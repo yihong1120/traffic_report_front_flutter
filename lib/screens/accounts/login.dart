@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String? redirectTo;
+
+  const LoginPage({super.key, this.redirectTo});
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -22,20 +24,16 @@ class LoginPageState extends State<LoginPage> {
         _isLoading = true;
       });
 
-      // 在执行异步操作前获取 Navigator 和 ScaffoldMessenger 状态
-      final navigator = Navigator.of(context);
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
-
       // 执行异步操作
       bool loggedIn = await AuthService.login(_username, _password);
 
-      // 根据操作结果使用先前获取的状态
       if (loggedIn) {
-        navigator.pushReplacementNamed('/accounts'); // 导航到账户页面，路由需要根据你的项目设置
-      } else {
-        scaffoldMessenger.showSnackBar(
-          const SnackBar(content: Text('Invalid username or password')),
-        );
+        // 如果有重定向URL，则导航到该URL，否则导航到默认的账户页面
+        if (widget.redirectTo != null) {
+            Navigator.pop(context, true); // 返回true表示登录成功
+        } else {
+            Navigator.pushReplacementNamed(context, '/accounts');
+        }
       }
 
       setState(() {

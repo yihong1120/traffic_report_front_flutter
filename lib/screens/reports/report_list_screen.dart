@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traffic_report_front_flutter/screens/accounts/login.dart';
+import 'package:traffic_report_front_flutter/services/auth_service.dart';
 import '../../models/traffic_violation.dart';
 import '../../services/report_service.dart';
 import 'edit_report_screen.dart';
@@ -11,6 +13,31 @@ class ReportListPage extends StatefulWidget {
 }
 
 class ReportListPageState extends State<ReportListPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus(); // 检查登录状态
+  }
+
+  void _checkLoginStatus() async {
+      bool isLoggedIn = await AuthService.isLoggedIn();
+      if (!isLoggedIn) {
+          final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LoginPage(redirectTo: '/reports'),
+              ),
+          );
+
+          // 如果result为true，表示用户已成功登录
+          if (result == true) {
+              // 你可以在这里重新加载页面，或者进行其他需要的操作
+              setState(() {});
+          }
+      }
+  }
+
   final ReportService _reportService = ReportService();
   final List<TrafficViolation> _reports = [];
   int _currentPage = 1;
