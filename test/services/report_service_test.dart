@@ -69,7 +69,7 @@ void main() {
                 ]),
                 200));
 
-        expect(await service.getReports(), isA<List<TrafficViolation>>());
+        expect(await service.getReports(), equals(<TrafficViolation>[]);
       },
     );
 
