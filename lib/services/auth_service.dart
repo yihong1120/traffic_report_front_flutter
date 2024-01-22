@@ -192,7 +192,7 @@ class AuthService {
       return true;
     } else {
       // 如果刷新失败，可能需要执行注销或其他操作
-      print('Failed to refresh token: ${response.statusCode}');
+      logger.v('Failed to refresh token: ${response.statusCode}');
       return false;
     }
   }
