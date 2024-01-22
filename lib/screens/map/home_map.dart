@@ -148,7 +148,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
                 status: status,
               ),
             ),
-        ],
+        ], // Modified code
       ),
     );
   }
