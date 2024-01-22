@@ -34,6 +34,9 @@ void main() {
           license_plate: 'ABC123',
           violation: '紅線停車',
           status: 'Pending',
+            address: 'Main St and 1st Ave',
+            officer: 'Officer123',
+            mediaFiles: [], // Assuming no media files for simplicity
           address: 'Main St and 1st Ave',
           officer: 'Officer123',
           mediaFiles: [], // Assuming no media files for simplicity
