@@ -7,7 +7,7 @@ class TrafficViolation {
   String? title; // 添加 title 属性
   DateTime? date;
   TimeOfDay? time;
-  String? license_plate;
+  String? licensePlate;
   String? violation;
   String? status;
   String? address;
