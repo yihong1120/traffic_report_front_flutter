@@ -87,7 +87,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
     String formattedDate = _selectedViolation?.date != null
         ? DateFormat('yyyy-MM-dd').format(_selectedViolation!.date!)
         : 'Unknown Date';
-    String license_plate = _selectedViolation?.license_plate ?? 'Unknown License Plate';
+    String licensePlate = _selectedViolation?.license_plate ?? 'Unknown License Plate';
     String violation = _selectedViolation?.violation ?? 'Unknown Violation';
     String address = _selectedViolation?.address ?? 'Unknown address';
     String time = formatTimeOfDay(_selectedViolation?.time);
@@ -139,7 +139,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
               top: 100,
               right: 50,
               child: CustomInfoWindow(
-                license_plate: license_plate,
+                licensePlate: licensePlate,
                 violation: violation,
                 date: formattedDate,
                 time: time,
