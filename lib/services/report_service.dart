@@ -11,7 +11,6 @@ import '../models/traffic_violation.dart';
 var logger = Logger();
 
 class ReportService {
-  // final String apiUrl = 'http://127.0.0.1:8000/reports/api/traffic-violations-list/';
   static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/reports';
 
   http.Client client;
