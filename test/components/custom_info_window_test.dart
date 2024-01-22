@@ -15,7 +15,7 @@ void main() {
       // Build the CustomInfoWindow widget
       await tester.pumpWidget(const MaterialApp(
         home: Scaffold(
-          body: CustomInfoWindow(
+          body: CustomInfoWindow(address: 'Test Address', officer: 'Test Officer', status: 'Test Status', time: 'Test Time',
             license_plate: testLicensePlate,
             violation: testViolation,
             date: testDate,
