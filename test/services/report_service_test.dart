@@ -74,14 +74,11 @@ void main() {
     );
 
     test(
-      'getViolation should return a TrafficViolation when the http call completes successfully',
+      'getViolation should throw an exception when the http call is unsuccessful',
       () async {
         const int recordId = 1;
-        when(client.get(isA<Uri>() as Uri))
-            .thenAnswer((_) async => http.Response(
-                jsonEncode({
-                  'id': recordId,
-                  'title': 'Parking Violation',
+        final response404 = http.Response('', 404);
+        when(client.get(isA<Uri>())).thenAnswer((_) async => response404);
                   'date': '2024-01-15',
                   'time': '14:00',
                   'licensePlate': 'ABC123',
