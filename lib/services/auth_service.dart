@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class AuthService {
   static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/accounts';
@@ -154,12 +155,61 @@ class AuthService {
     return token != null && token.isNotEmpty;
   }
 
+  // 這個公共方法允許其他服務獲取 access token
+  static Future<String?> getAccessToken() async {
+    return await _getToken();
+  }
+
+  // 這是一個私有方法，用於從安全存儲讀取 access token
   static Future<String?> _getToken() async {
     try {
       return await storage.read(key: 'access_token');
     } catch (e) {
+      // 這裡你可以添加錯誤處理邏輯，如日誌記錄
+      print('Error reading access token: $e');
       return null;
     }
+  }
+
+  // 刷新令牌的方法
+  static Future<bool> refreshToken() async {
+    var refreshToken = await storage.read(key: 'refresh_token');
+    if (refreshToken == null) {
+      print('No refresh token available.');
+      return false;
+    }
+
+    var url = Uri.parse('$_baseUrl/api/token/refresh/'); // 根据你的API路径进行调整
+    var response = await client.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'refresh': refreshToken}),
+    );
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      await storage.write(key: 'access_token', value: data['access']);
+      return true;
+    } else {
+      // 如果刷新失败，可能需要执行注销或其他操作
+      print('Failed to refresh token: ${response.statusCode}');
+      return false;
+    }
+  }
+
+  // 一个辅助方法，用于在发出请求之前检查和刷新令牌
+  static Future<String?> getValidAccessToken() async {
+    var accessToken = await _getToken();
+    if (accessToken == null || _isTokenExpired(accessToken)) {
+      // 如果令牌为空或已过期，尝试刷新
+      bool refreshed = await refreshToken();
+      if (refreshed) {
+        accessToken = await _getToken(); // 重新获取新的访问令牌
+      } else {
+        return null; // 刷新失败，返回 null
+      }
+    }
+    return accessToken;
   }
 
   static Future<Map<String, dynamic>?> getUserInfo() async {
@@ -181,6 +231,31 @@ class AuthService {
       // 打印错误日志或进行其他错误处理
       print('Failed to fetch user info: ${response.body}');
       return null;
+    }
+  }
+
+  // 检查 JWT 令牌是否过期
+  static bool _isTokenExpired(String token) {
+    try {
+      // 解码 token，但不验证签名
+      final jwt = JWT.decode(token);
+
+      // 获取 token 的过期时间
+      final DateTime? expiryDate = jwt.payload['exp'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(jwt.payload['exp'] * 1000)
+        : null;
+
+      // 检查 token 是否已过期
+      if (expiryDate != null) {
+        return expiryDate.isBefore(DateTime.now());
+      } else {
+        // 如果 token 没有 exp 字段，假定它没有过期
+        return false;
+      }
+    } catch (e) {
+      // 如果解码失败或其他错误发生
+      print('Error decoding token: $e');
+      return true; // 如果有错误，默认认为 token 已过期
     }
   }
 }
