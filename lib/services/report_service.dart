@@ -5,12 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import '../models/traffic_violation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../services/auth_service.dart';
 import '../models/traffic_violation.dart';
 
 var logger = Logger();
 
 class ReportService {
-  // final String apiUrl = 'http://127.0.0.1:8000/reports/api/traffic-violations-list/';
   static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/reports';
 
   http.Client client;
@@ -52,8 +52,18 @@ class ReportService {
   }
 
   Future<List<TrafficViolation>> getReports({int page = 1}) async {
-    var url = Uri.parse('$_baseUrl/api/traffic-violations-list/'); // 更新为新的API路径
-    var response = await http.get(Uri.parse('$url?page=$page'));
+    var url = Uri.parse('$_baseUrl/api/traffic-violations-list/?page=$page');
+
+    // 使用 AuthService 获取 JWT token
+    var token = await AuthService.getAccessToken(); // 如果 _getToken 是私有的，请更改为 public 或在 AuthService 内部调用它
+
+    var response = await http.get(
+      url,
+      // 将 token 添加到请求的 headers 中
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
 
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
