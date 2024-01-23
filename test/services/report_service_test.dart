@@ -83,7 +83,7 @@ void main() {
                   'time': '14:00',
                   'licensePlate': 'ABC123',
                   'violation': '紅線停車',
-                  'status': 'Pending',
+                  'status': 'Approved',
                   'location': 'Main St and 1st Ave',
                   'officer': 'Officer123',
                   'mediaFiles': [],
