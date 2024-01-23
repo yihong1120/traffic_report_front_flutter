@@ -34,9 +34,6 @@ void main() {
           license_plate: 'ABC123',
           violation: '紅線停車',
           status: 'Pending',
-            address: 'Main St and 1st Ave',
-            officer: 'Officer123',
-            mediaFiles: [], // Assuming no media files for simplicity
           address: 'Main St and 1st Ave',
           officer: 'Officer123',
           mediaFiles: [], // Assuming no media files for simplicity
@@ -50,47 +47,52 @@ void main() {
     test(
       'getReports should return a list of TrafficViolation when the http call completes successfully',
       () async {
-        when(client.get(isA<Uri>() as Uri))
-            .thenAnswer((_) async => http.Response(
-                jsonEncode([
-                  {
-                    'id': 1,
-                    'title': 'Parking Violation',
-                    'date': '2024-01-15',
-                    'time': '14:00',
-                    'licensePlate': 'ABC123',
-                    'violation': '紅線停車',
-                    'status': 'Pending',
-                    'location': 'Main St and 1st Ave',
-                    'officer': 'Officer123',
-                    'mediaFiles': [],
-                  },
-                  // Add more violation reports if needed
-                ]),
-                200));
+        when(client.get(any)).thenAnswer((_) async => http.Response(
+            jsonEncode([
+              {
+                'id': 1,
+                'title': 'Parking Violation',
+                'date': '2024-01-15',
+                'time': '14:00',
+                'license_plate': 'ABC123',
+                'violation': '紅線停車',
+                'status': 'Pending',
+                'address': 'Main St and 1st Ave',
+                'officer': 'Officer123',
+                'mediaFiles': [],
+              },
+              // Add more violation reports if needed
+            ]),
+            200));
 
-        expect(await service.getReports(), equals(<TrafficViolation>[]);
+        final reports = await service.getReports();
+        expect(reports, isNotEmpty);
+        expect(reports.first, isA<TrafficViolation>());
       },
     );
 
     test(
-      'getViolation should throw an exception when the http call is unsuccessful',
+      'getViolation should return a TrafficViolation when the http call completes successfully',
       () async {
         const int recordId = 1;
-        final response404 = http.Response('', 404);
-        when(client.get(isA<Uri>())).thenAnswer((_) async => response404);
-                  'date': '2024-01-15',
-                  'time': '14:00',
-                  'licensePlate': 'ABC123',
-                  'violation': '紅線停車',
-                  'status': 'Pending',
-                  'location': 'Main St and 1st Ave',
-                  'officer': 'Officer123',
-                  'mediaFiles': [],
-                }),
-                200));
+        when(client.get(any)).thenAnswer((_) async => http.Response(
+            jsonEncode({
+              'id': recordId,
+              'title': 'Parking Violation',
+              'date': '2024-01-15',
+              'time': '14:00',
+              'license_plate': 'ABC123',
+              'violation': '紅線停車',
+              'status': 'Pending',
+              'address': 'Main St and 1st Ave',
+              'officer': 'Officer123',
+              'mediaFiles': [],
+            }),
+            200));
 
-        expect(await service.getViolation(recordId), isA<TrafficViolation>());
+        final violation = await service.getViolation(recordId);
+        expect(violation, isA<TrafficViolation>());
+        expect(violation.id, recordId);
       },
     );
 
