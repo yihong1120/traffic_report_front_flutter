@@ -12,8 +12,27 @@ class CustomInfoWindow extends StatelessWidget {
   const CustomInfoWindow({
     super.key,
     required this.license_plate,
+    required this.violation, required this.address, required this.date, required this.time, required this.officer, required this.status,
+    /// Constructor for CustomInfoWindow.
+  ///
+  /// The following parameters are required:
+  /// - license_plate
+  /// - violation
+  /// - address
+  /// - date
+  /// - time
+  /// - officer
+  /// - status
+  const CustomInfoWindow({
+    super.key,
+    required this.license_plate,
     required this.violation,
     required this.address,
+    required this.date,
+    required this.time,
+    required this.officer,
+    required this.status,
+  });
     required this.date,
     required this.time,
     required this.officer,
@@ -45,6 +64,8 @@ class CustomInfoWindow extends StatelessWidget {
           Text('地點: $address',style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('日期: $date',style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('時間: $time',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('承辦人: $officer',style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text('開單情況: $status',style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('承辦人: $officer',style: const TextStyle(fontWeight: FontWeight.bold)),
           Text('開單情況: $status',style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
