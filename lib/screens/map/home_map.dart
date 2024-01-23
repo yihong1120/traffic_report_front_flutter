@@ -138,7 +138,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
               top: 100,
               right: 50,
               child: CustomInfoWindow(
-                license_plate: license_plate,
+                licensePlate: licensePlate,
                 violation: violation,
                 date: formattedDate,
                 time: time,
