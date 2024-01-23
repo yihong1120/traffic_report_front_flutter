@@ -104,6 +104,21 @@ void main() {
     test(
       'updateReport should return true when the http call completes successfully',
       () async {
+        // Arrange
+        final violation = TrafficViolation(
+          id: 1,
+          title: 'Updated Parking Violation',
+          date: DateTime.parse('2024-01-15'),
+          time: const TimeOfDay(hour: 14, minute: 0),
+          license_plate: 'ABC123',
+          violation: '紅線停車',
+          status: 'Approved',
+          address: 'Main St and 1st Ave',
+          officer: 'Officer123',
+          mediaFiles: [], // Assuming no media files for simplicity
+        );
+        final localMediaFiles = [XFile('path/to/file')]; // Mocked file paths
+        final remoteMediaFiles = ['http://example.com/file'];
         when(client.send(isA<http.BaseRequest>() as http.BaseRequest))
             .thenAnswer((_) async =>
                 http.StreamedResponse(Stream.value(utf8.encode('')), 200));
