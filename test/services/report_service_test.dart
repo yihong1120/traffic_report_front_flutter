@@ -66,6 +66,12 @@ void main() {
                 ]),
                 200));
 
+  /// This function retrieves a TrafficViolation when the http call completes successfully.
+  ///
+  /// Returns:
+  ///   A TrafficViolation when the http call completes successfully.
+  test
+
         expect(await service.getReports(), isA<List<TrafficViolation>>());
       },
     );
