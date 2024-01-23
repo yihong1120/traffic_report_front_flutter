@@ -8,7 +8,7 @@ import 'package:traffic_report_front_flutter/screens/accounts/login.dart';
 import 'package:video_player/video_player.dart';
 import 'package:logger/logger.dart';
 import '../../models/traffic_violation.dart';
-import '../../services/report_service.dart';
+
 import '../../services/auth_service.dart';
 import '../../components/media_picker.dart';
 import '../../components/media_preview.dart';
