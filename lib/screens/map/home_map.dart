@@ -63,7 +63,6 @@ class _HomeMapPageState extends State<HomeMapPage> {
       debugPrint('Error fetching traffic violation details: $error');
     });
   }
-
   void _searchData() {
     _mapService.searchData(_searchKeyword, _selectedDateRange, (results) {
       setState(() {
