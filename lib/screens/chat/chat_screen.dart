@@ -6,7 +6,7 @@ import 'package:traffic_report_front_flutter/services/auth_service.dart';
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
 
-  @override
+  
   ChatScreenState createState() => ChatScreenState();
 }
 
@@ -19,9 +19,10 @@ class ChatScreenState extends State<ChatPage> {
   }
 
   void _checkLoginStatus() async {
-      bool isLoggedIn = await AuthService.isLoggedIn();
+      bool isLoggedIn = await AuthService.isLoggedIn(context);
       if (!isLoggedIn) {
           final result = await Navigator.push(
+                        context,
               context,
               MaterialPageRoute(
                   builder: (context) => const LoginPage(redirectTo: '/chat'),
@@ -39,7 +40,7 @@ class ChatScreenState extends State<ChatPage> {
   final TextEditingController _controller = TextEditingController();
   String _response = '';
 
-  void _sendMessage() async {
+  Future<void> _sendMessage(BuildContext context) async {
     var response = await http.post(
       Uri.parse('127.0.0.1/api/chat-with-gemini/'),
       headers: <String, String>{
@@ -47,6 +48,7 @@ class ChatScreenState extends State<ChatPage> {
       },
       body: <String, String>{
         'message': _controller.text,
+        'context': context,
       },
     );
     setState(() {
