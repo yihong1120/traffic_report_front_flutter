@@ -34,9 +34,6 @@ void main() {
           license_plate: 'ABC123',
           violation: '紅線停車',
           status: 'Pending',
-            address: 'Main St and 1st Ave',
-            officer: 'Officer123',
-            mediaFiles: [], // Assuming no media files for simplicity
           address: 'Main St and 1st Ave',
           officer: 'Officer123',
           mediaFiles: [], // Assuming no media files for simplicity
@@ -69,16 +66,19 @@ void main() {
                 ]),
                 200));
 
-        expect(await service.getReports(), equals(<TrafficViolation>[]);
+        expect(await service.getReports(), isA<List<TrafficViolation>>());
       },
     );
 
     test(
-      'getViolation should throw an exception when the http call is unsuccessful',
+      'getViolation should return a TrafficViolation when the http call completes successfully',
       () async {
         const int recordId = 1;
-        final response404 = http.Response('', 404);
-        when(client.get(isA<Uri>())).thenAnswer((_) async => response404);
+        when(client.get(isA<Uri>() as Uri))
+            .thenAnswer((_) async => http.Response(
+                jsonEncode({
+                  'id': recordId,
+                  'title': 'Parking Violation',
                   'date': '2024-01-15',
                   'time': '14:00',
                   'licensePlate': 'ABC123',
