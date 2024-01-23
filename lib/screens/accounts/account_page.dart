@@ -43,8 +43,8 @@ class AccountPageState extends State<AccountPage> {
 
     if (userInfo != null) {
       setState(() {
-        _username = userInfo['username'] ?? 'N/A';  // 根据你的API调整字段名
-        _email = userInfo['email'] ?? 'N/A';        // 根据你的API调整字段名
+        _username = userInfo['user']['username'] ?? 'N/A';  // 根据你的API调整字段名
+        _email = userInfo['user']['email'] ?? 'N/A';        // 根据你的API调整字段名
       });
     } else {
       // 处理userInfo为空的情况，例如通过显示错误消息
