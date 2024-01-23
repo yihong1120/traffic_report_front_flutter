@@ -84,13 +84,20 @@ void main() {
                   'licensePlate': 'ABC123',
                   'violation': '紅線停車',
                   'status': 'Pending',
-                  'location': 'Main St and 1st Ave',
+                  'address': 'Main St and 1st Ave',
+                  'officer': 'Officer123',
+                  'mediaFiles': [],
                   'officer': 'Officer123',
                   'mediaFiles': [],
                 }),
                 200));
 
-        expect(await service.getViolation(recordId), isA<TrafficViolation>());
+        expect(await service.getViolation(recordId), isA<TrafficViolation>()),
+        
+        // Assert that the returned TrafficViolation object has correct values for address, officer, and mediaFiles
+        expect((await service.getViolation(recordId)).address, 'Main St and 1st Ave');
+        expect((await service.getViolation(recordId)).officer, 'Officer123');
+        expect((await service.getViolation(recordId)).mediaFiles, isEmpty);
       },
     );
 
