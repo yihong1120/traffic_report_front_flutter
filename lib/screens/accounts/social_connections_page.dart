@@ -3,6 +3,7 @@ import '../../models/social_account.dart';
 import '../../services/social_service.dart';
 
 class SocialConnectionsPage extends StatefulWidget {
+  /// Represents the page for managing social account connections.
   const SocialConnectionsPage({super.key});
 
   @override
@@ -10,6 +11,7 @@ class SocialConnectionsPage extends StatefulWidget {
 }
 
 class SocialConnectionsPageState extends State<SocialConnectionsPage> {
+  /// Represents the state of the SocialConnectionsPage.
   List<SocialAccount> _connectedAccounts = [];
   List<SocialProvider> _availableProviders = [];
   final SocialService _socialService = SocialService();
@@ -20,6 +22,9 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     _loadSocialConnections();
   }
 
+  /// Loads the connected social accounts and available social account providers.
+  /// No parameters are required.
+  /// Returns void.
   void _loadSocialConnections() async {
     try {
       _connectedAccounts = await _socialService.getConnectedAccounts();
@@ -31,6 +36,9 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     }
   }
 
+  /// Disconnects the specified social account.
+  /// Parameters:
+  /// - account: The social account to disconnect.
   void _disconnectSocialAccount(SocialAccount account) async {
     try {
       bool disconnected = await _socialService.disconnectAccount(account);
@@ -81,6 +89,9 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     );
   }
 
+  /// Builds a list tile for the specified social account.
+  /// Parameters:
+  /// - account: The social account.
   Widget _buildConnectedAccountItem(SocialAccount account) {
     return ListTile(
       title: Text('Provider: ${account.provider}'),
@@ -92,6 +103,9 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     );
   }
 
+  /// Builds a list tile for the specified social provider.
+  /// Parameters:
+  /// - provider: The social provider.
   Widget _buildProviderItem(SocialProvider provider) {
     return ListTile(
       title: Text('Connect with ${provider.name}'),
