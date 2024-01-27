@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomInfoWindow extends StatelessWidget {
-  final String license_plate;
+  final String licensePlate;
   final String violation;
   final String address;
   final String date;
