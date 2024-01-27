@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:traffic_report_front_flutter/services/social_service.dart';
+import 'package:traffic_report_front_flutter/models/social_account.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,6 +13,7 @@ import 'package:traffic_report_front_flutter/models/social_account.dart';
 class MockClient extends Mock implements http.Client {}
 
 void main() {
+  // Add unit tests for SocialService methods
   group('SocialService', () {
     late http.Client client;
     late SocialService socialService;
