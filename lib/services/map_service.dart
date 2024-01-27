@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/traffic_violation.dart';
 
 class MapService {
   final Set<Marker> _markers = {};
-  final String _baseUrl = 'http://127.0.0.1:8000/api';
+  final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/reports';
 
   Set<Marker> get markers => _markers;
 

@@ -11,10 +11,8 @@ class SocialConnectionsPage extends StatefulWidget {
 
 class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   List<SocialAccount> _connectedAccounts = [];
-  List<SocialProvider> _availableProviders =
-      []; // Assuming SocialProvider is a model containing provider information
-  final SocialService _socialService =
-      SocialService(); // Create an instance of SocialService
+  List<SocialProvider> _availableProviders = [];
+  final SocialService _socialService = SocialService();
 
   @override
   void initState() {
@@ -23,22 +21,27 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   }
 
   void _loadSocialConnections() async {
-    // Load connected social accounts and available social account providers
-    _connectedAccounts = await _socialService
-        .getConnectedAccounts(); // Call the method on the instance
-    _availableProviders = await SocialService
-        .getAvailableProviders(); // Call the method on the instance
-    setState(() {});
+    try {
+      _connectedAccounts = await _socialService.getConnectedAccounts();
+      _availableProviders = await _socialService.getAvailableProviders();
+      setState(() {});
+    } catch (e) {
+      // 弹窗显示错误或者以其他方式通知用户
+      print('Error loading social connections: $e');
+    }
   }
 
   void _disconnectSocialAccount(SocialAccount account) async {
-    // Handle disconnect logic
-    bool disconnected = await SocialService.disconnectAccount(
-        account); // Call the method on the instance
-    if (disconnected) {
-      setState(() {
-        _connectedAccounts.remove(account);
-      });
+    try {
+      bool disconnected = await _socialService.disconnectAccount(account);
+      if (disconnected) {
+        setState(() {
+          _connectedAccounts.remove(account);
+        });
+      }
+    } catch (e) {
+      // 弹窗显示错误或者以其他方式通知用户
+      print('Error disconnecting account: $e');
     }
   }
 
@@ -59,14 +62,7 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
                   'Social Account Connections',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                ..._connectedAccounts.map((account) => ListTile(
-                      title: Text('Provider: ${account.provider}'),
-                      subtitle: Text('UID: ${account.uid}'),
-                      trailing: TextButton(
-                        onPressed: () => _disconnectSocialAccount(account),
-                        child: const Text('Disconnect'),
-                      ),
-                    )),
+                ..._connectedAccounts.map(_buildConnectedAccountItem).toList(),
                 if (_connectedAccounts.isEmpty)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -76,19 +72,32 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
                   'Connect a social account:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                ..._availableProviders.map((provider) => ListTile(
-                      title: Text('Connect with ${provider.name}'),
-                      onTap: () {
-                        // Handle connect logic
-                        SocialService.connectWithProvider(
-                            provider); // Call the method on the instance
-                      },
-                    )),
+                ..._availableProviders.map(_buildProviderItem).toList(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildConnectedAccountItem(SocialAccount account) {
+    return ListTile(
+      title: Text('Provider: ${account.provider}'),
+      subtitle: Text('UID: ${account.uid}'),
+      trailing: TextButton(
+        onPressed: () => _disconnectSocialAccount(account),
+        child: const Text('Disconnect'),
+      ),
+    );
+  }
+
+  Widget _buildProviderItem(SocialProvider provider) {
+    return ListTile(
+      title: Text('Connect with ${provider.name}'),
+      onTap: () {
+        _socialService.connectWithProvider(provider);
+      },
     );
   }
 }
