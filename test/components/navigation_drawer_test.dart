@@ -48,8 +48,7 @@ void main() {
 
         // Verify that a push event happened on the mock navigator observer
         verify(mockObserver.didPush(
-          argThat(isA<Route<dynamic>>())
-              as Route<dynamic>, // Cast to Route<dynamic>
+          argThat(isA<Route<dynamic>>()), // Cast to Route<dynamic>
           any, // Use any matcher for the second argument
         ));
 
