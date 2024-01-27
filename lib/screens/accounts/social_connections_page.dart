@@ -3,15 +3,19 @@ import '../../models/social_account.dart';
 import '../../services/social_service.dart';
 
 class SocialConnectionsPage extends StatefulWidget {
+  /// Represents the page for managing social account connections.
   const SocialConnectionsPage({super.key});
 
   @override
   SocialConnectionsPageState createState() => SocialConnectionsPageState();
 }
 
+  /// Represents the state of the SocialConnectionsPage.
 class SocialConnectionsPageState extends State<SocialConnectionsPage> {
+  /// Represents the state of the SocialConnectionsPage.
   List<SocialAccount> _connectedAccounts = [];
-  List<SocialProvider> _availableProviders = [];
+    /// Represents the state of the SocialConnectionsPage.
+  List<SocialProvider> _availableProviders = [];}
   final SocialService _socialService = SocialService();
 
   @override
@@ -20,6 +24,9 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     _loadSocialConnections();
   }
 
+  /// Loads the connected social accounts and available social account providers.
+  /// No parameters are required.
+  /// Returns void.
   void _loadSocialConnections() async {
     try {
       _connectedAccounts = await _socialService.getConnectedAccounts();
@@ -31,21 +38,10 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     }
   }
 
-  void _disconnectSocialAccount(SocialAccount account) async {
-    try {
-      bool disconnected = await _socialService.disconnectAccount(account);
-      if (disconnected) {
-        setState(() {
-          _connectedAccounts.remove(account);
-        });
-      }
-    } catch (e) {
-      // 弹窗显示错误或者以其他方式通知用户
-      print('Error disconnecting account: $e');
-    }
-  }
-
-  @override
+  /// Builds the social account connections page.
+  /// Parameters:
+  /// - context: The build context.
+  /// Returns a Scaffold widget.
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +77,37 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     );
   }
 
-  Widget _buildConnectedAccountItem(SocialAccount account) {
+  /// Builds a list tile for the specified social account.
+  /// Parameters:
+  /// Disconnects the specified social account.
+  /// Parameters:
+  /// - account: The social account to disconnect.
+  /// Returns void.
+  void _disconnectSocialAccount(SocialAccount account) async {
+    try {
+      bool disconnected = await _socialService.disconnectAccount(account);
+      if (disconnected) {
+        setState(() {
+          _connectedAccounts.remove(account);
+        });
+      }
+    } catch (e) {
+      // 弹窗显示错误或者以其他方式通知用户
+      print('Error disconnecting account: $e');
+    }
+  }
+
+  /// Builds the social account connections page.
+  /// Parameters:
+  /// - context: The build context.
+  /// Returns a Scaffold widget.
+  Widget build(BuildContext context) {
+  /// - account: The social account.
+  /// Builds a list tile for the specified social provider.
+  /// Parameters:
+  /// - provider: The social provider.
+  /// Returns void.
+  Widget _buildProviderItem(SocialProvider provider) {
     return ListTile(
       title: Text('Provider: ${account.provider}'),
       subtitle: Text('UID: ${account.uid}'),
@@ -92,7 +118,17 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
     );
   }
 
-  Widget _buildProviderItem(SocialProvider provider) {
+  /// Builds a list tile for the specified social provider.
+  /// Builds a list tile for the specified social account.
+  /// Parameters:
+  /// - account: The social account.
+  /// Returns void.
+  Widget _buildConnectedAccountItem(SocialAccount account) {
+  /// Builds a list tile for the specified social account.
+  /// Parameters:
+  /// - account: The social account.
+  /// Returns void.
+  Widget _buildConnectedAccountItem(SocialAccount account) {
     return ListTile(
       title: Text('Connect with ${provider.name}'),
       onTap: () {

@@ -5,13 +5,20 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/traffic_violation.dart';
 
+  /// Represents a service for loading and managing markers on the map.
 class MapService {
   final Set<Marker> _markers = {};
   final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/reports';
 
   Set<Marker> get markers => _markers;
 
-  Future<Set<Marker>> loadMarkers(Function(String) onMarkerTapped) async {
+    /// Represents a service for loading and managing markers on the map.
+  ///
+  /// Loads and retrieves the markers for traffic violations.
+  ///
+  /// Parameters:
+  /// - onMarkerTapped: A function to handle when a marker is tapped.
+  /// Returns a Future<Set<Marker>>.
     var url = Uri.parse('$_baseUrl/traffic-violation-markers/');
     var response = await http.get(url);
     Set<Marker> markers = {};
@@ -58,6 +65,11 @@ class MapService {
     }
   }
 
+    /// Retrieves and returns the details of a traffic violation.
+  ///
+  /// Parameters:
+  /// - trafficViolationId: The ID of the traffic violation to retrieve details for.
+  /// Returns a Future<TrafficViolation>.
   Future<TrafficViolation?> getTrafficViolationDetails(
       String trafficViolationId) async {
     var url =
@@ -77,7 +89,7 @@ class MapService {
     }
   }
 
-  Future<void> searchData(String keyword, DateTimeRange? dateRange,
+    /// Performs a search based on the provided keyword and date range.
       Function(Set<Marker>) onSearchComplete) async {
     // This is a placeholder for the search logic. You would need to implement the actual search
     // logic based on your backend API's capabilities. The following is a simple example that
