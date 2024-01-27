@@ -115,9 +115,16 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   }
 
   /// Builds a list tile for the specified social provider.
+  /// Builds a list tile for the specified social account.
   /// Parameters:
-  /// - provider: The social provider.
-  Widget _buildProviderItem(SocialProvider provider) {
+  /// - account: The social account.
+  /// Returns void.
+  Widget _buildConnectedAccountItem(SocialAccount account) {
+  /// Builds a list tile for the specified social account.
+  /// Parameters:
+  /// - account: The social account.
+  /// Returns void.
+  Widget _buildConnectedAccountItem(SocialAccount account) {
     return ListTile(
       title: Text('Connect with ${provider.name}'),
       onTap: () {
