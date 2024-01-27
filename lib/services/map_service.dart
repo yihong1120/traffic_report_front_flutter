@@ -65,6 +65,11 @@ class MapService {
     }
   }
 
+    /// Retrieves and returns the details of a traffic violation.
+  ///
+  /// Parameters:
+  /// - trafficViolationId: The ID of the traffic violation to retrieve details for.
+  /// Returns a Future<TrafficViolation>.
   Future<TrafficViolation?> getTrafficViolationDetails(
       String trafficViolationId) async {
     var url =
