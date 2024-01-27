@@ -6,28 +6,36 @@ import '../models/social_account.dart';
 
 class SocialService {
   final http.Client httpClient;
+  final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/accounts';
 
   SocialService({http.Client? client}) : httpClient = client ?? http.Client();
 
   Future<List<SocialAccount>> getConnectedAccounts() async {
-    var url = Uri.parse('${dotenv.env['API_URL']}/connected-accounts');
+    var url = Uri.parse('$_baseUrl/api/social-connections');
     var response = await httpClient.get(url);
 
     if (response.statusCode == 200) {
-      List<dynamic> accountsJson = json.decode(response.body);
-      List<SocialAccount> accounts = accountsJson
-          .map((accountJson) => SocialAccount.fromJson(accountJson))
-          .toList();
-      return accounts;
+      try {
+        List<dynamic> accountsJson = json.decode(response.body);
+        List<SocialAccount> accounts = accountsJson
+            .map((accountJson) => SocialAccount.fromJson(accountJson))
+            .toList();
+        return accounts;
+      } catch (e) {
+        print('Error parsing JSON: $e');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to parse connected accounts JSON');
+      }
     } else {
-      throw Exception('Failed to load connected accounts');
+      print('Request failed with status: ${response.statusCode}.');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to load connected accounts, status code: ${response.statusCode}');
     }
   }
 
-  static Future<List<SocialProvider>> getAvailableProviders() async {
-    // 这里的 URL 应该指向您的后端 API
-    var url = Uri.parse('${dotenv.env['API_URL']}/available-providers');
-    var response = await http.get(url);
+  Future<List<SocialProvider>> getAvailableProviders() async {
+    var url = Uri.parse('$_baseUrl/api/available-providers');
+    var response = await httpClient.get(url);
 
     if (response.statusCode == 200) {
       List<dynamic> providersJson = json.decode(response.body);
@@ -40,20 +48,16 @@ class SocialService {
     }
   }
 
-  static Future<bool> disconnectAccount(SocialAccount account) async {
-    // 这里的 URL 应该指向您的后端 API
-    var url = Uri.parse('${dotenv.env['API_URL']}/disconnect-account');
-    var response = await http.post(url, body: account.toJson());
+  Future<bool> disconnectAccount(SocialAccount account) async {
+    var url = Uri.parse('$_baseUrl/api/disconnect-account');
+    var response = await httpClient.post(url, body: account.toJson());
 
     return response.statusCode == 200;
   }
 
-  static Future<void> connectWithProvider(SocialProvider provider) async {
-    // 构建 OAuth 登录 URL
-    final String baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000';
-    final Uri loginUri = Uri.parse('$baseUrl/social/login/${provider.id}');
+  Future<void> connectWithProvider(SocialProvider provider) async {
+    final Uri loginUri = Uri.parse('$_baseUrl/api/social/login/${provider.id}');
 
-    // 使用 url_launcher 打开浏览器窗口
     if (await canLaunchUrl(loginUri)) {
       await launchUrl(loginUri);
     } else {
@@ -62,7 +66,6 @@ class SocialService {
   }
 }
 
-// 假设 SocialProvider 是一个包含提供者信息的模型
 class SocialProvider {
   final String id;
   final String name;
