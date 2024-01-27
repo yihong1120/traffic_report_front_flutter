@@ -70,7 +70,7 @@ class _MediaPickerMenu extends StatelessWidget {
     );
   }
 
-  void _handleImageSelection(BuildContext context, NavigatorState navigator,
+  void _handleImageSelection(NavigatorState navigator,
       ImagePicker picker, ImageSource source, bool isVideo) async {
     try {
       List<XFile>? files;
