@@ -12,7 +12,13 @@ class MapService {
 
   Set<Marker> get markers => _markers;
 
-  Future<Set<Marker>> loadMarkers(Function(String) onMarkerTapped) async {
+    /// Represents a service for loading and managing markers on the map.
+  ///
+  /// Loads and retrieves the markers for traffic violations.
+  ///
+  /// Parameters:
+  /// - onMarkerTapped: A function to handle when a marker is tapped.
+  /// Returns a Future<Set<Marker>>.
     var url = Uri.parse('$_baseUrl/traffic-violation-markers/');
     var response = await http.get(url);
     Set<Marker> markers = {};
