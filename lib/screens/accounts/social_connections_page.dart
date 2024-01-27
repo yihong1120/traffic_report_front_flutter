@@ -103,7 +103,11 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   /// Returns a Scaffold widget.
   Widget build(BuildContext context) {
   /// - account: The social account.
-  Widget _buildConnectedAccountItem(SocialAccount account) {
+  /// Builds a list tile for the specified social provider.
+  /// Parameters:
+  /// - provider: The social provider.
+  /// Returns void.
+  Widget _buildProviderItem(SocialProvider provider) {
     return ListTile(
       title: Text('Provider: ${account.provider}'),
       subtitle: Text('UID: ${account.uid}'),
