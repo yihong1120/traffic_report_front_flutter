@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/traffic_violation.dart';
 
+  /// Represents a service for loading and managing markers on the map.
 class MapService {
   final Set<Marker> _markers = {};
   final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/reports';
