@@ -41,6 +41,7 @@ class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   /// Disconnects the specified social account.
   /// Parameters:
   /// - account: The social account to disconnect.
+  /// Returns void.
   void _disconnectSocialAccount(SocialAccount account) async {
     try {
       bool disconnected = await _socialService.disconnectAccount(account);
