@@ -57,7 +57,8 @@ class MapService {
     }
   }
 
-  Future<TrafficViolation?> getTrafficViolationDetails(
+  Future<TrafficViolation?> getTrafficViolationDetails(// Removed unused variable
+      _,
       String trafficViolationId) async {
     var url =
         Uri.parse('$_baseUrl/traffic-violation-details/$trafficViolationId/');
