@@ -89,7 +89,7 @@ class MapService {
     }
   }
 
-  Future<void> searchData(String keyword, DateTimeRange? dateRange,
+    /// Performs a search based on the provided keyword and date range.
       Function(Set<Marker>) onSearchComplete) async {
     // This is a placeholder for the search logic. You would need to implement the actual search
     // logic based on your backend API's capabilities. The following is a simple example that
