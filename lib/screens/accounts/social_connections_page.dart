@@ -10,10 +10,12 @@ class SocialConnectionsPage extends StatefulWidget {
   SocialConnectionsPageState createState() => SocialConnectionsPageState();
 }
 
+  /// Represents the state of the SocialConnectionsPage.
 class SocialConnectionsPageState extends State<SocialConnectionsPage> {
   /// Represents the state of the SocialConnectionsPage.
   List<SocialAccount> _connectedAccounts = [];
-  List<SocialProvider> _availableProviders = [];
+    /// Represents the state of the SocialConnectionsPage.
+  List<SocialProvider> _availableProviders = [];}
   final SocialService _socialService = SocialService();
 
   @override
