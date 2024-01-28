@@ -7,12 +7,12 @@ import '../models/traffic_violation.dart';
 
 class MapService {
   final Set<Marker> _markers = {};
-  final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/reports';
+  final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/';
 
   Set<Marker> get markers => _markers;
 
   Future<Set<Marker>> loadMarkers(Function(String) onMarkerTapped) async {
-    var url = Uri.parse('$_baseUrl/traffic-violation-markers/');
+    var url = Uri.parse('$_baseUrl/api/traffic-violation-markers/');
     var response = await http.get(url);
     Set<Marker> markers = {};
 
@@ -61,7 +61,7 @@ class MapService {
   Future<TrafficViolation?> getTrafficViolationDetails(
       String trafficViolationId) async {
     var url =
-        Uri.parse('$_baseUrl/traffic-violation-details/$trafficViolationId/');
+        Uri.parse('$_baseUrl/api/traffic-violation-details/$trafficViolationId/');
         // print(url);
     var response = await http.get(url);
 
