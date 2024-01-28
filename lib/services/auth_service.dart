@@ -16,13 +16,20 @@ class AuthService {
   // Allow for the client to be set for testing purposes
   static http.Client client = http.Client();
 
+  // Google 登录的客户端 ID
+  static const String _googleClientId = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
+
+  static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: _googleClientId,
+  );
+
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Google 登录
   static Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
-          await GoogleSignIn().signIn();
+          await _googleSignIn.signIn();
 
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
@@ -37,12 +44,13 @@ class AuthService {
             await _auth.signInWithCredential(credential);
 
         final User? user = authResult.user;
-        return user;
+        return user; // 返回登录用户的信息
       }
     } catch (e) {
-      print(e);
+      // 如果登录失败，则打印错误信息
+      print("Error signing in with Google: $e");
     }
-    return null;
+    return null; // 如果登录失败或者用户取消登录，则返回 null
   }
 
   // Facebook 登录
