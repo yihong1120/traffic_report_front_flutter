@@ -94,6 +94,39 @@ class LoginPageState extends State<LoginPage> {
                         onPressed: _register,
                         child: const Text('Register'),
                       ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          final user = await AuthService.signInWithGoogle();
+                          if (user != null) {
+                            // 用户已成功登录
+                            Navigator.pushReplacementNamed(context, '/accounts');
+                          }
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
+                        child: const Text('Login with Google'),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          final user = await AuthService.signInWithFacebook();
+                          if (user != null) {
+                            // 用户已成功登录
+                            Navigator.pushReplacementNamed(context, '/accounts');
+                          }
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
+                        child: const Text('Login with Facebook'),
+                      ),
                     ],
                   ),
                 ),

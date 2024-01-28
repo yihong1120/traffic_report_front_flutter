@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
   static final String _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:8000/accounts';
@@ -12,6 +15,66 @@ class AuthService {
 
   // Allow for the client to be set for testing purposes
   static http.Client client = http.Client();
+
+  // Google 登录的客户端 ID
+  static const String _googleClientId = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
+
+  static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: _googleClientId,
+  );
+
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // Google 登录
+  static Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+
+        final UserCredential authResult =
+            await _auth.signInWithCredential(credential);
+
+        final User? user = authResult.user;
+        return user; // 返回登录用户的信息
+      }
+    } catch (e) {
+      // 如果登录失败，则打印错误信息
+      print("Error signing in with Google: $e");
+    }
+    return null; // 如果登录失败或者用户取消登录，则返回 null
+  }
+
+  // Facebook 登录
+  static Future<User?> signInWithFacebook() async {
+    try {
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      if (loginResult.status == LoginStatus.success) {
+        final AccessToken accessToken = loginResult.accessToken!;
+
+        final AuthCredential credential =
+            FacebookAuthProvider.credential(accessToken.token);
+
+        final UserCredential authResult =
+            await _auth.signInWithCredential(credential);
+
+        final User? user = authResult.user;
+        return user;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
 
   static Future<bool> login(String username, String password) async {
     var url = Uri.parse('$_baseUrl/api/login/');
